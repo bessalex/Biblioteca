@@ -1,2 +1,0 @@
-# Bibloteca
-Ejercicio Biblioteca
