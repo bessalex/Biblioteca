@@ -6,6 +6,8 @@ import java.util.List;
 public class Biblioteca {
 
     public static final int MAXIMO_DIAS_PRESTAMO = 15;
+    public static final int MAXIMO_RENOVACIONES = 2;
+
     private final List<Libro> libros ;
     private final List<Prestamo> prestamos;
 
@@ -46,7 +48,8 @@ public class Biblioteca {
         if (!libroPrestar.isDisponible())
             return null;
 
-        Prestamo prestamo = new Prestamo(libroPrestar, estudiante,fechaPrestamo);
+        Prestamo prestamo = new Prestamo(libroPrestar, estudiante);
+        prestamo.setFechaInicio(fechaPrestamo);
 
         this.prestamos.add(prestamo);
         libroPrestar.setDisponible(Boolean.FALSE);
@@ -72,5 +75,34 @@ public class Biblioteca {
         });
         return vista;
     }
+
+    public Prestamo renovarPrestamo(String tituloLibro, Estudiante estudiante, LocalDate fechaRenovacion) {
+        Libro libro = this.getLibro(tituloLibro);
+
+        if (libro == null || libro.isDisponible())
+            return null;
+
+        Prestamo prestamo = this.getPrestamo(libro,estudiante);
+        if (prestamo == null)
+            return null;
+
+        LocalDate nuevaFechaVencimiento = prestamo.setRenovacion(fechaRenovacion);
+        if (nuevaFechaVencimiento == null)
+            return null;
+
+        return new Prestamo(prestamo);
+    }
+
+
+    private Prestamo getPrestamo(Libro libro,Estudiante estudiante){
+        Prestamo aBuscar = new Prestamo(libro, estudiante);
+        int posBuscado = this.prestamos.indexOf(aBuscar);
+
+        if (posBuscado >= 0) {
+            return this.prestamos.get(posBuscado);
+        }
+        return null;
+    }
+
 
 }

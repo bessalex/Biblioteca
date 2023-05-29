@@ -1,6 +1,7 @@
 package ar.alex.biblioteca;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Estudiante {
 
@@ -15,4 +16,13 @@ public class Estudiante {
         this.nombres = nombres;
         this.fechaNacimiento = fechaNacimiento;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Estudiante that = (Estudiante) o;
+        return Objects.equals(padron, that.padron);
+    }
+
 }

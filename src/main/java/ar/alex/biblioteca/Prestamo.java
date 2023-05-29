@@ -3,19 +3,21 @@ package ar.alex.biblioteca;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Prestamo {
 
     private final Libro libro;
     private final Estudiante estudiante;
-    private LocalDate fechaInicio;
-    private LocalDate fechaVencimiento;
+    private LocalDate fechaInicio = null ;
+    private LocalDate fechaVencimiento = null ;
 
-    public Prestamo(Libro libro, Estudiante estudiante, LocalDate fechaInicio) {
+    private int nroRenovacion = 0;
+
+    public Prestamo(Libro libro, Estudiante estudiante) {
         this.libro = libro;
         this.estudiante = estudiante;
-        this.fechaInicio = fechaInicio;
-        this.fechaVencimiento = fechaInicio.plusDays(Biblioteca.MAXIMO_DIAS_PRESTAMO);
+        this.nroRenovacion = 0;
     }
 
     public Prestamo(@NotNull Prestamo prestamo) {
@@ -23,7 +25,13 @@ public class Prestamo {
         this.estudiante = null;
         this.fechaInicio = prestamo.fechaInicio;
         this.fechaVencimiento = prestamo.getFechaVencimiento();
+        this.nroRenovacion = prestamo.getNroRenovacion();
     }
+
+    private int getNroRenovacion() {
+        return this.nroRenovacion;
+    }
+
 
     public LocalDate getFechaVencimiento() {
         return this.fechaVencimiento;
@@ -42,5 +50,36 @@ public class Prestamo {
         return "Título = " + libro.getTitulo() + " | Fecha Vencimiento = " + this.fechaVencimiento;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Prestamo prestamo = (Prestamo) o;
+        return Objects.equals(libro, prestamo.libro) &&
+                Objects.equals(estudiante, prestamo.estudiante);
+    }
+
+    public void setFechaInicio(LocalDate fechaInicio) {
+        if (fechaInicio != null && this.nroRenovacion == 0 && this.fechaInicio == null) {
+            this.fechaInicio = fechaInicio;
+            this.fechaVencimiento = this.fechaInicio.plusDays(Biblioteca.MAXIMO_DIAS_PRESTAMO);
+        }
+    }
+
+    public LocalDate setRenovacion(LocalDate fechaRenovacion) {
+        if (fechaRenovacion == null
+                || this.nroRenovacion >= Biblioteca.MAXIMO_RENOVACIONES
+                || this.fechaVencimiento == null
+                || this.fechaInicio.isAfter(fechaRenovacion)){
+            return null;
+        }
+        this.fechaVencimiento = fechaRenovacion.plusDays(Biblioteca.MAXIMO_DIAS_PRESTAMO);
+        this.nroRenovacion++;
+        return this.fechaVencimiento;
+    }
+
+    public LocalDate getFechaInicio() {
+        return fechaInicio;
+    }
 
 }

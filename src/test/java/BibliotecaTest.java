@@ -183,5 +183,107 @@ public class BibliotecaTest {
         Assertions.assertNotNull(prestados);
         Assertions.assertEquals(0,prestados.size());
     }
+    /*
+ ====  5. Renovación del préstamo de su libro extendiendo su fecha de devolución siempre y
+     cuando no haya excedido el límite establecido de renovaciones establecidos por la biblioteca. ===
+     */
+    @Test
+    public void renovarPrestamoNoExisteTest(){
+        // Generar Biblioteca
+        Biblioteca biblioteca = new Biblioteca();
+        Libro libro = new Libro("El último confin de la tierra",Categoria.HISTORIA);
+        biblioteca.addLibro(libro);
+        Libro libro2 = new Libro("La Íliada",Categoria.CLASICO);
+        biblioteca.addLibro(libro2);
+        // generar Estudiante
+        Estudiante estudiante1 = new Estudiante(86606,"Pablo", "Aimar",
+                LocalDate.of(1976, 11, 3));
+
+        Prestamo prestamo = biblioteca.renovarPrestamo("La Íliada", estudiante1,LocalDate.now());
+        Assertions.assertNull(prestamo);
+
+    }
+
+    @Test
+    public void renovarPrestamoExcedeLimiteFailTest(){
+        Biblioteca biblioteca = new Biblioteca();
+
+        Libro libro = new Libro("El último confin de la tierra",Categoria.HISTORIA);
+        biblioteca.addLibro(libro);
+        Libro libro2 = new Libro("La Íliada",Categoria.CLASICO);
+        biblioteca.addLibro(libro2);
+
+        Estudiante estudiante1 = new Estudiante(86606,"Pablo", "Aimar",
+                LocalDate.of(1976, 11, 3));
+
+        Prestamo prestamo = biblioteca.solicitarPrestamo("La Íliada", estudiante1,
+                LocalDate.of(2023,05,25));
+        Assertions.assertEquals(prestamo.getFechaVencimiento(),
+                LocalDate.of(2023,05,25).plusDays(Biblioteca.MAXIMO_DIAS_PRESTAMO));
+
+        Prestamo prestamoRenovado = biblioteca.renovarPrestamo("La Íliada",estudiante1,
+                LocalDate.of(2023, 06, 01));
+        Assertions.assertEquals(prestamoRenovado.getLibro(),libro2);
+        Assertions.assertEquals(prestamoRenovado.getFechaVencimiento(),
+                LocalDate.of(2023,06,01).plusDays(Biblioteca.MAXIMO_DIAS_PRESTAMO));
+
+        Prestamo prestamoRenovado2 = biblioteca.renovarPrestamo("La Íliada",estudiante1,
+                LocalDate.of(2023, 06, 01));
+        Assertions.assertEquals(prestamoRenovado2.getLibro(),libro2);
+        Assertions.assertEquals(prestamoRenovado2.getFechaVencimiento(),
+                LocalDate.of(2023,06,01).plusDays(Biblioteca.MAXIMO_DIAS_PRESTAMO));
+
+        Prestamo prestamoRenovado3 = biblioteca.renovarPrestamo("La Íliada",estudiante1,
+                LocalDate.of(2023, 06, 01));
+        Assertions.assertNull(prestamoRenovado3);
+
+    }
+
+    @Test
+    public void renovarPrestamoYaPrestadoTest(){
+        Biblioteca biblioteca = new Biblioteca();
+
+        Libro libro = new Libro("El último confin de la tierra",Categoria.HISTORIA);
+        biblioteca.addLibro(libro);
+        Libro libro2 = new Libro("La Íliada",Categoria.CLASICO);
+        biblioteca.addLibro(libro2);
+
+        Estudiante estudiante1 = new Estudiante(86606,"Pablo", "Aimar",
+                LocalDate.of(1976, 11, 3));
+
+        Estudiante estudiante2 = new Estudiante(99999,"Pablo", "Aimar",
+                LocalDate.of(1976, 11, 3));
+
+        Prestamo prestamo = biblioteca.solicitarPrestamo("La Íliada", estudiante1,
+                LocalDate.of(2023,05,25));
+
+        Prestamo prsetamoRenovado = biblioteca.renovarPrestamo("La Íliada", estudiante2,
+                LocalDate.of(2023,05,26));
+        Assertions.assertNull(prsetamoRenovado);
+
+    }
+    @Test
+    public void renovarPrestamoOKTest(){
+        Biblioteca biblioteca = new Biblioteca();
+
+        Libro libro = new Libro("El último confin de la tierra",Categoria.HISTORIA);
+        biblioteca.addLibro(libro);
+        Libro libro2 = new Libro("La Íliada",Categoria.CLASICO);
+        biblioteca.addLibro(libro2);
+
+        Estudiante estudiante1 = new Estudiante(86606, "Pablo", "Aimar",
+                LocalDate.of(1976, 11, 3));
+
+        Prestamo prestamo = biblioteca.solicitarPrestamo("La Íliada", estudiante1,
+                LocalDate.of(2023,05,20));
+
+        Prestamo prestamoRenovado = biblioteca.renovarPrestamo("La Íliada",
+                estudiante1, LocalDate.of(2023, 06, 01));
+        Assertions.assertNotNull(prestamoRenovado);
+        Assertions.assertEquals(libro2.getTitulo(),prestamoRenovado.getLibro().getTitulo());
+        Assertions.assertNull(prestamoRenovado.getEstudiante());
+        Assertions.assertEquals(LocalDate.of(2023,06,01).plusDays(15L),
+                prestamoRenovado.getFechaVencimiento());
+    }
 
 }
