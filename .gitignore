@@ -1,0 +1,11 @@
+# Ignorar archivos compilados
+*.class
+
+# Ignorar directorio de dependencias de Maven
+/target/
+
+# Ignorar archivos de configuración local
+config.properties
+
+# Ignorar archivos de registro
+*.log
