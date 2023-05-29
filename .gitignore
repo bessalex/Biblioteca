@@ -2,7 +2,7 @@
 *.class
 
 # Ignorar directorio de dependencias de Maven
-target/
+/target/
 
 # Ignorar archivos de configuración local
 config.properties
