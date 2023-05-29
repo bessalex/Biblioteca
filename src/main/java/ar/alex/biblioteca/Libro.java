@@ -4,9 +4,11 @@ import java.util.Objects;
 
 public class Libro {
     private String titulo;
+    private Categoria categoria;
 
-    public Libro(String titulo){
+    public Libro(String titulo, Categoria categoria){
         this.titulo = titulo.toLowerCase();
+        this.categoria = categoria;
     }
 
 
@@ -20,5 +22,9 @@ public class Libro {
 
     public String getTitulo() {
         return this.titulo;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
     }
 }

@@ -1,2 +1,7 @@
-package ar.alex.biblioteca;public enum Categoria {
+package ar.alex.biblioteca;
+
+public enum Categoria {
+    COMICS, BIOGRAFIA, CIENTIFICO, AUTOAYUDA, AVENTURAS, CIENCIA_FICCION,
+    CUENTO, DEPORTE, HUMOR, MARKETING, SALUD, SUSPENSO, INFORMATICA, NO_FICCION,
+    NOVELA_NEGRA, NOVELA, NOVELAS_ROMÁNTICAS, CLASICO, HISTORIA
 }
