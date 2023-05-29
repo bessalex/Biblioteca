@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BibliotecaTest {
@@ -69,8 +70,8 @@ public class BibliotecaTest {
     }
 
     /*
-    3. Un estudiante pueda solicitar prestado un libro y que su fecha de devolución sea dentro
-    de los siguientes 15 días, teniendo presente que exista un libro disponible.
+ ====   3. Un estudiante pueda solicitar prestado un libro y que su fecha de devolución sea dentro
+    de los siguientes 15 días, teniendo presente que exista un libro disponible.   =================
      */
     @Test
     public void solicitarPrestamoOKTest(){
@@ -123,4 +124,64 @@ public class BibliotecaTest {
         Assertions.assertNull(prestamo);
 
     }
+
+
+    /*
+ ===== 4. El usuario de este aplicativo pueda visualizar los libros que se encuentran prestados
+     y su fecha de devolución.                                                         ==============
+     */
+    @Test
+    public void visualizarPrestadosTest(){
+        // Cargar libros a Biblioteca
+        Biblioteca biblioteca = new Biblioteca();
+        biblioteca.addLibro(new Libro("La Íliada",Categoria.CLASICO));
+        biblioteca.addLibro(new Libro("El último confin de la tierra",Categoria.HISTORIA));
+        biblioteca.addLibro(new Libro("La Odisea",Categoria.CLASICO));
+        // Crear estudiantes
+        Estudiante estudiante1 = new Estudiante(86606,"Pablo", "Aimar",
+                LocalDate.of(1976, 11, 3));
+        Estudiante estudiante2 = new Estudiante(90888,"Ariel", "Ortega",
+                LocalDate.of(1976, 11, 3));
+        // generar Prstamos
+        biblioteca.solicitarPrestamo("El último confin de la tierra", estudiante1,
+                LocalDate.of(2023,05,14));
+        biblioteca.solicitarPrestamo("La Íliada", estudiante2,
+                LocalDate.of(2023,05,10));
+
+        List<String> esperados = new ArrayList<>();
+        esperados.add("Título = El último confin de la tierra | Fecha Vencimiento = " +
+                LocalDate.of(2023,05,14).plusDays(Biblioteca.MAXIMO_DIAS_PRESTAMO));
+        esperados.add("Título = La Íliada | Fecha Vencimiento = " +
+                LocalDate.of(2023,05,10).plusDays(Biblioteca.MAXIMO_DIAS_PRESTAMO));
+
+        List<String> prestados = biblioteca.getVistaPrestamos();
+
+        Assertions.assertEquals(2,prestados.size());
+        Assertions.assertEquals(esperados.get(0), prestados.get(0));
+        Assertions.assertEquals(esperados.get(1), prestados.get(1));
+    }
+
+    @Test
+    public void visualizarPrestadosVacioTest(){
+        // Cargar libros a Biblioteca
+        Biblioteca biblioteca = new Biblioteca();
+        biblioteca.addLibro(new Libro("La Íliada",Categoria.CLASICO));
+        biblioteca.addLibro(new Libro("El último confin de la tierra",Categoria.HISTORIA));
+        biblioteca.addLibro(new Libro("La Odisea",Categoria.CLASICO));
+        // Crear estudiantes
+        Estudiante estudiante1 = new Estudiante(86606,"Pablo", "Aimar",
+                LocalDate.of(1976, 11, 3));
+        Estudiante estudiante2 = new Estudiante(90888,"Ariel", "Ortega",
+                LocalDate.of(1976, 11, 3));
+
+        List<String> esperados = new ArrayList<>();
+        esperados.add("Título = El último confin de la tierra | Fecha Vencimiento = " +
+                LocalDate.of(2023,05,14).plusDays(Biblioteca.MAXIMO_DIAS_PRESTAMO));
+
+        List<String> prestados = biblioteca.getVistaPrestamos();
+
+        Assertions.assertNotNull(prestados);
+        Assertions.assertEquals(0,prestados.size());
+    }
+
 }

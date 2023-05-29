@@ -36,4 +36,11 @@ public class Prestamo {
     public Estudiante getEstudiante() {
         return estudiante;
     }
+
+    @Override
+    public String toString() {
+        return "Título = " + libro.getTitulo() + " | Fecha Vencimiento = " + this.fechaVencimiento;
+    }
+
+
 }

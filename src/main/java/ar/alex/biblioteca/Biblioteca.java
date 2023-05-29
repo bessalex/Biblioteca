@@ -64,4 +64,13 @@ public class Biblioteca {
         return null;
     }
 
+    public List<String> getVistaPrestamos() {
+        List<String> vista = new ArrayList<>();
+
+        this.prestamos.forEach(prestamo -> {
+            vista.add(prestamo.toString());
+        });
+        return vista;
+    }
+
 }
