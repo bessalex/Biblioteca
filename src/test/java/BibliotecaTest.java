@@ -51,4 +51,21 @@ public class BibliotecaTest {
         Assertions.assertEquals(2, librosClasicos.size());
     }
 
+    // === 2. Dado una categoría permita mostrar los libros de esa categoría. ===
+    @Test
+    public void mostrarLibrosPorCategoriaVacioTest(){
+        Biblioteca biblioteca = new Biblioteca();
+
+        biblioteca.addLibro(new Libro("La Íliada",Categoria.CLASICO));
+        biblioteca.addLibro(new Libro("El último confin de la tierra",Categoria.HISTORIA));
+        biblioteca.addLibro(new Libro("La Odisea",Categoria.CLASICO));
+
+        List<Libro> librosDeportes = biblioteca.getLibrosPorCategoria(Categoria.DEPORTE);
+
+        Assertions.assertEquals(0, librosDeportes.size());
+    }
+
+
+
+
 }

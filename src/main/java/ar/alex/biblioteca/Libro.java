@@ -7,7 +7,7 @@ public class Libro {
     private Categoria categoria;
 
     public Libro(String titulo, Categoria categoria){
-        this.titulo = titulo.toLowerCase();
+        this.titulo = titulo;
         this.categoria = categoria;
     }
 
