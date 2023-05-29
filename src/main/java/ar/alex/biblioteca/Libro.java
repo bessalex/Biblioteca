@@ -1,14 +1,31 @@
 package ar.alex.biblioteca;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Objects;
 
 public class Libro {
     private String titulo;
     private Categoria categoria;
 
+    private Boolean disponible;
+
+    public Libro(String titulo){
+        this.titulo = titulo;
+        this.categoria = null;
+        this.disponible = Boolean.TRUE;
+    }
+
     public Libro(String titulo, Categoria categoria){
         this.titulo = titulo;
         this.categoria = categoria;
+        this.disponible = Boolean.TRUE;
+    }
+
+    public Libro(@NotNull Libro libro) {
+        this.titulo = libro.getTitulo();
+        this.categoria = libro.getCategoria();
+        this.disponible = libro.isDisponible();
     }
 
 
@@ -27,4 +44,13 @@ public class Libro {
     public Categoria getCategoria() {
         return categoria;
     }
+
+    public void setDisponible(Boolean disponible) {
+        this.disponible = disponible;
+    }
+
+    public Boolean isDisponible() {
+        return this.disponible;
+    }
+
 }

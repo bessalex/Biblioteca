@@ -1,14 +1,18 @@
 package ar.alex.biblioteca;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Biblioteca {
 
-    List<Libro> libros ;
+    public static final int MAXIMO_DIAS_PRESTAMO = 15;
+    private final List<Libro> libros ;
+    private final List<Prestamo> prestamos;
 
 
     public Biblioteca(){
         this.libros = new ArrayList<>();
+        this.prestamos = new ArrayList<>();
     }
 
     public void addLibro(Libro libro){
@@ -32,5 +36,32 @@ public class Biblioteca {
         return librosDeCategoria;
     }
 
+    public Prestamo solicitarPrestamo(String tituloLibro, Estudiante estudiante, LocalDate fechaPrestamo) {
+
+        Libro libroPrestar = this.getLibro(tituloLibro);
+
+        if (libroPrestar == null)
+            return null;
+
+        if (!libroPrestar.isDisponible())
+            return null;
+
+        Prestamo prestamo = new Prestamo(libroPrestar, estudiante,fechaPrestamo);
+
+        this.prestamos.add(prestamo);
+        libroPrestar.setDisponible(Boolean.FALSE);
+
+        return new Prestamo(prestamo);
+    }
+
+    private Libro getLibro(String titulo){
+        Libro libroBuscar = new Libro(titulo);
+        int posLibro = this.libros.indexOf(libroBuscar);
+
+        if (posLibro >= 0) {
+            return this.libros.get(posLibro);
+        }
+        return null;
+    }
 
 }
