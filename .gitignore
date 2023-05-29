@@ -9,3 +9,6 @@ config.properties
 
 # Ignorar archivos de registro
 *.log
+
+# Directorio y archivos específicos de IntelliJ IDEA
+.idea/
