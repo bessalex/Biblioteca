@@ -1,6 +1,5 @@
 package ar.alex.biblioteca;
 
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -22,7 +21,7 @@ public class Libro {
         this.disponible = Boolean.TRUE;
     }
 
-    public Libro(@NotNull Libro libro) {
+    public Libro( Libro libro) {
         this.titulo = libro.getTitulo();
         this.categoria = libro.getCategoria();
         this.disponible = libro.isDisponible();

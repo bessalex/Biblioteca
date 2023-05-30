@@ -1,6 +1,5 @@
 package ar.alex.biblioteca;
 
-import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -20,7 +19,7 @@ public class Prestamo {
         this.nroRenovacion = 0;
     }
 
-    public Prestamo(@NotNull Prestamo prestamo) {
+    public Prestamo( Prestamo prestamo) {
         this.libro = new Libro(prestamo.libro);
         this.estudiante = null;
         this.fechaInicio = prestamo.fechaInicio;
