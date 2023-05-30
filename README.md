@@ -13,3 +13,16 @@ Nos llamaron de la biblioteca Nacional y nos solicitaron construir un sistema pa
 Link: https://ed.team/cursos/tdd .
 2.	Vamos a trabajar con Junit que es una librería de java para desarrollar nuestros test. Para mas información se puede visitar la docu oficial: https://junit.org/junit5/docs/current/user-guide/
 3.	Vamos a generar un proyecto Maven, info sobre maven: https://maven.apache.org/guides/index.html
+
+
+## Modificación de ejercicio
+
+Nos llamaron de la biblioteca Nacional y nos solicitaron construir un sistema para dicha biblioteca donde cumpla con los siguientes casos de usos, estos deben permitir realizar las siguientes funcionalidades: 
+
+1. Incorporar un libro a la biblioteca. Cada libro tiene un título, un código ISBN y no puede estar registrado más de una vez. 
+2. Dado un código ISBN, buscar y devolver los datos del libro identificado por dicho ISBN. Título, código ISBN, autor, y categoría. 
+3. Dado una categoría, permitir listar todos los libros correspondientes a esa categoría. 
+4. Incorporar un estudiante o socio a la biblioteca registrando un tipo y número de documento, nombre y apellido, y domicilio. 
+5. Un estudiante solicita prestado un libro y su plazo límite de devolución es dentro de 15 días corridos, teniendo presente que exista un libro disponible. 
+6. Consultar una lista de libros que se encuentran prestados y su fecha de vencimiento del préstamo. 
+7. Renovación del préstamo de su libro extendiendo su fecha de devolución siempre y cuando no haya excedido el límite de renovaciones establecido por la biblioteca. 
