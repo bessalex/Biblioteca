@@ -8,13 +8,15 @@ public class Biblioteca {
     public static final int MAXIMO_DIAS_PRESTAMO = 15;
     public static final int MAXIMO_RENOVACIONES = 2;
 
-    private final List<Libro> libros ;
-    private final List<Prestamo> prestamos;
+    private List<Libro> libros ;
+    private List<Prestamo> prestamos;
+    private List<Estudiante> estudiantes;
 
 
     public Biblioteca(){
         this.libros = new ArrayList<>();
         this.prestamos = new ArrayList<>();
+        this.estudiantes = new ArrayList<>();
     }
 
     public void addLibro(Libro libro){
@@ -24,7 +26,7 @@ public class Biblioteca {
 
     public List<Libro> getLibros() {
         List<Libro> libros = new ArrayList<>();
-        this.libros.forEach( libro -> libros.add(new Libro(libro.getTitulo(), libro.getCategoria())));
+        this.libros.forEach( libro -> libros.add(new Libro(libro.getIsbn(), libro.getTitulo(), libro.getCategoria())));
         return libros;
     }
 
@@ -33,16 +35,17 @@ public class Biblioteca {
 
         this.libros.forEach(libro -> {
             if (libro.getCategoria() == categoria)
-                librosDeCategoria.add(new Libro(libro.getTitulo(),libro.getCategoria()));
+                librosDeCategoria.add(new Libro(libro.getIsbn(), libro.getTitulo(),libro.getCategoria()));
         });
         return librosDeCategoria;
     }
 
-    public Prestamo solicitarPrestamo(String tituloLibro, Estudiante estudiante, LocalDate fechaPrestamo) {
+    public Prestamo solicitarPrestamo(String isbn, Integer dniEstudiante, LocalDate fechaPrestamo) {
 
-        Libro libroPrestar = this.getLibro(tituloLibro);
+        Libro libroPrestar = this.searchLibroPorISBN(isbn);
+        Estudiante estudiante = this.getEstudiatePorDni(dniEstudiante);
 
-        if (libroPrestar == null)
+        if (libroPrestar == null || estudiante == null)
             return null;
 
         if (!libroPrestar.isDisponible())
@@ -57,15 +60,17 @@ public class Biblioteca {
         return new Prestamo(prestamo);
     }
 
-    private Libro getLibro(String titulo){
-        Libro libroBuscar = new Libro(titulo);
-        int posLibro = this.libros.indexOf(libroBuscar);
+    private Estudiante getEstudiatePorDni(Integer dniEstudiante) {
+        Estudiante estudiante = new Estudiante(dniEstudiante);
+        int posEstudiante = this.estudiantes.indexOf(estudiante);
 
-        if (posLibro >= 0) {
-            return this.libros.get(posLibro);
+        if (posEstudiante >= 0) {
+            return this.estudiantes.get(posEstudiante);
         }
         return null;
+
     }
+
 
     public List<String> getVistaPrestamos() {
         List<String> vista = new ArrayList<>();
@@ -76,10 +81,11 @@ public class Biblioteca {
         return vista;
     }
 
-    public Prestamo renovarPrestamo(String tituloLibro, Estudiante estudiante, LocalDate fechaRenovacion) {
-        Libro libro = this.getLibro(tituloLibro);
+    public Prestamo renovarPrestamo(String isbn, Integer dniEstudiante, LocalDate fechaRenovacion) {
+        Libro libro = this.searchLibroPorISBN(isbn);
+        Estudiante estudiante = this.getEstudiatePorDni(dniEstudiante);
 
-        if (libro == null || libro.isDisponible())
+        if (libro == null || libro.isDisponible() || estudiante == null)
             return null;
 
         Prestamo prestamo = this.getPrestamo(libro,estudiante);
@@ -105,4 +111,39 @@ public class Biblioteca {
     }
 
 
+    public Libro getLibroPorISBN(String isbn) {
+        if (isbn == null)
+            return null;
+
+        Libro libro = this.searchLibroPorISBN(isbn);
+        if (libro == null)
+            return null;
+
+        return new Libro(libro);
+    }
+
+    private Libro searchLibroPorISBN(String isbn) {
+        Libro libro = new Libro(isbn);
+        int posLibro = this.libros.indexOf(libro);
+
+        if (posLibro >= 0) {
+            return this.libros.get(posLibro);
+        }
+        return null;
+    }
+
+
+    public void addEstudiante(Estudiante estudiante) {
+        if ((estudiante != null)
+                && (!this.estudiantes.contains(estudiante)))
+            this.estudiantes.add(estudiante);
+
+    }
+
+    public List<Estudiante> getEstudiantes() {
+        List<Estudiante> estudiantes = new ArrayList<>();
+        this.estudiantes.forEach( estudiante -> estudiantes.add(
+                new Estudiante(estudiante)));
+        return estudiantes;
+    }
 }
