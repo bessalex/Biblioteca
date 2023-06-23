@@ -1,5 +1,6 @@
 package ar.alex.biblioteca;
-import java.time.LocalDate;
+import ar.alex.LibroService;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,95 +9,122 @@ public class Biblioteca {
     public static final int MAXIMO_DIAS_PRESTAMO = 15;
     public static final int MAXIMO_RENOVACIONES = 2;
 
-    private List<Libro> libros ;
-    private List<Prestamo> prestamos;
-    private List<Estudiante> estudiantes;
+ //   private List<Libro> libros ;
+    private final List<Prestamo> prestamos;
+    private final List<Estudiante> estudiantes;
 
+    private final LibroService libroService;
 
     public Biblioteca(){
-        this.libros = new ArrayList<>();
+    //    this.libros = new ArrayList<>();
+        this.libroService = new LibroService(new LibroRepositoryImpl());
         this.prestamos = new ArrayList<>();
         this.estudiantes = new ArrayList<>();
     }
 
     public void addLibro(Libro libro){
-        if ((libro != null) && (!this.libros.contains(libro)))
-            this.libros.add(libro);
+  //      if ((libro != null) && (!this.libros.contains(libro)))
+  //          this.libros.add(libro);
+            this.libroService.save(libro);
     }
 
     public List<Libro> getLibros() {
-        List<Libro> libros = new ArrayList<>();
-        this.libros.forEach( libro -> libros.add(new Libro(libro.getIsbn(), libro.getTitulo(), libro.getCategoria())));
-        return libros;
+     //   List<Libro> libros = new ArrayList<>();
+
+                //.forEach( libro -> libros.add(new Libro(libro.getIsbn(), libro.getTitulo(), libro.getCategoria())));
+        return this.libroService.findAll();
     }
 
     public List<Libro> getLibrosPorCategoria(Categoria categoria) {
-        List<Libro> librosDeCategoria = new ArrayList<>();
+      /*  List<Libro> librosDeCategoria = new ArrayList<>();
+
 
         this.libros.forEach(libro -> {
             if (libro.getCategoria() == categoria)
                 librosDeCategoria.add(new Libro(libro.getIsbn(), libro.getTitulo(),libro.getCategoria()));
-        });
-        return librosDeCategoria;
+        }); */
+        return this.libroService.findByCategoria(categoria);
     }
 
-    public Prestamo solicitarPrestamo(String isbn, Integer dniEstudiante, LocalDate fechaPrestamo) {
+    public Prestamo solicitarPrestamo(Libro libro, Estudiante estudiante) throws IllegalArgumentException {
 
-        Libro libroPrestar = this.searchLibroPorISBN(isbn);
-        Estudiante estudiante = this.getEstudiatePorDni(dniEstudiante);
+        if (libro == null || estudiante == null) {
+            throw new IllegalArgumentException("Libro o estudiante deben informarse");
+        }
 
-        if (libroPrestar == null || estudiante == null)
-            return null;
+        if (!libroExiste(libro)){
+            throw new IllegalArgumentException("Libro inexistente en Biblioteca");
+        }
 
-        if (!libroPrestar.isDisponible())
-            return null;
+        if (!estudianteExiste(estudiante)){
+            throw new IllegalArgumentException("Estudiante inexistente en Biblioteca");
+        }
 
-        Prestamo prestamo = new Prestamo(libroPrestar, estudiante);
-        prestamo.setFechaInicio(fechaPrestamo);
+        if (prestamoExiste(libro, estudiante)){
+            throw new IllegalArgumentException("Ya existe un prestamo de este libro y estudiante");
+        }
+
+        if (!libro.isDisponible()){
+            throw new IllegalArgumentException("Libro sin Ejemplares disponibles");
+        }
+
+        Prestamo prestamo = new Prestamo(libro, estudiante);
 
         this.prestamos.add(prestamo);
-        libroPrestar.setDisponible(Boolean.FALSE);
+        libro.marcarEjemplarPrestado();
+        this.libroService.update(libro);
 
-        return new Prestamo(prestamo);
+        return prestamo;
     }
 
-    private Estudiante getEstudiatePorDni(Integer dniEstudiante) {
-        Estudiante estudiante = new Estudiante(dniEstudiante);
-        int posEstudiante = this.estudiantes.indexOf(estudiante);
-
-        if (posEstudiante >= 0) {
-            return this.estudiantes.get(posEstudiante);
-        }
-        return null;
-
+    private boolean estudianteExiste(Estudiante estudiante) {
+        return this.estudiantes.contains(new Estudiante(estudiante));
     }
+
+    private boolean libroExiste(Libro libro) {
+        if (this.libroService.findByIsbn(libro.getIsbn()) != null)
+            return Boolean.TRUE;
+        return Boolean.FALSE;
+    }
+
+    private boolean prestamoExiste(Libro libro, Estudiante estudiante) {
+        return this.prestamos.contains(new Prestamo(libro, estudiante));
+    }
+
+
 
 
     public List<String> getVistaPrestamos() {
         List<String> vista = new ArrayList<>();
 
-        this.prestamos.forEach(prestamo -> {
+        for (Prestamo prestamo : this.prestamos) {
             vista.add(prestamo.toString());
-        });
+        }
         return vista;
     }
 
-    public Prestamo renovarPrestamo(String isbn, Integer dniEstudiante, LocalDate fechaRenovacion) {
-        Libro libro = this.searchLibroPorISBN(isbn);
-        Estudiante estudiante = this.getEstudiatePorDni(dniEstudiante);
+    public Prestamo renovarPrestamo(Libro libro, Estudiante estudiante) {
 
-        if (libro == null || libro.isDisponible() || estudiante == null)
-            return null;
+        if (!libroExiste(libro)){
+            throw new IllegalArgumentException("Libro inexistente en Biblioteca");
+        }
+
+        if (!estudianteExiste(estudiante)){
+            throw new IllegalArgumentException("Estudiante inexistente en Biblioteca");
+        }
 
         Prestamo prestamo = this.getPrestamo(libro,estudiante);
-        if (prestamo == null)
-            return null;
+        if (prestamo == null){
+            throw new IllegalArgumentException("No existe un prestamo de este libro y estudiante");
+        }
 
-        LocalDate nuevaFechaVencimiento = prestamo.setRenovacion(fechaRenovacion);
-        if (nuevaFechaVencimiento == null)
-            return null;
+        if (!prestamo.isRenovable()){
+            throw new IllegalArgumentException("Prestamo Supera nro de Renovaciones posibles");
+        }
 
-        return new Prestamo(prestamo);
+        prestamo.setRenovacion();
+
+        return prestamo;
     }
 
 
@@ -112,16 +140,16 @@ public class Biblioteca {
 
 
     public Libro getLibroPorISBN(String isbn) {
-        if (isbn == null)
+     /*   if (isbn == null)
             return null;
 
         Libro libro = this.searchLibroPorISBN(isbn);
         if (libro == null)
             return null;
-
-        return new Libro(libro);
+       */
+        return this.libroService.findByIsbn(isbn);
     }
-
+/*
     private Libro searchLibroPorISBN(String isbn) {
         Libro libro = new Libro(isbn);
         int posLibro = this.libros.indexOf(libro);
@@ -131,7 +159,7 @@ public class Biblioteca {
         }
         return null;
     }
-
+*/
 
     public void addEstudiante(Estudiante estudiante) {
         if ((estudiante != null)

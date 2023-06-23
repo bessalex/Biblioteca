@@ -8,30 +8,27 @@ public class Libro {
     private Categoria categoria= null;
     private String isbn;
     private String autor = null;
-    private Boolean disponible = null;;
+
+
+    //private Boolean disponible = null;
+    private int ejemplares_disponibles = 0;
 
     public Libro(String isbn){
         this.isbn = isbn;
-        this.disponible = Boolean.TRUE;
+        this.ejemplares_disponibles = 1;
     }
 
-    public Libro(String isbn, String titulo){
-        this.isbn = isbn;
-        this.titulo = titulo;
-        this.disponible = Boolean.TRUE;
-    }
-
-    public Libro(String isbn, String titulo, Categoria categoria){
+    public Libro(String isbn, String titulo, Categoria categoria, int num_ejemplares){
         this.isbn = isbn;
         this.titulo = titulo;
         this.categoria = categoria;
-        this.disponible = Boolean.TRUE;
+        this.ejemplares_disponibles = num_ejemplares;
     }
 
     public Libro( Libro libro) {
         this.titulo = libro.getTitulo();
         this.categoria = libro.getCategoria();
-        this.disponible = libro.isDisponible();
+        this.ejemplares_disponibles = libro.ejemplares_disponibles;
         this.isbn = libro.getIsbn();
         this.autor =  libro.getAutor();
     }
@@ -41,7 +38,12 @@ public class Libro {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Libro libro = (Libro) o;
-        return Objects.equals(this.isbn,libro.getIsbn());
+        return Objects.equals(getIsbn(), libro.getIsbn());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getIsbn());
     }
 
     public String getTitulo() {
@@ -52,35 +54,24 @@ public class Libro {
         return categoria;
     }
 
-    public void setDisponible(Boolean disponible) {
-        this.disponible = disponible;
-    }
-
     public Boolean isDisponible() {
-        return this.disponible;
+
+        if (this.ejemplares_disponibles > 0 )
+                return Boolean.TRUE;
+        return Boolean.FALSE;
     }
 
     public String getIsbn() {
         return isbn;
     }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
-    }
-
     public String getAutor() {
         return autor;
     }
 
-    public void setAutor(String autor) {
-        this.autor = autor;
+
+    public void marcarEjemplarPrestado() {
+        this.ejemplares_disponibles--;
     }
 
-    public Boolean getDisponible() {
-        return disponible;
-    }
 }

@@ -17,6 +17,8 @@ public class Prestamo {
         this.libro = libro;
         this.estudiante = estudiante;
         this.nroRenovacion = 0;
+        this.fechaInicio = LocalDate.now();
+        this.fechaVencimiento = this.fechaInicio.plusDays(Biblioteca.MAXIMO_DIAS_PRESTAMO);
     }
 
     public Prestamo( Prestamo prestamo) {
@@ -27,7 +29,7 @@ public class Prestamo {
         this.nroRenovacion = prestamo.getNroRenovacion();
     }
 
-    private int getNroRenovacion() {
+    public int getNroRenovacion() {
         return this.nroRenovacion;
     }
 
@@ -58,24 +60,16 @@ public class Prestamo {
                 Objects.equals(estudiante, prestamo.estudiante);
     }
 
-    public void setFechaInicio(LocalDate fechaInicio) {
-        if (fechaInicio != null && this.nroRenovacion == 0 && this.fechaInicio == null) {
-            this.fechaInicio = fechaInicio;
-            this.fechaVencimiento = this.fechaInicio.plusDays(Biblioteca.MAXIMO_DIAS_PRESTAMO);
-        }
+    public boolean isRenovable(){
+        return (this.nroRenovacion < Biblioteca.MAXIMO_RENOVACIONES);
     }
 
-    public LocalDate setRenovacion(LocalDate fechaRenovacion) {
-        if (fechaRenovacion == null
-                || this.nroRenovacion >= Biblioteca.MAXIMO_RENOVACIONES
-                || this.fechaVencimiento == null
-                || this.fechaInicio.isAfter(fechaRenovacion)){
-            return null;
-        }
-        this.fechaVencimiento = fechaRenovacion.plusDays(Biblioteca.MAXIMO_DIAS_PRESTAMO);
+
+    public void setRenovacion() {
+        this.fechaVencimiento = LocalDate.now().plusDays(Biblioteca.MAXIMO_DIAS_PRESTAMO);
         this.nroRenovacion++;
-        return this.fechaVencimiento;
     }
+
 
     public LocalDate getFechaInicio() {
         return fechaInicio;

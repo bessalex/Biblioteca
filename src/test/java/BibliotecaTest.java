@@ -3,373 +3,276 @@ import ar.alex.biblioteca.Categoria;
 import ar.alex.biblioteca.Estudiante;
 import ar.alex.biblioteca.Prestamo;
 import ar.alex.biblioteca.Libro;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
+import java.io.IOError;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BibliotecaTest {
 
+    private Biblioteca biblioteca;
 
-    // ==== 1. Incorporar libros y que los mismos no estén duplicados por el título. =================
-    // ==== 1m. Incorporar un libro a la biblioteca. Cada libro tiene un título, un código ISBN
-    //          y no puede estar registrado más de una vez.
+    private Libro libroLaIliada;
+    private Libro libroElUltimoConfin;
+    private Estudiante estudiante1;
+    private String isbnLaIliada;
+    private int dniEstudiante1;
+
+    @BeforeEach
+    public void setUp() {
+        this.biblioteca = new Biblioteca();
+        this.isbnLaIliada = "9788467037531";
+        this.libroLaIliada = new Libro(this.isbnLaIliada, "La Íliada", Categoria.CLASICO,1);
+        this.libroElUltimoConfin = new Libro("9789500718585",
+                "El último confin de la tierra",
+                Categoria.HISTORIA, 1);
+
+        this.dniEstudiante1 = 31999999;
+        this.estudiante1 = (new Estudiante(31999999,"Pablo", "Aimar",
+                "Río Cuarto"));
+    }
+
+    @AfterEach
+    public void teardown(){
+        this.biblioteca = null;
+        this.libroLaIliada = null;
+        this.libroElUltimoConfin = null;
+    }
+
     @Test
+    @DisplayName("Incorporar Libros a Biblioteca OK")
     public void incorporarLibrosTest(){
 
-        Biblioteca biblioteca = new Biblioteca();
-        Libro libro = new Libro("9788467037531", "La Íliada");
+        this.biblioteca.addLibro(this.libroLaIliada);
 
-        biblioteca.addLibro(libro);
-
-        Assertions.assertEquals(1, biblioteca.getLibros().size());
+        Assertions.assertEquals(1, this.biblioteca.getLibros().size());
     }
 
     @Test
+    @DisplayName("Intentar incorporar Libros Duplicados ")
     public void incorporarLibrosDuplicadosFailTest(){
-        // No se van a incorporar duplicados
 
-        Biblioteca biblioteca = new Biblioteca();
-        Libro libro = new Libro("9788467037531", "La Íliada");
-        Libro libro2 = new Libro("9788467037531", "La Íliade");
+        Libro libro = new Libro(this.isbnLaIliada, "La Íliada", Categoria.CLASICO,1);
 
-        biblioteca.addLibro(libro);
-        biblioteca.addLibro(libro2);
+        this.biblioteca.addLibro(this.libroLaIliada);
+        this.biblioteca.addLibro(libro);
 
-        Assertions.assertEquals(1, biblioteca.getLibros().size());
-        Assertions.assertEquals(libro,biblioteca.getLibros().get(0));
+        Assertions.assertEquals(1, this.biblioteca.getLibros().size());
+        Assertions.assertEquals(libro,this.biblioteca.getLibros().get(0));
 
     }
 
-    // ===== 2. Dado una categoría permita mostrar los libros de esa categoría. ====
     @Test
-    public void mostrarLibrosPorCategoriaTest(){
-        Biblioteca biblioteca = new Biblioteca();
+    @DisplayName("Obtener Libros por Categoria OK")
+    public void getLibrosPorCategoriaTest(){
 
-        biblioteca.addLibro(new Libro("9788467037531","La Íliada", Categoria.CLASICO));
-        biblioteca.addLibro(new Libro("9789500718585", "El último confin de la tierra", Categoria.HISTORIA));
-        biblioteca.addLibro(new Libro("9788426106582", "La Odisea",Categoria.CLASICO));
+        this.biblioteca.addLibro(this.libroLaIliada);
+        this.biblioteca.addLibro(this.libroElUltimoConfin);
 
         List<Libro> librosClasicos = biblioteca.getLibrosPorCategoria(Categoria.CLASICO);
 
-        Assertions.assertEquals(2, librosClasicos.size());
+        Assertions.assertEquals(1, librosClasicos.size());
     }
 
-    // === 2. Dado una categoría permita mostrar los libros de esa categoría.                         =====
-    // === 3m. Dado una categoría, permitir listar todos los libros correspondientes a esa categoría. =====
-    @Test
-    public void mostrarLibrosPorCategoriaVacioTest(){
-        Biblioteca biblioteca = new Biblioteca();
 
-        biblioteca.addLibro(new Libro("9788467037531","La Íliada", Categoria.CLASICO));
-        biblioteca.addLibro(new Libro("9789500718585", "El último confin de la tierra", Categoria.HISTORIA));
-        biblioteca.addLibro(new Libro("9788426106582", "La Odisea",Categoria.CLASICO));
+    @Test
+    @DisplayName("Obtener Libros por Categoría Vacío")
+    public void getLibrosPorCategoriaVacioTest(){
+
+        this.biblioteca.addLibro(this.libroLaIliada);
+        this.biblioteca.addLibro(this.libroElUltimoConfin);
 
         List<Libro> librosDeportes = biblioteca.getLibrosPorCategoria(Categoria.DEPORTE);
 
         Assertions.assertEquals(0, librosDeportes.size());
     }
 
-    /*
-    ==== 2m. Dado un código ISBN, buscar y devolver los datos del libro identificado por dicho ISBN.
-             Título, código ISBN, autor, y categoría.                                                 ====
-     */
+
     @Test
+    @DisplayName("Obtener Libro por ISBN OK")
     public void getLibroPorIsbnOKTest(){
-        Biblioteca biblioteca = new Biblioteca();
-        String isbn = "9788467037531";
-        Libro laIliada = new Libro(isbn,"La Íliada", Categoria.CLASICO);
-        laIliada.setAutor("Homero");
-        biblioteca.addLibro(laIliada);
 
-        biblioteca.addLibro(new Libro("9789500718585", "El último confin de la tierra", Categoria.HISTORIA));
-        biblioteca.addLibro(new Libro("9788426106582", "La Odisea",Categoria.CLASICO));
+        this.biblioteca.addLibro(this.libroLaIliada);
+        this.biblioteca.addLibro(this.libroElUltimoConfin);
 
-        Libro libro = biblioteca.getLibroPorISBN(isbn);
+        Libro libro = biblioteca.getLibroPorISBN(this.isbnLaIliada);
 
-        Assertions.assertNotSame(laIliada,libro);
-        Assertions.assertEquals(laIliada,libro);
-        Assertions.assertEquals(libro.getTitulo(),laIliada.getTitulo());
-        Assertions.assertEquals(libro.getAutor(), laIliada.getAutor());
-        Assertions.assertEquals(libro.getCategoria(), laIliada.getCategoria());
-        Assertions.assertEquals(libro.getCategoria(), laIliada.getCategoria());
+        Assertions.assertNotSame(this.libroLaIliada,libro);
+        Assertions.assertEquals(this.libroLaIliada,libro);
+        Assertions.assertEquals(libro.getTitulo(),this.libroLaIliada.getTitulo());
+        Assertions.assertEquals(libro.getAutor(), this.libroLaIliada.getAutor());
+        Assertions.assertEquals(libro.getCategoria(), this.libroLaIliada.getCategoria());
+        Assertions.assertEquals(libro.getCategoria(), this.libroLaIliada.getCategoria());
     }
+
+
     @Test
+    @DisplayName("Obtener libro por ISBN Fail Test")
     public void getLibroPorIsbnFailTest(){
-        Biblioteca biblioteca = new Biblioteca();
-        String isbn = "9788467037531";
-        Libro laIliada = new Libro(isbn,"La Íliada", Categoria.CLASICO);
-        laIliada.setAutor("Homero");
 
-        biblioteca.addLibro(new Libro("9789500718585", "El último confin de la tierra", Categoria.HISTORIA));
-        biblioteca.addLibro(new Libro("9788426106582", "La Odisea",Categoria.CLASICO));
+        this.biblioteca.addLibro(this.libroElUltimoConfin);
 
-        Libro libro = biblioteca.getLibroPorISBN(isbn);
+        Libro libro = biblioteca.getLibroPorISBN(this.isbnLaIliada);
 
         Assertions.assertNull(libro);
-
     }
 
-    /*
- ====   3. Un estudiante pueda solicitar prestado un libro y que su fecha de devolución sea dentro
-    de los siguientes 15 días, teniendo presente que exista un libro disponible.
 
-       5m. Un estudiante solicita prestado un libro y su plazo límite de devolución es
-       dentro de 15 días corridos, teniendo presente que exista un libro disponible.
-     */
     @Test
+    @DisplayName("Solicitar Préstamo OK")
     public void solicitarPrestamoOKTest(){
-        // crear libros en biblioteca
-        Biblioteca biblioteca = new Biblioteca();
-        String tituloLibro = "La Íliada";
-        Libro libroAlquilado = new Libro("9788467037531","La Íliada");
-        biblioteca.addLibro(libroAlquilado);
-        biblioteca.addLibro(new Libro("9789500718585", "El último confin de la tierra"));
-        biblioteca.addLibro(new Libro("9788426106582", "La Odisea"));
 
-        // Crear estudiante
-        biblioteca.addEstudiante(new Estudiante(31999999,"Pablo", "Aimar",
-               "Río Cuarto"));
+        this.biblioteca.addLibro(this.libroLaIliada);
+        this.biblioteca.addLibro(this.libroElUltimoConfin);
+        this.biblioteca.addEstudiante(this.estudiante1);
 
-        // Prestamo solicitado a libro existente
-        Prestamo prestamo =  biblioteca.solicitarPrestamo("9788467037531",31999999,
-                LocalDate.of(2023,05,14));
+        Prestamo prestamo =  biblioteca.solicitarPrestamo(this.libroLaIliada,this.estudiante1);
 
-        Assertions.assertEquals(libroAlquilado.getTitulo(), prestamo.getLibro().getTitulo());
-        Assertions.assertEquals(libroAlquilado.getCategoria(), prestamo.getLibro().getCategoria());
-        Assertions.assertEquals(LocalDate.of(2023,05,29), prestamo.getFechaVencimiento());
+        Assertions.assertEquals(this.libroLaIliada.getTitulo(), prestamo.getLibro().getTitulo());
+        Assertions.assertEquals(this.libroLaIliada.getCategoria(), prestamo.getLibro().getCategoria());
+        Assertions.assertEquals(LocalDate.now().plusDays(Biblioteca.MAXIMO_DIAS_PRESTAMO),
+                prestamo.getFechaVencimiento());
     }
 
     @Test
+    @DisplayName("Solicitar Prestamo Biblioteca Vacía")
+
     public void solicitarPrestamoSinLibrosTest(){
-        Biblioteca biblioteca = new Biblioteca();
 
-        biblioteca.addEstudiante( new Estudiante(31999999,"Pablo", "Aimar",
-               "Río Cuarto"));
+        this.biblioteca.addEstudiante(this.estudiante1);
 
-        Prestamo prestamo =  biblioteca.solicitarPrestamo("9788467037531",31999999, LocalDate.now());
+        Assertions.assertThrows(IllegalArgumentException.class,
+                ()->{biblioteca.solicitarPrestamo(this.libroLaIliada, this.estudiante1);
+        });
 
-        Assertions.assertNull(prestamo);
     }
 
     @Test
+    @DisplayName("Solicitar Prestamo Libro Inexistente")
     public void solicitarPrestamoLibroInexistenteTest(){
-        Biblioteca biblioteca = new Biblioteca();
 
-        biblioteca.addLibro(new Libro("9789500718585", "El último confin de la tierra"));
-        biblioteca.addLibro(new Libro("9788426106582", "La Odisea"));
+        this.biblioteca.addLibro(this.libroElUltimoConfin);
+        this.biblioteca.addEstudiante(this.estudiante1);
 
-        biblioteca.addEstudiante( new Estudiante(31999999,"Pablo", "Aimar",
-               "Río Cuarto"));
-
-        Prestamo prestamo =  biblioteca.solicitarPrestamo("1",31999999, LocalDate.now());
-
-        Assertions.assertNull(prestamo);
-
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> {
+                    biblioteca.solicitarPrestamo(this.libroLaIliada, this.estudiante1);
+                });
     }
 
 
-    /*
- ===== 4. El usuario de este aplicativo pueda visualizar los libros que se encuentran prestados
-     y su fecha de devolución.
-
-     6m. Consultar una lista de libros que se encuentran prestados y su fecha de vencimiento del préstamo.
-
-    */
     @Test
+    @DisplayName("Visualizar Prestamos OK")
     public void visualizarPrestadosTest(){
-        // Cargar libros a Biblioteca
-        Biblioteca biblioteca = new Biblioteca();
-        biblioteca.addLibro(new Libro("9788467037531","La Íliada"));
-        biblioteca.addLibro(new Libro("9789500718585", "El último confin de la tierra"));
-        biblioteca.addLibro(new Libro("9788426106582", "La Odisea"));
 
-        // Crear estudiantes
-        biblioteca.addEstudiante( new Estudiante(31999999,"Pablo", "Aimar",
-               "Río Cuarto"));
-        biblioteca.addEstudiante( new Estudiante(90888888,"Ariel", "Ortega",
-               "Río Cuarto"));
-        // generar Prstamos
-        biblioteca.solicitarPrestamo("9789500718585", 31999999,
-                LocalDate.of(2023,05,14));
-        biblioteca.solicitarPrestamo("9788467037531", 90888888,
-                LocalDate.of(2023,05,10));
+        this.biblioteca.addLibro(this.libroElUltimoConfin);
+        this.biblioteca.addLibro(this.libroLaIliada);
+        this.biblioteca.addEstudiante(this.estudiante1);
+
+        this.biblioteca.solicitarPrestamo(this.libroLaIliada, this.estudiante1);
 
 
         List<String> esperados = new ArrayList<>();
-        esperados.add("Título = El último confin de la tierra | Fecha Vencimiento = " +
-                LocalDate.of(2023,05,14).plusDays(Biblioteca.MAXIMO_DIAS_PRESTAMO));
         esperados.add("Título = La Íliada | Fecha Vencimiento = " +
-                LocalDate.of(2023,05,10).plusDays(Biblioteca.MAXIMO_DIAS_PRESTAMO));
+                LocalDate.now().plusDays(Biblioteca.MAXIMO_DIAS_PRESTAMO));
 
         List<String> prestados = biblioteca.getVistaPrestamos();
 
-        Assertions.assertEquals(2,prestados.size());
+        Assertions.assertEquals(1,prestados.size());
         Assertions.assertEquals(esperados.get(0), prestados.get(0));
-        Assertions.assertEquals(esperados.get(1), prestados.get(1));
     }
 
     @Test
+    @DisplayName("Visualizar Prestamos Vacío")
     public void visualizarPrestadosVacioTest(){
-        // Cargar libros a Biblioteca
-        Biblioteca biblioteca = new Biblioteca();
-        biblioteca.addLibro(new Libro("9788467037531","La Íliada"));
-        biblioteca.addLibro(new Libro("9789500718585", "El último confin de la tierra"));
-        biblioteca.addLibro(new Libro("9788426106582", "La Odisea"));
 
-        // Crear estudiantes
-        biblioteca.addEstudiante( new Estudiante(31999999,"Pablo", "Aimar",
-               "Río Cuarto"));
-        biblioteca.addEstudiante( new Estudiante(90888,"Ariel", "Ortega",
-               "Río Cuarto"));
+        this.biblioteca.addLibro(this.libroLaIliada);
+        this.biblioteca.addEstudiante(this.estudiante1);
 
-        List<String> prestados = biblioteca.getVistaPrestamos();
+        List<String> prestados = this.biblioteca.getVistaPrestamos();
 
         Assertions.assertNotNull(prestados);
         Assertions.assertEquals(0,prestados.size());
     }
 
-    /*
- ==== 4m. Incorporar un estudiante o socio a la biblioteca registrando
-          un tipo y número de documento, nombre y apellido, y domicilio. ===
-     */
+
     @Test
+    @DisplayName("Incorporar Estudiante OK")
     public void incorporarEstudianteOKTest(){
-        Biblioteca biblioteca = new Biblioteca();
 
-        Estudiante estudiante = new Estudiante(31999999,"Aimar",
-                "Pablo Cesar", "Río Cuarto");
-
-        biblioteca.addEstudiante(estudiante);
+        this.biblioteca.addEstudiante(this.estudiante1);
 
         Assertions.assertEquals(1, biblioteca.getEstudiantes().size());
     }
 
     @Test
+    @DisplayName("Incorporar Estudiante Duplicado ")
     public void incorporarEstudianteDuplicadoTest(){
-        Biblioteca biblioteca = new Biblioteca();
 
-        Estudiante estudiante = new Estudiante(31999999,"Aimar",
+        this.biblioteca.addEstudiante(this.estudiante1);
+
+        Estudiante estudianteDup = new Estudiante(this.dniEstudiante1,"Aimar",
                 "Pablo Cesar", "Río Cuarto");
 
-        Estudiante estudianteDup = new Estudiante(31999999,"Aimar",
-                "Pablo Cesar", "Río Cuarto");
-
-        biblioteca.addEstudiante(estudiante);
+        biblioteca.addEstudiante(this.estudiante1);
         biblioteca.addEstudiante(estudianteDup);
 
         Assertions.assertEquals(1, biblioteca.getEstudiantes().size());
     }
 
-    /*
- ====  5. Renovación del préstamo de su libro extendiendo su fecha de devolución siempre y
-     cuando no haya excedido el límite establecido de renovaciones establecidos por la biblioteca. ===
 
-       7m. Renovación del préstamo de su libro extendiendo su fecha de devolución siempre y
-       cuando no haya excedido el límite de renovaciones establecido por la biblioteca.           =====
-     */
     @Test
+    @DisplayName("Renovar Prestamo Inexistente FailTest")
     public void renovarPrestamoNoExisteTest(){
-        // Generar Biblioteca
-        Biblioteca biblioteca = new Biblioteca();
-        Libro libro = new Libro("9789500718585", "El último confin de la tierra");
-        biblioteca.addLibro(libro);
-        Libro libro2 = new Libro("9788467037531","La Íliada");
-        biblioteca.addLibro(libro2);
 
-        // generar Estudiante
-        biblioteca.addEstudiante( new Estudiante(31999999,"Pablo", "Aimar",
-               "Río Cuarto"));
+        this.biblioteca.addLibro(this.libroLaIliada);
+        this.biblioteca.addEstudiante(this.estudiante1);
 
-        Prestamo prestamo = biblioteca.renovarPrestamo("9788467037531", 31999999,LocalDate.now());
-        Assertions.assertNull(prestamo);
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> {biblioteca.renovarPrestamo(this.libroLaIliada, this.estudiante1);},
+                "No existe un prestamo de este libro y estudiante");
 
     }
 
     @Test
+    @DisplayName("Renovar Prestamo Excede Limite Renovaciones ")
     public void renovarPrestamoExcedeLimiteFailTest(){
-        Biblioteca biblioteca = new Biblioteca();
 
-        Libro libro = new Libro("9789500718585", "El último confin de la tierra");
-        biblioteca.addLibro(libro);
-        Libro libro2 = new Libro("9788467037531","La Íliada");
-        biblioteca.addLibro(libro2);
+        this.biblioteca.addLibro(this.libroLaIliada);
+        this.biblioteca.addEstudiante(this.estudiante1);
 
-        biblioteca.addEstudiante( new Estudiante(31999999,"Pablo", "Aimar",
-               "Río Cuarto"));
+        Prestamo prestamo = this.biblioteca.solicitarPrestamo(this.libroLaIliada, this.estudiante1);
 
-        Prestamo prestamo = biblioteca.solicitarPrestamo("9788467037531", 31999999,
-                LocalDate.of(2023,05,25));
-        Assertions.assertEquals(prestamo.getFechaVencimiento(),
-                LocalDate.of(2023,05,25).plusDays(Biblioteca.MAXIMO_DIAS_PRESTAMO));
+        Prestamo prestamoRenovado = this.biblioteca.renovarPrestamo(this.libroLaIliada, this.estudiante1);
 
-        Prestamo prestamoRenovado = biblioteca.renovarPrestamo("9788467037531",31999999,
-                LocalDate.of(2023, 06, 01));
-        Assertions.assertEquals(prestamoRenovado.getLibro(),libro2);
-        Assertions.assertEquals(prestamoRenovado.getFechaVencimiento(),
-                LocalDate.of(2023,06,01).plusDays(Biblioteca.MAXIMO_DIAS_PRESTAMO));
+        Prestamo prestamoRenovado2 = this.biblioteca.renovarPrestamo(this.libroLaIliada, this.estudiante1);
 
-        Prestamo prestamoRenovado2 = biblioteca.renovarPrestamo("9788467037531",31999999,
-                LocalDate.of(2023, 06, 01));
-        Assertions.assertEquals(prestamoRenovado2.getLibro(),libro2);
-        Assertions.assertEquals(prestamoRenovado2.getFechaVencimiento(),
-                LocalDate.of(2023,06,01).plusDays(Biblioteca.MAXIMO_DIAS_PRESTAMO));
-
-        Prestamo prestamoRenovado3 = biblioteca.renovarPrestamo("9788467037531",31999999,
-                LocalDate.of(2023, 06, 01));
-
-        Assertions.assertNull(prestamoRenovado3);
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> {biblioteca.renovarPrestamo(this.libroLaIliada, this.estudiante1);},
+                "Prestamo Supera nro de Renovaciones posibles");
 
     }
 
+
+
     @Test
-    public void renovarPrestamoYaPrestadoTest(){
-        Biblioteca biblioteca = new Biblioteca();
-
-        Libro libro = new Libro("9789500718585", "El último confin de la tierra");
-        biblioteca.addLibro(libro);
-        Libro libro2 =  new Libro("9788467037531","La Íliada");
-        biblioteca.addLibro(libro2);
-
-        biblioteca.addEstudiante( new Estudiante(31999999,"Pablo", "Aimar",
-               "Río Cuarto"));
-
-        biblioteca.addEstudiante( new Estudiante(99999,"Pablo", "Aimar",
-               "Río Cuarto"));
-
-        Prestamo prestamo = biblioteca.solicitarPrestamo("9788467037531", 31999999,
-                LocalDate.of(2023,05,25));
-
-        Prestamo prsetamoRenovado = biblioteca.renovarPrestamo("9788467037531", 99999,
-                LocalDate.of(2023,05,26));
-        Assertions.assertNull(prsetamoRenovado);
-
-    }
-    @Test
+    @DisplayName("Renovar Prestamo OK")
     public void renovarPrestamoOKTest(){
-        Biblioteca biblioteca = new Biblioteca();
 
-        Libro libro = new Libro("9789500718585", "El último confin de la tierra");
-        biblioteca.addLibro(libro);
-        Libro libro2 =  new Libro("9788467037531","La Íliada");
-        biblioteca.addLibro(libro2);
+        this.biblioteca.addLibro(this.libroLaIliada);
+        this.biblioteca.addEstudiante(this.estudiante1);
 
-        biblioteca.addEstudiante(  new Estudiante(31999999, "Pablo", "Aimar",
-               "Río Cuarto"));
-
-        Prestamo prestamo = biblioteca.solicitarPrestamo("9788467037531", 31999999,
-                LocalDate.of(2023,05,20));
+        Prestamo prestamo = this.biblioteca.solicitarPrestamo(this.libroLaIliada, this.estudiante1);
         System.out.println(prestamo);
         Assertions.assertNotNull(prestamo);
 
-        Prestamo prestamoRenovado = biblioteca.renovarPrestamo("9788467037531",
-                31999999, LocalDate.of(2023, 06, 01));
-        Assertions.assertNotNull(prestamoRenovado);
-        Assertions.assertEquals(libro2.getTitulo(),prestamoRenovado.getLibro().getTitulo());
-        Assertions.assertNull(prestamoRenovado.getEstudiante());
-        Assertions.assertEquals(LocalDate.of(2023,06,01).plusDays(15L),
+        Prestamo prestamoRenovado = biblioteca.renovarPrestamo(this.libroLaIliada, this.estudiante1);
+
+        Assertions.assertEquals(this.libroLaIliada.getTitulo(),prestamoRenovado.getLibro().getTitulo());
+        Assertions.assertEquals(this.estudiante1,prestamo.getEstudiante());
+        Assertions.assertEquals(LocalDate.now().plusDays(15L),
                 prestamoRenovado.getFechaVencimiento());
     }
 
