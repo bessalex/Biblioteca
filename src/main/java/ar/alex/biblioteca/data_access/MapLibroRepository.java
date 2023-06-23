@@ -1,4 +1,7 @@
-package ar.alex.biblioteca;
+package ar.alex.biblioteca.data_access;
+
+import ar.alex.biblioteca.business.Categoria;
+import ar.alex.biblioteca.business.Libro;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,9 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class LibroRepositoryImpl implements LibroRepository{
+public class MapLibroRepository implements LibroRepository {
 
-    private final Map<String,Libro> libroMap = new HashMap<>();
+    private final Map<String, Libro> libroMap = new HashMap<>();
     @Override
     public void save(Libro libro) {
         this.libroMap.put(libro.getIsbn(),libro);
@@ -33,9 +36,7 @@ public class LibroRepositoryImpl implements LibroRepository{
     }
 
     @Override
-    public void update(Libro libroPrestar) {  // verifiar que libro exista es útil 
-    //    Libro libro = this.libroMap.get(libroPrestar.getIsbn());
-    //    libro.setDisponible(libroPrestar.getDisponible());
-        this.libroMap.put(libroPrestar.getIsbn(), libroPrestar);
+    public void update(Libro libro) {
+        this.libroMap.put(libro.getIsbn(), libro);
     }
 }

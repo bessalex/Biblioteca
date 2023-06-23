@@ -1,4 +1,4 @@
-package ar.alex.biblioteca;
+package ar.alex.biblioteca.business;
 
 
 import java.time.LocalDate;
@@ -56,8 +56,12 @@ public class Prestamo {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Prestamo prestamo = (Prestamo) o;
-        return Objects.equals(libro, prestamo.libro) &&
-                Objects.equals(estudiante, prestamo.estudiante);
+        return Objects.equals(getLibro(), prestamo.getLibro()) && Objects.equals(getEstudiante(), prestamo.getEstudiante());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getLibro(), getEstudiante());
     }
 
     public boolean isRenovable(){

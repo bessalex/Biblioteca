@@ -1,4 +1,4 @@
-package ar.alex.biblioteca;
+package ar.alex.biblioteca.business;
 
 public enum Categoria {
     COMICS, BIOGRAFIA, CIENTIFICO, AUTOAYUDA, AVENTURAS, CIENCIA_FICCION,

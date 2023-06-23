@@ -1,4 +1,7 @@
-package ar.alex.biblioteca;
+package ar.alex.biblioteca.data_access;
+
+import ar.alex.biblioteca.business.Categoria;
+import ar.alex.biblioteca.business.Libro;
 
 import java.util.List;
 

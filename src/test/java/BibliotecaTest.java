@@ -1,11 +1,10 @@
-import ar.alex.biblioteca.Biblioteca;
-import ar.alex.biblioteca.Categoria;
-import ar.alex.biblioteca.Estudiante;
-import ar.alex.biblioteca.Prestamo;
-import ar.alex.biblioteca.Libro;
+import ar.alex.biblioteca.business.Biblioteca;
+import ar.alex.biblioteca.business.Categoria;
+import ar.alex.biblioteca.business.Estudiante;
+import ar.alex.biblioteca.business.Prestamo;
+import ar.alex.biblioteca.business.Libro;
 import org.junit.jupiter.api.*;
 
-import java.io.IOError;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;

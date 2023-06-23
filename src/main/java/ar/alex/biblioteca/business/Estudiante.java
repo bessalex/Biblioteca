@@ -1,4 +1,4 @@
-package ar.alex.biblioteca;
+package ar.alex.biblioteca.business;
 
 import java.util.Objects;
 
@@ -14,9 +14,6 @@ public class Estudiante {
         this.apellido = apellido;
         this.nombres = nombres;
         this.direccion = direccion;
-    }
-    public Estudiante(Integer dni) {
-        this.dni = dni;
     }
 
     @Override

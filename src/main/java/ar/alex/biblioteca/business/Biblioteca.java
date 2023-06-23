@@ -1,5 +1,10 @@
-package ar.alex.biblioteca;
-import ar.alex.biblioteca.LibroService;
+package ar.alex.biblioteca.business;
+import ar.alex.biblioteca.business.service.EstudianteService;
+import ar.alex.biblioteca.business.service.LibroService;
+import ar.alex.biblioteca.business.service.PrestamoService;
+import ar.alex.biblioteca.data_access.MapEstudianteRepository;
+import ar.alex.biblioteca.data_access.MapLibroRepository;
+import ar.alex.biblioteca.data_access.MapPrestamoRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,16 +16,17 @@ public class Biblioteca {
 
  //   private List<Libro> libros ;
  //   private final List<Prestamo> prestamos;
-    private final List<Estudiante> estudiantes;
+ //   private final List<Estudiante> estudiantes;
 
     private final LibroService libroService;
     private final PrestamoService prestamoService;
+    private final EstudianteService estudianteService;
 
     public Biblioteca(){
     //    this.libros = new ArrayList<>();
-        this.libroService = new LibroService(new LibroRepositoryImpl());
-        this.prestamoService = new PrestamoService(new PrestamoRepositoryImpl());
-        this.estudiantes = new ArrayList<>();
+        this.libroService = new LibroService(new MapLibroRepository());
+        this.prestamoService = new PrestamoService(new MapPrestamoRepository());
+        this.estudianteService = new EstudianteService(new MapEstudianteRepository());
     }
 
     public void addLibro(Libro libro){
@@ -80,7 +86,10 @@ public class Biblioteca {
     }
 
     private boolean estudianteExiste(Estudiante estudiante) {
-        return this.estudiantes.contains(new Estudiante(estudiante));
+     //   return this.estudiantes.contains(new Estudiante(estudiante));
+        if (this.estudianteService.findByDni(estudiante.getDni()) != null)
+            return Boolean.TRUE;
+        return Boolean.FALSE;
     }
 
     private boolean libroExiste(Libro libro) {
@@ -90,7 +99,7 @@ public class Biblioteca {
     }
 
     private boolean prestamoExiste(Libro libro, Estudiante estudiante) {
-        if (this.prestamoService.findByIsbnAndDni(libro.getIsbn(), estudiante.getDni()) != null)
+        if (this.prestamoService.findByLibroAndEstudiante(libro, estudiante) != null)
             return Boolean.TRUE;
 
         return Boolean.FALSE;
@@ -142,7 +151,7 @@ public class Biblioteca {
             return this.prestamos.get(posBuscado);
         }
         return null;*/
-        return this.prestamoService.findByIsbnAndDni(libro.getIsbn(), estudiante.getDni());
+        return this.prestamoService.findByLibroAndEstudiante(libro, estudiante);
     }
 
 
@@ -169,16 +178,11 @@ public class Biblioteca {
 */
 
     public void addEstudiante(Estudiante estudiante) {
-        if ((estudiante != null)
-                && (!this.estudiantes.contains(estudiante)))
-            this.estudiantes.add(estudiante);
+        this.estudianteService.save(estudiante);
 
     }
 
     public List<Estudiante> getEstudiantes() {
-        List<Estudiante> estudiantes = new ArrayList<>();
-        this.estudiantes.forEach( estudiante -> estudiantes.add(
-                new Estudiante(estudiante)));
-        return estudiantes;
+        return this.estudianteService.findAll();
     }
 }
