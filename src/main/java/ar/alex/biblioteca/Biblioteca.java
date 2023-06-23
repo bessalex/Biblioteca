@@ -1,5 +1,5 @@
 package ar.alex.biblioteca;
-import ar.alex.LibroService;
+import ar.alex.biblioteca.LibroService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,15 +10,16 @@ public class Biblioteca {
     public static final int MAXIMO_RENOVACIONES = 2;
 
  //   private List<Libro> libros ;
-    private final List<Prestamo> prestamos;
+ //   private final List<Prestamo> prestamos;
     private final List<Estudiante> estudiantes;
 
     private final LibroService libroService;
+    private final PrestamoService prestamoService;
 
     public Biblioteca(){
     //    this.libros = new ArrayList<>();
         this.libroService = new LibroService(new LibroRepositoryImpl());
-        this.prestamos = new ArrayList<>();
+        this.prestamoService = new PrestamoService(new PrestamoRepositoryImpl());
         this.estudiantes = new ArrayList<>();
     }
 
@@ -70,7 +71,8 @@ public class Biblioteca {
 
         Prestamo prestamo = new Prestamo(libro, estudiante);
 
-        this.prestamos.add(prestamo);
+        //this.prestamos.add(prestamo);
+        this.prestamoService.save(prestamo);
         libro.marcarEjemplarPrestado();
         this.libroService.update(libro);
 
@@ -88,7 +90,10 @@ public class Biblioteca {
     }
 
     private boolean prestamoExiste(Libro libro, Estudiante estudiante) {
-        return this.prestamos.contains(new Prestamo(libro, estudiante));
+        if (this.prestamoService.findByIsbnAndDni(libro.getIsbn(), estudiante.getDni()) != null)
+            return Boolean.TRUE;
+
+        return Boolean.FALSE;
     }
 
 
@@ -97,7 +102,7 @@ public class Biblioteca {
     public List<String> getVistaPrestamos() {
         List<String> vista = new ArrayList<>();
 
-        for (Prestamo prestamo : this.prestamos) {
+        for (Prestamo prestamo : this.prestamoService.findAll()) {
             vista.add(prestamo.toString());
         }
         return vista;
@@ -123,19 +128,21 @@ public class Biblioteca {
         }
 
         prestamo.setRenovacion();
+        this.prestamoService.update(prestamo);
 
         return prestamo;
     }
 
 
     private Prestamo getPrestamo(Libro libro,Estudiante estudiante){
-        Prestamo aBuscar = new Prestamo(libro, estudiante);
+        /*Prestamo aBuscar = new Prestamo(libro, estudiante);
         int posBuscado = this.prestamos.indexOf(aBuscar);
 
         if (posBuscado >= 0) {
             return this.prestamos.get(posBuscado);
         }
-        return null;
+        return null;*/
+        return this.prestamoService.findByIsbnAndDni(libro.getIsbn(), estudiante.getDni());
     }
 
 

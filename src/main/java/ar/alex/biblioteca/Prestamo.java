@@ -22,8 +22,8 @@ public class Prestamo {
     }
 
     public Prestamo( Prestamo prestamo) {
-        this.libro = new Libro(prestamo.libro);
-        this.estudiante = null;
+        this.libro = prestamo.libro;
+        this.estudiante = prestamo.estudiante;
         this.fechaInicio = prestamo.fechaInicio;
         this.fechaVencimiento = prestamo.getFechaVencimiento();
         this.nroRenovacion = prestamo.getNroRenovacion();

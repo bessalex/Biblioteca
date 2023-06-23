@@ -1,4 +1,4 @@
-package ar.alex;
+package ar.alex.biblioteca;
 
 import ar.alex.biblioteca.Categoria;
 import ar.alex.biblioteca.Libro;
