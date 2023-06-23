@@ -83,8 +83,8 @@ public class Biblioteca {
 
     private boolean libroExiste(Libro libro) {
         if (this.libroService.findByIsbn(libro.getIsbn()) != null)
-            return Boolean.TRUE ;
-        return Boolean.FALSE ;
+            return Boolean.TRUE;
+        return Boolean.FALSE;
     }
 
     private boolean prestamoExiste(Libro libro, Estudiante estudiante) {
