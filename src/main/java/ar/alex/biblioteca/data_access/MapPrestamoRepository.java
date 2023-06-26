@@ -4,10 +4,7 @@ import ar.alex.biblioteca.business.Estudiante;
 import ar.alex.biblioteca.business.Libro;
 import ar.alex.biblioteca.business.Prestamo;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MapPrestamoRepository implements PrestamoRepository{
 
@@ -26,9 +23,9 @@ public class MapPrestamoRepository implements PrestamoRepository{
 
 
     @Override
-    public Prestamo findByLibroAndEstudiante(Libro libro, Estudiante estudiante) {
+    public Optional<Prestamo> findByLibroAndEstudiante(Libro libro, Estudiante estudiante) {
 
-        return this.prestamoMap.get(new Prestamo(libro,estudiante).hashCode());
+        return Optional.ofNullable(this.prestamoMap.get(new Prestamo(libro, estudiante).hashCode()));
 
     }
 

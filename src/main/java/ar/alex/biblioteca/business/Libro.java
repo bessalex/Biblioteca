@@ -4,19 +4,13 @@ package ar.alex.biblioteca.business;
 import java.util.Objects;
 
 public class Libro {
-    private String titulo = null;
-    private Categoria categoria= null;
-    private String isbn;
+    private String titulo;
+    private Categoria categoria;
+    private final String isbn;
     private String autor = null;
 
+    private int ejemplares_disponibles;
 
-    //private Boolean disponible = null;
-    private int ejemplares_disponibles = 0;
-
-    public Libro(String isbn){
-        this.isbn = isbn;
-        this.ejemplares_disponibles = 1;
-    }
 
     public Libro(String isbn, String titulo, Categoria categoria, int num_ejemplares){
         this.isbn = isbn;

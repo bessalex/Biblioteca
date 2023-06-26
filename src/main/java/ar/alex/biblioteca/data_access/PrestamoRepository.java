@@ -5,6 +5,7 @@ import ar.alex.biblioteca.business.Libro;
 import ar.alex.biblioteca.business.Prestamo;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PrestamoRepository {
 
@@ -12,7 +13,7 @@ public interface PrestamoRepository {
 
     List<Prestamo> findAll();
 
-    Prestamo findByLibroAndEstudiante(Libro libro, Estudiante estudiante);
+    Optional<Prestamo> findByLibroAndEstudiante(Libro libro, Estudiante estudiante);
 
     void update(Prestamo prestamo);
 }

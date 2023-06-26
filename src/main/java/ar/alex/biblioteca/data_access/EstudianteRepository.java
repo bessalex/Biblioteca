@@ -3,6 +3,7 @@ package ar.alex.biblioteca.data_access;
 import ar.alex.biblioteca.business.Estudiante;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface EstudianteRepository {
 
@@ -11,6 +12,6 @@ public interface EstudianteRepository {
 
     List<Estudiante> findAll();
 
-    Estudiante findByDni(Integer dni);
+    Optional<Estudiante> findByDni(Integer dni);
 
 }

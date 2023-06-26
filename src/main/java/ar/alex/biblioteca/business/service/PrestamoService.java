@@ -6,6 +6,7 @@ import ar.alex.biblioteca.business.Prestamo;
 import ar.alex.biblioteca.data_access.PrestamoRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public class PrestamoService {
 
@@ -23,7 +24,7 @@ public class PrestamoService {
         return this.prestamoRepository.findAll();
     }
 
-    public Prestamo findByLibroAndEstudiante(Libro libro, Estudiante estudiante) {
+    public Optional<Prestamo> findByLibroAndEstudiante(Libro libro, Estudiante estudiante) {
         if (libro == null){
             throw new RuntimeException("Libro no puede ser Nulo");
         }

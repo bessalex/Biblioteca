@@ -3,10 +3,7 @@ package ar.alex.biblioteca.data_access;
 import ar.alex.biblioteca.business.Categoria;
 import ar.alex.biblioteca.business.Libro;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MapLibroRepository implements LibroRepository {
@@ -29,10 +26,10 @@ public class MapLibroRepository implements LibroRepository {
     }
 
     @Override
-    public Libro findByIsbn(String isbn) {
+    public Optional<Libro> findByIsbn(String isbn) {
         if (this.libroMap.get(isbn) == null)
-            return null;
-        return new Libro (this.libroMap.get(isbn));
+            return Optional.empty();
+        return Optional.of(new Libro(this.libroMap.get(isbn)));
     }
 
     @Override

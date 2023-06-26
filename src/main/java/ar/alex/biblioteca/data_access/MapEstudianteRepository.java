@@ -2,10 +2,7 @@ package ar.alex.biblioteca.data_access;
 
 import ar.alex.biblioteca.business.Estudiante;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MapEstudianteRepository implements EstudianteRepository {
 
@@ -24,11 +21,11 @@ public class MapEstudianteRepository implements EstudianteRepository {
 
 
     @Override
-    public Estudiante findByDni(Integer dni) {
+    public Optional<Estudiante> findByDni(Integer dni) {
 
         if (this.estudianteMap.get(dni) == null)
-            return null;
-        return new Estudiante (this.estudianteMap.get(dni));
+            return Optional.empty();
+        return Optional.of(new Estudiante(this.estudianteMap.get(dni)));
     }
 
 }

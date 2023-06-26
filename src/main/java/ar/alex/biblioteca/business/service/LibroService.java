@@ -5,6 +5,7 @@ import ar.alex.biblioteca.business.Libro;
 import ar.alex.biblioteca.data_access.LibroRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public class LibroService {
 
@@ -26,7 +27,7 @@ public class LibroService {
         return this.libroRepository.findByCategoria(categoria);
     }
 
-    public Libro findByIsbn(String isbn) {
+    public Optional<Libro> findByIsbn(String isbn) {
         return this.libroRepository.findByIsbn(isbn);
     }
 

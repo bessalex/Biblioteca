@@ -4,6 +4,7 @@ import ar.alex.biblioteca.business.Estudiante;
 import ar.alex.biblioteca.data_access.EstudianteRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public class EstudianteService {
 
@@ -21,8 +22,10 @@ public class EstudianteService {
         return this.estudianteRepository.findAll();
     }
 
-    public Estudiante findByDni(Integer dni) {
+    public Optional<Estudiante> findByDni(Integer dni) {
         return this.estudianteRepository.findByDni(dni);
     }
+
+
 
 }

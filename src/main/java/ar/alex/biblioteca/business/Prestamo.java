@@ -8,10 +8,10 @@ public class Prestamo {
 
     private final Libro libro;
     private final Estudiante estudiante;
-    private LocalDate fechaInicio = null ;
-    private LocalDate fechaVencimiento = null ;
+    private final LocalDate fechaInicio;
+    private LocalDate fechaVencimiento ;
 
-    private int nroRenovacion = 0;
+    private int nroRenovacion;
 
     public Prestamo(Libro libro, Estudiante estudiante) {
         this.libro = libro;
@@ -20,19 +20,6 @@ public class Prestamo {
         this.fechaInicio = LocalDate.now();
         this.fechaVencimiento = this.fechaInicio.plusDays(Biblioteca.MAXIMO_DIAS_PRESTAMO);
     }
-
-    public Prestamo( Prestamo prestamo) {
-        this.libro = prestamo.libro;
-        this.estudiante = prestamo.estudiante;
-        this.fechaInicio = prestamo.fechaInicio;
-        this.fechaVencimiento = prestamo.getFechaVencimiento();
-        this.nroRenovacion = prestamo.getNroRenovacion();
-    }
-
-    public int getNroRenovacion() {
-        return this.nroRenovacion;
-    }
-
 
     public LocalDate getFechaVencimiento() {
         return this.fechaVencimiento;
@@ -51,13 +38,13 @@ public class Prestamo {
         return "Título = " + libro.getTitulo() + " | Fecha Vencimiento = " + this.fechaVencimiento;
     }
 
-    @Override
+/*    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Prestamo prestamo = (Prestamo) o;
         return Objects.equals(getLibro(), prestamo.getLibro()) && Objects.equals(getEstudiante(), prestamo.getEstudiante());
-    }
+    }*/
 
     @Override
     public int hashCode() {
@@ -72,11 +59,6 @@ public class Prestamo {
     public void setRenovacion() {
         this.fechaVencimiento = LocalDate.now().plusDays(Biblioteca.MAXIMO_DIAS_PRESTAMO);
         this.nroRenovacion++;
-    }
-
-
-    public LocalDate getFechaInicio() {
-        return fechaInicio;
     }
 
 }
