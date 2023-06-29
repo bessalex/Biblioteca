@@ -58,7 +58,7 @@ public class Biblioteca {
      * @throws EstudianteNoPresenteException Si el estudiante no registrado en biblioteca
      * @throws LibroNoPresenteException  Si el libro no existe en la biblioteca
      */
-    public Prestamo solicitarPrestamo(Libro libro, Estudiante estudiante) throws PrestamoDuplicadoException, LibroSinEjemplaresException, EstudianteNoPresenteException, LibroNoPresenteException {
+    public Prestamo solicitarPrestamo(Libro libro, Estudiante estudiante) {
 
         if (libro == null || estudiante == null) {
             throw new IllegalArgumentException("Libro o estudiante deben informarse");
@@ -89,7 +89,7 @@ public class Biblioteca {
      * @return Estudiante obtenido de registrados
      * @throws EstudianteNoPresenteException En caso de no obtener el estudiante buscado.
      */
-    private Estudiante ifEstudianteExistOrElseThrow(Estudiante estudiante) throws EstudianteNoPresenteException {
+    private Estudiante ifEstudianteExistOrElseThrow(Estudiante estudiante) {
         Optional<Estudiante> estudianteFound = this.estudianteService.findByDni(estudiante.getDni());
 
         return estudianteFound.orElseThrow(() ->
@@ -102,7 +102,7 @@ public class Biblioteca {
      * @return Libro obtenido de los registrados
      * @throws LibroNoPresenteException En caso de no obtener el libro buscado
      */
-    private Libro ifLibroExistOrElseThrow(Libro libro) throws LibroNoPresenteException {
+    private Libro ifLibroExistOrElseThrow(Libro libro) {
         Optional<Libro> libroFound = this.libroService.findByIsbn(libro.getIsbn());
         return libroFound.orElseThrow((() ->
                 new LibroNoPresenteException("Libro No existe en biblioteca")));
@@ -131,7 +131,7 @@ public class Biblioteca {
      * @throws LibroNoPresenteException Si el libro no está presente en la biblioteca
      * @throws PrestamoSuperaRenovacionesException Si se supera el número de renovaciones permitidas
      */
-    public Prestamo renovarPrestamo(Libro libro, Estudiante estudiante) throws EstudianteNoPresenteException, LibroNoPresenteException, PrestamoSuperaRenovacionesException {
+    public Prestamo renovarPrestamo(Libro libro, Estudiante estudiante) {
 
         Estudiante estudianteFound = ifEstudianteExistOrElseThrow(estudiante);
         Libro libroFound = ifLibroExistOrElseThrow(libro);
@@ -167,7 +167,7 @@ public class Biblioteca {
      * @return Libro obtenido
      * @throws LibroNoPresenteException Si el libro no existe
      */
-    public Libro getLibroPorISBN(String isbn) throws LibroNoPresenteException {
+    public Libro getLibroPorISBN(String isbn) {
         Libro libro = new Libro(isbn,"",Categoria.CLASICO,0);
         return ifLibroExistOrElseThrow(libro);
 /*        Optional<Libro> libroFound =this.libroService.findByIsbn(isbn);
