@@ -10,6 +10,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 public class BibliotecaTest {
 
     private Biblioteca biblioteca;
@@ -98,7 +100,12 @@ public class BibliotecaTest {
         this.biblioteca.addLibro(this.libroLaIliada);
         this.biblioteca.addLibro(this.libroElUltimoConfin);
 
-        Libro libro = biblioteca.getLibroPorISBN(this.isbnLaIliada);
+        Libro libro = null;
+        try {
+            libro = biblioteca.getLibroPorISBN(this.isbnLaIliada);
+        } catch (LibroNoPresenteException e) {
+            fail(e.toString());
+        }
 
         Assertions.assertNotSame(this.libroLaIliada,libro);
         Assertions.assertEquals(this.libroLaIliada,libro);
@@ -129,7 +136,13 @@ public class BibliotecaTest {
         this.biblioteca.addLibro(this.libroElUltimoConfin);
         this.biblioteca.addEstudiante(this.estudiante1);
 
-        Prestamo prestamo = biblioteca.solicitarPrestamo(this.libroLaIliada,this.estudiante1);
+        Prestamo prestamo = null;
+        try {
+            prestamo = biblioteca.solicitarPrestamo(this.libroLaIliada,this.estudiante1);
+        } catch (LibroNoPresenteException | LibroSinEjemplaresException |
+                 PrestamoDuplicadoException | EstudianteNoPresenteException e) {
+            fail(e.toString());
+        }
 
         Assertions.assertEquals(this.libroLaIliada.getTitulo(), prestamo.getLibro().getTitulo());
         Assertions.assertEquals(this.libroLaIliada.getCategoria(), prestamo.getLibro().getCategoria());
@@ -145,7 +158,12 @@ public class BibliotecaTest {
         this.biblioteca.addLibro(this.libroLaIliada);
         this.biblioteca.addEstudiante(this.estudiante1);
 
-        biblioteca.solicitarPrestamo(this.libroLaIliada,this.estudiante1);
+        try {
+            biblioteca.solicitarPrestamo(this.libroLaIliada,this.estudiante1);
+        } catch (LibroNoPresenteException | EstudianteNoPresenteException |
+                 PrestamoDuplicadoException | LibroSinEjemplaresException e) {
+            fail(e.toString());
+        }
 
         Assertions.assertThrows(PrestamoDuplicadoException.class,
                 ()-> biblioteca.solicitarPrestamo(this.libroLaIliada,this.estudiante1),
@@ -176,7 +194,12 @@ public class BibliotecaTest {
         Estudiante estudiante2 = new Estudiante(9999,"Saviola", "Javier Pedro", "Nuñez");
         this.biblioteca.addEstudiante(estudiante2);
 
-        biblioteca.solicitarPrestamo(this.libroLaIliada,estudiante2);
+        try {
+            biblioteca.solicitarPrestamo(this.libroLaIliada,estudiante2);
+        } catch (LibroNoPresenteException | LibroSinEjemplaresException |
+                 PrestamoDuplicadoException | EstudianteNoPresenteException e) {
+            fail(e.toString());
+        }
 
         Assertions.assertThrows(LibroSinEjemplaresException.class,
                 ()-> biblioteca.solicitarPrestamo(this.libroLaIliada,this.estudiante1),
@@ -231,7 +254,12 @@ public class BibliotecaTest {
         this.biblioteca.addLibro(this.libroLaIliada);
         this.biblioteca.addEstudiante(this.estudiante1);
 
-        this.biblioteca.solicitarPrestamo(this.libroLaIliada, this.estudiante1);
+        try {
+            this.biblioteca.solicitarPrestamo(this.libroLaIliada, this.estudiante1);
+        } catch (LibroNoPresenteException | LibroSinEjemplaresException |
+                 PrestamoDuplicadoException | EstudianteNoPresenteException e) {
+            fail(e.toString());
+        }
 
         List<String> esperados = new ArrayList<>();
         esperados.add("Título = La Íliada | Fecha Vencimiento = " +
@@ -302,11 +330,14 @@ public class BibliotecaTest {
         this.biblioteca.addLibro(this.libroLaIliada);
         this.biblioteca.addEstudiante(this.estudiante1);
 
-        this.biblioteca.solicitarPrestamo(this.libroLaIliada, this.estudiante1);
-
-        this.biblioteca.renovarPrestamo(this.libroLaIliada, this.estudiante1);
-
-        this.biblioteca.renovarPrestamo(this.libroLaIliada, this.estudiante1);
+        try {
+            this.biblioteca.solicitarPrestamo(this.libroLaIliada, this.estudiante1);
+            this.biblioteca.renovarPrestamo(this.libroLaIliada, this.estudiante1);
+            this.biblioteca.renovarPrestamo(this.libroLaIliada, this.estudiante1);
+        } catch (LibroNoPresenteException | LibroSinEjemplaresException | PrestamoDuplicadoException |
+                 EstudianteNoPresenteException | PrestamoSuperaRenovacionesException e) {
+            fail(e.toString());
+        }
 
         Assertions.assertThrows(PrestamoSuperaRenovacionesException.class,
                 () -> biblioteca.renovarPrestamo(this.libroLaIliada, this.estudiante1),
@@ -323,11 +354,16 @@ public class BibliotecaTest {
         this.biblioteca.addLibro(this.libroLaIliada);
         this.biblioteca.addEstudiante(this.estudiante1);
 
-        Prestamo prestamo = this.biblioteca.solicitarPrestamo(this.libroLaIliada, this.estudiante1);
-
-        Assertions.assertNotNull(prestamo);
-
-        Prestamo prestamoRenovado = biblioteca.renovarPrestamo(this.libroLaIliada, this.estudiante1);
+        Prestamo prestamo = null;
+        Prestamo prestamoRenovado = null;
+        try {
+            prestamo = this.biblioteca.solicitarPrestamo(this.libroLaIliada, this.estudiante1);
+            Assertions.assertNotNull(prestamo);
+            prestamoRenovado = biblioteca.renovarPrestamo(this.libroLaIliada, this.estudiante1);
+        } catch (LibroNoPresenteException | LibroSinEjemplaresException | PrestamoDuplicadoException |
+                 EstudianteNoPresenteException | PrestamoSuperaRenovacionesException e) {
+            fail(e.toString());
+        }
 
         Assertions.assertEquals(this.libroLaIliada.getTitulo(),prestamoRenovado.getLibro().getTitulo());
         Assertions.assertEquals(this.estudiante1,prestamo.getEstudiante());
