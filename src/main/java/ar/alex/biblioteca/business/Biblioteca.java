@@ -131,17 +131,16 @@ public class Biblioteca {
      * @throws LibroNoPresenteException Si el libro no está presente en la biblioteca
      * @throws PrestamoSuperaRenovacionesException Si se supera el número de renovaciones permitidas
      */
-    public Prestamo renovarPrestamo(Libro libro, Estudiante estudiante) throws PrestamoSuperaRenovacionesException, EstudianteNoPresenteException, LibroNoPresenteException {
+    public Prestamo renovarPrestamo(Libro libro, Estudiante estudiante) throws PrestamoSuperaRenovacionesException, EstudianteNoPresenteException, LibroNoPresenteException, PrestamoVencidoException {
 
         Estudiante estudianteFound = ifEstudianteExistOrElseThrow(estudiante);
         Libro libroFound = ifLibroExistOrElseThrow(libro);
         Prestamo prestamoFound = ifPrestamoExistOrElseThrow(libroFound, estudianteFound);
 
-        if (!prestamoFound.isRenovable()){
-            throw new PrestamoSuperaRenovacionesException("Prestamo Supera nro de Renovaciones posibles");
-        }
 
-        prestamoFound.setRenovacion();
+        prestamoFound.renovar();
+
+
         this.prestamoService.update(prestamoFound);
 
         return prestamoFound;

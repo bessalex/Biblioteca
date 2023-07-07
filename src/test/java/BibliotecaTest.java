@@ -335,7 +335,7 @@ public class BibliotecaTest {
             this.biblioteca.renovarPrestamo(this.libroLaIliada, this.estudiante1);
             this.biblioteca.renovarPrestamo(this.libroLaIliada, this.estudiante1);
         } catch (LibroNoPresenteException | LibroSinEjemplaresException | PrestamoDuplicadoException |
-                 EstudianteNoPresenteException | PrestamoSuperaRenovacionesException e) {
+                 EstudianteNoPresenteException | PrestamoSuperaRenovacionesException | PrestamoVencidoException e) {
             fail(e.toString());
         }
 
@@ -361,7 +361,7 @@ public class BibliotecaTest {
             Assertions.assertNotNull(prestamo);
             prestamoRenovado = biblioteca.renovarPrestamo(this.libroLaIliada, this.estudiante1);
         } catch (LibroNoPresenteException | LibroSinEjemplaresException | PrestamoDuplicadoException |
-                 EstudianteNoPresenteException | PrestamoSuperaRenovacionesException e) {
+                 EstudianteNoPresenteException | PrestamoSuperaRenovacionesException | PrestamoVencidoException e) {
             fail(e.toString());
         }
 
@@ -371,4 +371,28 @@ public class BibliotecaTest {
                 prestamoRenovado.getFechaVencimiento());
     }
 
+
+    @Test
+    @DisplayName("Renovar Prestamo Vencido")
+    public void renovarPrestamoVencidoTest() {
+
+        this.biblioteca.addLibro(this.libroLaIliada);
+        this.biblioteca.addEstudiante(this.estudiante1);
+
+        Prestamo prestamo = null;
+        Prestamo prestamoRenovado = null;
+
+        try {
+            prestamo = this.biblioteca.solicitarPrestamo(this.libroLaIliada, this.estudiante1);
+        } catch (LibroNoPresenteException | LibroSinEjemplaresException | PrestamoDuplicadoException |
+                 EstudianteNoPresenteException e) {
+            fail(e.toString());
+        }
+        Assertions.assertNotNull(prestamo);
+        prestamo.expirar();
+
+        Assertions.assertThrows(PrestamoVencidoException.class,
+                () -> biblioteca.renovarPrestamo(this.libroLaIliada, this.estudiante1),
+                "Prestamo Supera nro de Renovaciones posibles");
+    }
 }

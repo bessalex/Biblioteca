@@ -1,6 +1,9 @@
 package ar.alex.biblioteca.business;
 
 
+import ar.alex.biblioteca.business.exceptions.PrestamoSuperaRenovacionesException;
+import ar.alex.biblioteca.business.exceptions.PrestamoVencidoException;
+
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -51,14 +54,32 @@ public class Prestamo {
         return Objects.hash(getLibro(), getEstudiante());
     }
 
-    public boolean isRenovable(){
-        return (this.nroRenovacion < Biblioteca.MAXIMO_RENOVACIONES);
+    private boolean isRenovable(){
+        if (this.isDisponible())
+            return (this.nroRenovacion < Biblioteca.MAXIMO_RENOVACIONES);
+
+        return false;
+    }
+
+    private boolean isDisponible(){
+        return this.fechaVencimiento.isAfter(LocalDate.now());
+    }
+
+    public void renovar() throws PrestamoSuperaRenovacionesException, PrestamoVencidoException {
+        if (!this.isDisponible()){
+            throw new PrestamoVencidoException("Prestamo Vencido");
+        }
+        if (!this.isRenovable()){
+            throw new PrestamoSuperaRenovacionesException("Prestamo Supera nro de Renovaciones posibles");
+        }
+        this.fechaVencimiento = LocalDate.now().plusDays(Biblioteca.MAXIMO_DIAS_PRESTAMO);
+        this.nroRenovacion++;
     }
 
 
-    public void setRenovacion() {
-        this.fechaVencimiento = LocalDate.now().plusDays(Biblioteca.MAXIMO_DIAS_PRESTAMO);
-        this.nroRenovacion++;
+    public void expirar(){
+        this.fechaVencimiento = LocalDate.now();
+
     }
 
 }
