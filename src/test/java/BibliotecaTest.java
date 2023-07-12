@@ -1,8 +1,4 @@
-import ar.alex.biblioteca.business.Biblioteca;
-import ar.alex.biblioteca.business.Categoria;
-import ar.alex.biblioteca.business.Estudiante;
-import ar.alex.biblioteca.business.Prestamo;
-import ar.alex.biblioteca.business.Libro;
+import ar.alex.biblioteca.business.*;
 import ar.alex.biblioteca.business.exceptions.*;
 import org.junit.jupiter.api.*;
 
@@ -16,20 +12,23 @@ public class BibliotecaTest {
 
     private Biblioteca biblioteca;
 
-    private Libro libroLaIliada;
-    private Libro libroElUltimoConfin;
+    private Libro libroClasico, libroHistoria, libroCiencia;
     private Estudiante estudiante1;
-    private String isbnLaIliada;
+    private String isbnLibroClasico, isbnLibroCiencia;
     private int dniEstudiante1;
 
     @BeforeEach
     public void setUp() {
         this.biblioteca = new Biblioteca();
-        this.isbnLaIliada = "9788467037531";
-        this.libroLaIliada = new Libro(this.isbnLaIliada, "La Íliada", Categoria.CLASICO,1);
-        this.libroElUltimoConfin = new Libro("9789500718585",
+        this.isbnLibroClasico = "9788467037531";
+        this.libroClasico = new Libro(this.isbnLibroClasico, "La Íliada", Categoria.CLASICO,1);
+        this.libroHistoria = new Libro("9789500718585",
                 "El último confin de la tierra",
                 Categoria.HISTORIA, 1);
+
+        this.isbnLibroCiencia = "9789874682734";
+        this.libroCiencia = new Libro(this.isbnLibroCiencia, "El último teorema de Fermat",
+                Categoria.CIENCIA,1);
 
         this.dniEstudiante1 = 31999999;
         this.estudiante1 = (new Estudiante(31999999,"Pablo", "Aimar",
@@ -39,8 +38,8 @@ public class BibliotecaTest {
     @AfterEach
     public void teardown(){
         this.biblioteca = null;
-        this.libroLaIliada = null;
-        this.libroElUltimoConfin = null;
+        this.libroClasico = null;
+        this.libroHistoria = null;
         this.estudiante1 = null;
     }
 
@@ -48,7 +47,7 @@ public class BibliotecaTest {
     @DisplayName("Incorporar Libros a Biblioteca OK")
     public void incorporarLibrosTest(){
 
-        this.biblioteca.addLibro(this.libroLaIliada);
+        this.biblioteca.addLibro(this.libroClasico);
 
         Assertions.assertEquals(1, this.biblioteca.getLibros().size());
     }
@@ -57,9 +56,9 @@ public class BibliotecaTest {
     @DisplayName("Intentar incorporar Libros Duplicados ")
     public void incorporarLibrosDuplicadosFailTest(){
 
-        Libro libro = new Libro(this.isbnLaIliada, "La Íliada", Categoria.CLASICO,1);
+        Libro libro = new Libro(this.isbnLibroClasico, "La Íliada", Categoria.CLASICO,1);
 
-        this.biblioteca.addLibro(this.libroLaIliada);
+        this.biblioteca.addLibro(this.libroClasico);
         this.biblioteca.addLibro(libro);
 
         Assertions.assertEquals(1, this.biblioteca.getLibros().size());
@@ -71,8 +70,8 @@ public class BibliotecaTest {
     @DisplayName("Obtener Libros por Categoria OK")
     public void getLibrosPorCategoriaTest(){
 
-        this.biblioteca.addLibro(this.libroLaIliada);
-        this.biblioteca.addLibro(this.libroElUltimoConfin);
+        this.biblioteca.addLibro(this.libroClasico);
+        this.biblioteca.addLibro(this.libroHistoria);
 
         List<Libro> librosClasicos = biblioteca.getLibrosPorCategoria(Categoria.CLASICO);
 
@@ -84,8 +83,8 @@ public class BibliotecaTest {
     @DisplayName("Obtener Libros por Categoría Vacío")
     public void getLibrosPorCategoriaVacioTest(){
 
-        this.biblioteca.addLibro(this.libroLaIliada);
-        this.biblioteca.addLibro(this.libroElUltimoConfin);
+        this.biblioteca.addLibro(this.libroClasico);
+        this.biblioteca.addLibro(this.libroHistoria);
 
         List<Libro> librosDeportes = biblioteca.getLibrosPorCategoria(Categoria.DEPORTE);
 
@@ -97,22 +96,22 @@ public class BibliotecaTest {
     @DisplayName("Obtener Libro por ISBN OK")
     public void getLibroPorIsbnOKTest() {
 
-        this.biblioteca.addLibro(this.libroLaIliada);
-        this.biblioteca.addLibro(this.libroElUltimoConfin);
+        this.biblioteca.addLibro(this.libroClasico);
+        this.biblioteca.addLibro(this.libroHistoria);
 
         Libro libro = null;
         try {
-            libro = biblioteca.getLibroPorISBN(this.isbnLaIliada);
+            libro = biblioteca.getLibroPorISBN(this.isbnLibroClasico);
         } catch (LibroNoPresenteException e) {
             fail(e.toString());
         }
 
-        Assertions.assertNotSame(this.libroLaIliada,libro);
-        Assertions.assertEquals(this.libroLaIliada,libro);
-        Assertions.assertEquals(libro.getTitulo(),this.libroLaIliada.getTitulo());
-        Assertions.assertEquals(libro.getAutor(), this.libroLaIliada.getAutor());
-        Assertions.assertEquals(libro.getCategoria(), this.libroLaIliada.getCategoria());
-        Assertions.assertEquals(libro.getCategoria(), this.libroLaIliada.getCategoria());
+        Assertions.assertNotSame(this.libroClasico,libro);
+        Assertions.assertEquals(this.libroClasico,libro);
+        Assertions.assertEquals(libro.getTitulo(),this.libroClasico.getTitulo());
+        Assertions.assertEquals(libro.getAutor(), this.libroClasico.getAutor());
+        Assertions.assertEquals(libro.getCategoria(), this.libroClasico.getCategoria());
+        Assertions.assertEquals(libro.getCategoria(), this.libroClasico.getCategoria());
     }
 
 
@@ -120,10 +119,10 @@ public class BibliotecaTest {
     @DisplayName("Obtener libro por ISBN Fail Test")
     public void getLibroPorIsbnFailTest(){
 
-        this.biblioteca.addLibro(this.libroElUltimoConfin);
+        this.biblioteca.addLibro(this.libroHistoria);
 
         Assertions.assertThrows(LibroNoPresenteException.class, () ->
-                biblioteca.getLibroPorISBN(this.isbnLaIliada));
+                biblioteca.getLibroPorISBN(this.isbnLibroClasico));
 
     }
 
@@ -132,20 +131,20 @@ public class BibliotecaTest {
     @DisplayName("Solicitar Préstamo OK")
     public void solicitarPrestamoOKTest(){
 
-        this.biblioteca.addLibro(this.libroLaIliada);
-        this.biblioteca.addLibro(this.libroElUltimoConfin);
+        this.biblioteca.addLibro(this.libroClasico);
+        this.biblioteca.addLibro(this.libroHistoria);
         this.biblioteca.addEstudiante(this.estudiante1);
 
         Prestamo prestamo = null;
         try {
-            prestamo = biblioteca.solicitarPrestamo(this.libroLaIliada,this.estudiante1);
+            prestamo = biblioteca.solicitarPrestamo(this.libroClasico,this.estudiante1);
         } catch (LibroNoPresenteException | LibroSinEjemplaresException |
                  PrestamoDuplicadoException | EstudianteNoPresenteException e) {
             fail(e.toString());
         }
 
-        Assertions.assertEquals(this.libroLaIliada.getTitulo(), prestamo.getLibro().getTitulo());
-        Assertions.assertEquals(this.libroLaIliada.getCategoria(), prestamo.getLibro().getCategoria());
+        Assertions.assertEquals(this.libroClasico.getTitulo(), prestamo.getLibro().getTitulo());
+        Assertions.assertEquals(this.libroClasico.getCategoria(), prestamo.getLibro().getCategoria());
         Assertions.assertEquals(LocalDate.now().plusDays(Biblioteca.MAXIMO_DIAS_PRESTAMO),
                 prestamo.getFechaVencimiento());
     }
@@ -155,18 +154,18 @@ public class BibliotecaTest {
     @DisplayName("Solicitar Préstamo Ya Esitente")
     public void solicitarPrestamoExisteFailTest(){
 
-        this.biblioteca.addLibro(this.libroLaIliada);
+        this.biblioteca.addLibro(this.libroClasico);
         this.biblioteca.addEstudiante(this.estudiante1);
 
         try {
-            biblioteca.solicitarPrestamo(this.libroLaIliada,this.estudiante1);
+            biblioteca.solicitarPrestamo(this.libroClasico,this.estudiante1);
         } catch (LibroNoPresenteException | EstudianteNoPresenteException |
                  PrestamoDuplicadoException | LibroSinEjemplaresException e) {
             fail(e.toString());
         }
 
         Assertions.assertThrows(PrestamoDuplicadoException.class,
-                ()-> biblioteca.solicitarPrestamo(this.libroLaIliada,this.estudiante1),
+                ()-> biblioteca.solicitarPrestamo(this.libroClasico,this.estudiante1),
                 "Ya existe un prestamo de este libro y estudiante");
 
     }
@@ -180,7 +179,7 @@ public class BibliotecaTest {
         this.biblioteca.addEstudiante(this.estudiante1);
 
         Assertions.assertThrows(LibroNoPresenteException.class,
-                ()-> biblioteca.solicitarPrestamo(this.libroLaIliada, this.estudiante1));
+                ()-> biblioteca.solicitarPrestamo(this.libroClasico, this.estudiante1));
 
     }
 
@@ -189,20 +188,20 @@ public class BibliotecaTest {
     @DisplayName("Solicitar Préstamo Libro No Disponible")
     public void solicitarPrestamoLibroNoDisponibleFailTest(){
 
-        this.biblioteca.addLibro(this.libroLaIliada);
+        this.biblioteca.addLibro(this.libroClasico);
         this.biblioteca.addEstudiante(this.estudiante1);
         Estudiante estudiante2 = new Estudiante(9999,"Saviola", "Javier Pedro", "Nuñez");
         this.biblioteca.addEstudiante(estudiante2);
 
         try {
-            biblioteca.solicitarPrestamo(this.libroLaIliada,estudiante2);
+            biblioteca.solicitarPrestamo(this.libroClasico,estudiante2);
         } catch (LibroNoPresenteException | LibroSinEjemplaresException |
                  PrestamoDuplicadoException | EstudianteNoPresenteException e) {
             fail(e.toString());
         }
 
         Assertions.assertThrows(LibroSinEjemplaresException.class,
-                ()-> biblioteca.solicitarPrestamo(this.libroLaIliada,this.estudiante1),
+                ()-> biblioteca.solicitarPrestamo(this.libroClasico,this.estudiante1),
                 "Libro sin Ejemplares disponibles");
 
     }
@@ -212,10 +211,10 @@ public class BibliotecaTest {
     @DisplayName("Solicitar Préstamo Estudiante No Existe")
     public void solicitarPrestamoEstudianteNoExisteFailTest(){
 
-        this.biblioteca.addLibro(this.libroLaIliada);
+        this.biblioteca.addLibro(this.libroClasico);
 
         Assertions.assertThrows(EstudianteNoPresenteException.class,
-                ()-> biblioteca.solicitarPrestamo(this.libroLaIliada,this.estudiante1),
+                ()-> biblioteca.solicitarPrestamo(this.libroClasico,this.estudiante1),
                 "Estudiante No existe en biblioteca");
 
     }
@@ -224,11 +223,11 @@ public class BibliotecaTest {
     @DisplayName("Solicitar Préstamo Estudiante nulo")
     public void solicitarPrestamoEstudianteNullFailTest(){
 
-        this.biblioteca.addLibro(this.libroLaIliada);
+        this.biblioteca.addLibro(this.libroClasico);
         this.biblioteca.addEstudiante(this.estudiante1);
 
         Assertions.assertThrows(IllegalArgumentException.class,
-                ()-> biblioteca.solicitarPrestamo(this.libroLaIliada,null),
+                ()-> biblioteca.solicitarPrestamo(this.libroClasico,null),
                 "Libro o estudiante deben informarse");
 
     }
@@ -238,11 +237,11 @@ public class BibliotecaTest {
     @DisplayName("Solicitar Prestamo Libro Inexistente")
     public void solicitarPrestamoLibroInexistenteTest(){
 
-        this.biblioteca.addLibro(this.libroElUltimoConfin);
+        this.biblioteca.addLibro(this.libroHistoria);
         this.biblioteca.addEstudiante(this.estudiante1);
 
         Assertions.assertThrows(LibroNoPresenteException.class,
-                () -> biblioteca.solicitarPrestamo(this.libroLaIliada, this.estudiante1));
+                () -> biblioteca.solicitarPrestamo(this.libroClasico, this.estudiante1));
     }
 
 
@@ -250,12 +249,12 @@ public class BibliotecaTest {
     @DisplayName("Visualizar Prestamos OK")
     public void visualizarPrestadosTest(){
 
-        this.biblioteca.addLibro(this.libroElUltimoConfin);
-        this.biblioteca.addLibro(this.libroLaIliada);
+        this.biblioteca.addLibro(this.libroHistoria);
+        this.biblioteca.addLibro(this.libroClasico);
         this.biblioteca.addEstudiante(this.estudiante1);
 
         try {
-            this.biblioteca.solicitarPrestamo(this.libroLaIliada, this.estudiante1);
+            this.biblioteca.solicitarPrestamo(this.libroClasico, this.estudiante1);
         } catch (LibroNoPresenteException | LibroSinEjemplaresException |
                  PrestamoDuplicadoException | EstudianteNoPresenteException e) {
             fail(e.toString());
@@ -275,7 +274,7 @@ public class BibliotecaTest {
     @DisplayName("Visualizar Prestamos Vacío")
     public void visualizarPrestadosVacioTest(){
 
-        this.biblioteca.addLibro(this.libroLaIliada);
+        this.biblioteca.addLibro(this.libroClasico);
         this.biblioteca.addEstudiante(this.estudiante1);
 
         List<String> prestados = this.biblioteca.getVistaPrestamos();
@@ -314,11 +313,11 @@ public class BibliotecaTest {
     @DisplayName("Renovar Prestamo Inexistente FailTest")
     public void renovarPrestamoNoExisteTest(){
 
-        this.biblioteca.addLibro(this.libroLaIliada);
+        this.biblioteca.addLibro(this.libroClasico);
         this.biblioteca.addEstudiante(this.estudiante1);
 
         Assertions.assertThrows(RuntimeException.class,
-                () -> biblioteca.renovarPrestamo(this.libroLaIliada, this.estudiante1),
+                () -> biblioteca.renovarPrestamo(this.libroClasico, this.estudiante1),
                 "Prestamo No existe en biblioteca");
 
     }
@@ -327,20 +326,20 @@ public class BibliotecaTest {
     @DisplayName("Renovar Prestamo Excede Limite Renovaciones ")
     public void renovarPrestamoExcedeLimiteFailTest() {
 
-        this.biblioteca.addLibro(this.libroLaIliada);
+        this.biblioteca.addLibro(this.libroClasico);
         this.biblioteca.addEstudiante(this.estudiante1);
 
         try {
-            this.biblioteca.solicitarPrestamo(this.libroLaIliada, this.estudiante1);
-            this.biblioteca.renovarPrestamo(this.libroLaIliada, this.estudiante1);
-            this.biblioteca.renovarPrestamo(this.libroLaIliada, this.estudiante1);
+            this.biblioteca.solicitarPrestamo(this.libroClasico, this.estudiante1);
+            this.biblioteca.renovarPrestamo(this.libroClasico, this.estudiante1);
+            this.biblioteca.renovarPrestamo(this.libroClasico, this.estudiante1);
         } catch (LibroNoPresenteException | LibroSinEjemplaresException | PrestamoDuplicadoException |
                  EstudianteNoPresenteException | PrestamoSuperaRenovacionesException | PrestamoVencidoException e) {
             fail(e.toString());
         }
 
         Assertions.assertThrows(PrestamoSuperaRenovacionesException.class,
-                () -> biblioteca.renovarPrestamo(this.libroLaIliada, this.estudiante1),
+                () -> biblioteca.renovarPrestamo(this.libroClasico, this.estudiante1),
                 "Prestamo Supera nro de Renovaciones posibles");
 
     }
@@ -351,21 +350,21 @@ public class BibliotecaTest {
     @DisplayName("Renovar Prestamo OK")
     public void renovarPrestamoOKTest() {
 
-        this.biblioteca.addLibro(this.libroLaIliada);
+        this.biblioteca.addLibro(this.libroClasico);
         this.biblioteca.addEstudiante(this.estudiante1);
 
         Prestamo prestamo = null;
         Prestamo prestamoRenovado = null;
         try {
-            prestamo = this.biblioteca.solicitarPrestamo(this.libroLaIliada, this.estudiante1);
+            prestamo = this.biblioteca.solicitarPrestamo(this.libroClasico, this.estudiante1);
             Assertions.assertNotNull(prestamo);
-            prestamoRenovado = biblioteca.renovarPrestamo(this.libroLaIliada, this.estudiante1);
+            prestamoRenovado = biblioteca.renovarPrestamo(this.libroClasico, this.estudiante1);
         } catch (LibroNoPresenteException | LibroSinEjemplaresException | PrestamoDuplicadoException |
                  EstudianteNoPresenteException | PrestamoSuperaRenovacionesException | PrestamoVencidoException e) {
             fail(e.toString());
         }
 
-        Assertions.assertEquals(this.libroLaIliada.getTitulo(),prestamoRenovado.getLibro().getTitulo());
+        Assertions.assertEquals(this.libroClasico.getTitulo(),prestamoRenovado.getLibro().getTitulo());
         Assertions.assertEquals(this.estudiante1,prestamo.getEstudiante());
         Assertions.assertEquals(LocalDate.now().plusDays(15L),
                 prestamoRenovado.getFechaVencimiento());
@@ -376,14 +375,13 @@ public class BibliotecaTest {
     @DisplayName("Renovar Prestamo Vencido")
     public void renovarPrestamoVencidoTest() {
 
-        this.biblioteca.addLibro(this.libroLaIliada);
+        this.biblioteca.addLibro(this.libroClasico);
         this.biblioteca.addEstudiante(this.estudiante1);
 
         Prestamo prestamo = null;
-        Prestamo prestamoRenovado = null;
 
         try {
-            prestamo = this.biblioteca.solicitarPrestamo(this.libroLaIliada, this.estudiante1);
+            prestamo = this.biblioteca.solicitarPrestamo(this.libroClasico, this.estudiante1);
         } catch (LibroNoPresenteException | LibroSinEjemplaresException | PrestamoDuplicadoException |
                  EstudianteNoPresenteException e) {
             fail(e.toString());
@@ -392,7 +390,57 @@ public class BibliotecaTest {
         prestamo.expirar();
 
         Assertions.assertThrows(PrestamoVencidoException.class,
-                () -> biblioteca.renovarPrestamo(this.libroLaIliada, this.estudiante1),
+                () -> biblioteca.renovarPrestamo(this.libroClasico, this.estudiante1),
                 "Prestamo Supera nro de Renovaciones posibles");
     }
+
+
+    @Test
+    @DisplayName("Solicitar Préstamo Ciencia OK")
+    public void solicitarPrestamoCienciaOKTest(){
+
+        this.biblioteca.addLibro(this.libroCiencia);
+        this.biblioteca.addEstudiante(this.estudiante1);
+
+        Prestamo prestamo = null;
+        try {
+            prestamo = biblioteca.solicitarPrestamo(this.libroCiencia,this.estudiante1);
+        } catch (LibroNoPresenteException | LibroSinEjemplaresException |
+                 PrestamoDuplicadoException | EstudianteNoPresenteException e) {
+            fail(e.toString());
+        }
+
+        Assertions.assertEquals(this.libroCiencia.getTitulo(), prestamo.getLibro().getTitulo());
+        Assertions.assertEquals(this.libroCiencia.getCategoria(), prestamo.getLibro().getCategoria());
+        Assertions.assertEquals(LocalDate.now().plusDays(CondicionPrestamo.MAXIMO_DIAS_PRESTAMO_CATEGORIA_CIENCIA),
+                prestamo.getFechaVencimiento());
+    }
+
+
+    @Test
+    @DisplayName("Renovar Prestamo Ciencia OK")
+    public void renovarPrestamoCienciaOKTest() {
+
+        this.biblioteca.addLibro(this.libroCiencia);
+        this.biblioteca.addEstudiante(this.estudiante1);
+
+        Prestamo prestamo = null;
+        Prestamo prestamoRenovado = null;
+        try {
+            prestamo = this.biblioteca.solicitarPrestamo(this.libroCiencia, this.estudiante1);
+            Assertions.assertNotNull(prestamo);
+            prestamoRenovado = biblioteca.renovarPrestamo(this.libroCiencia, this.estudiante1);
+        } catch (LibroNoPresenteException | LibroSinEjemplaresException | PrestamoDuplicadoException |
+                 EstudianteNoPresenteException | PrestamoSuperaRenovacionesException | PrestamoVencidoException e) {
+            fail(e.toString());
+        }
+
+        Assertions.assertEquals(this.libroCiencia.getTitulo(),prestamoRenovado.getLibro().getTitulo());
+        Assertions.assertEquals(this.estudiante1,prestamo.getEstudiante());
+        Assertions.assertEquals(LocalDate.now().plusDays(CondicionPrestamo.MAXIMO_DIAS_PRESTAMO_CATEGORIA_CIENCIA),
+                prestamoRenovado.getFechaVencimiento());
+    }
+
+
+
 }
