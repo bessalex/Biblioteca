@@ -21,7 +21,7 @@ public class MapLibroRepository implements LibroRepository {
 
     @Override
     public List<Libro> findByCategoria(Categoria categoria) {
-        return this.libroMap.values().stream().filter(libro -> libro.getCategoria() == categoria).
+        return this.libroMap.values().stream().filter(libro -> libro.getCategoria().equals(categoria)).
                 collect(Collectors.toList());
     }
 

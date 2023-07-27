@@ -167,7 +167,7 @@ public class Biblioteca {
      * @throws LibroNoPresenteException Si el libro no existe
      */
     public Libro getLibroPorISBN(String isbn) throws LibroNoPresenteException {
-        Libro libro = new Libro(isbn,"",Categoria.CLASICO,0);
+        Libro libro = new Libro(isbn,"",new CategoriaClasico(),0);
         return ifLibroExistOrElseThrow(libro);
         /*        Optional<Libro> libroFound =this.libroService.findByIsbn(isbn);
 
