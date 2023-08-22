@@ -8,6 +8,7 @@ public class CategoriaDeportes extends Categoria {
 
     @Override
     public int getMaximoDiasPrestamo(CondicionPrestamoVisitor visitor) {
+
         return visitor.getMaximoDiasPrestamo(this);
     }
 }

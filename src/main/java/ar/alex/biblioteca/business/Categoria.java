@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public abstract class Categoria {
 
-   private String name;
+   private final String name;
 
    public Categoria(String name){
       this.name = name;
