@@ -21,9 +21,10 @@ public class Prestamo {
         this.libro = libro;
         this.estudiante = estudiante;
         this.nroRenovacion = 0;
-        this.condiciones = new CondicionPrestamo(libro);
+        this.condiciones = new CondicionPrestamo();
         this.fechaInicio = LocalDate.now();
-        this.fechaVencimiento = this.fechaInicio.plusDays(this.condiciones.getMaximoDiasPrestamo());
+        this.fechaVencimiento = this.fechaInicio.plusDays(
+                this.libro.getCategoria().getMaximoDiasPrestamo(this.condiciones));
     }
 
     public LocalDate getFechaVencimiento() {
@@ -74,7 +75,8 @@ public class Prestamo {
         if (!this.isRenovable()){
             throw new PrestamoSuperaRenovacionesException("Prestamo Supera nro de Renovaciones posibles");
         }
-        this.fechaVencimiento = LocalDate.now().plusDays(this.condiciones.getMaximoDiasPrestamo());
+        this.fechaVencimiento = LocalDate.now().plusDays(
+                this.libro.getCategoria().getMaximoDiasPrestamo(this.condiciones));
         this.nroRenovacion++;
     }
 

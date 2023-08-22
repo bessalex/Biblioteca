@@ -21,14 +21,15 @@ public class BibliotecaTest {
     public void setUp() {
         this.biblioteca = new Biblioteca();
         this.isbnLibroClasico = "9788467037531";
-        this.libroClasico = new Libro(this.isbnLibroClasico, "La Íliada", Categoria.CLASICO,1);
+        this.libroClasico = new Libro(this.isbnLibroClasico, "La Íliada",
+                new CategoriaClasico(),1);
         this.libroHistoria = new Libro("9789500718585",
                 "El último confin de la tierra",
-                Categoria.HISTORIA, 1);
+                new CategoriaHistoria(), 1);
 
         this.isbnLibroCiencia = "9789874682734";
         this.libroCiencia = new Libro(this.isbnLibroCiencia, "El último teorema de Fermat",
-                Categoria.CIENCIA,1);
+                new CategoriaCiencia(),1);
 
         this.dniEstudiante1 = 31999999;
         this.estudiante1 = (new Estudiante(31999999,"Pablo", "Aimar",
@@ -56,7 +57,8 @@ public class BibliotecaTest {
     @DisplayName("Intentar incorporar Libros Duplicados ")
     public void incorporarLibrosDuplicadosFailTest(){
 
-        Libro libro = new Libro(this.isbnLibroClasico, "La Íliada", Categoria.CLASICO,1);
+        Libro libro = new Libro(this.isbnLibroClasico, "La Íliada",
+                new CategoriaClasico(),1);
 
         this.biblioteca.addLibro(this.libroClasico);
         this.biblioteca.addLibro(libro);
@@ -73,7 +75,7 @@ public class BibliotecaTest {
         this.biblioteca.addLibro(this.libroClasico);
         this.biblioteca.addLibro(this.libroHistoria);
 
-        List<Libro> librosClasicos = biblioteca.getLibrosPorCategoria(Categoria.CLASICO);
+        List<Libro> librosClasicos = biblioteca.getLibrosPorCategoria(new CategoriaClasico());
 
         Assertions.assertEquals(1, librosClasicos.size());
     }
@@ -86,7 +88,7 @@ public class BibliotecaTest {
         this.biblioteca.addLibro(this.libroClasico);
         this.biblioteca.addLibro(this.libroHistoria);
 
-        List<Libro> librosDeportes = biblioteca.getLibrosPorCategoria(Categoria.DEPORTE);
+        List<Libro> librosDeportes = biblioteca.getLibrosPorCategoria(new CategoriaDeportes());
 
         Assertions.assertEquals(0, librosDeportes.size());
     }
