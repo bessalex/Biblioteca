@@ -1,9 +1,12 @@
 package ar.alex.biblioteca.data_access;
 
+import ar.alex.biblioteca.api.dto.LibroDto;
 import ar.alex.biblioteca.business.Categoria;
 import ar.alex.biblioteca.business.Libro;
 
+import java.lang.reflect.Array;
 import java.util.*;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class MapLibroRepository implements LibroRepository {
@@ -15,8 +18,12 @@ public class MapLibroRepository implements LibroRepository {
     }
 
     @Override
-    public List<Libro> findAll() {
-        return new ArrayList<>(this.libroMap.values());
+    public List<LibroDto> findAll() {
+        return new ArrayList<>(this.libroMap.values()
+                .stream()
+                .map(Libro::mapToDTO)
+                .collect(Collectors.toList())
+        );
     }
 
     @Override
@@ -27,6 +34,7 @@ public class MapLibroRepository implements LibroRepository {
 
     @Override
     public Optional<Libro> findByIsbn(String isbn) {
+        System.out.println("isbn findByIsbn = " + isbn);
         if (this.libroMap.get(isbn) == null)
             return Optional.empty();
         return Optional.of(new Libro(this.libroMap.get(isbn)));

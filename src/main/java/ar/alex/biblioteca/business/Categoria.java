@@ -1,19 +1,24 @@
 package ar.alex.biblioteca.business;
 
+import ar.alex.biblioteca.business.enums.CategoriaType;
+
 import java.util.Objects;
 
-public abstract class Categoria {
+public class Categoria {
 
-   private final String name;
 
-   public Categoria(String name){
-      this.name = name;
+   private final CategoriaType categoriaEnum;
+
+   public Categoria(CategoriaType categoriaEnum){
+      this.categoriaEnum = categoriaEnum;
    }
 
-   public abstract int getMaximoDiasPrestamo(CondicionPrestamoVisitor visitor);
+   public int getMaximoDiasPrestamo(CondicionPrestamoVisitor visitor){
+      return visitor.getMaximoDiasPrestamo(this);
+   }
 
    public String getName(){
-      return this.name;
+      return categoriaEnum.getName();
    };
 
    @Override

@@ -1,5 +1,6 @@
 package ar.alex.biblioteca.data_access;
 
+import ar.alex.biblioteca.api.dto.LibroDto;
 import ar.alex.biblioteca.business.Categoria;
 import ar.alex.biblioteca.business.Libro;
 
@@ -11,7 +12,7 @@ public interface LibroRepository {
 
     void save(Libro libro);
 
-    List<Libro> findAll();
+    List<LibroDto> findAll();
 
     List<Libro> findByCategoria(Categoria categoria);
 

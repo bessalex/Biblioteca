@@ -1,3 +1,5 @@
+import ar.alex.biblioteca.api.controller.Biblioteca;
+import ar.alex.biblioteca.business.enums.CategoriaType;
 import ar.alex.biblioteca.business.*;
 import ar.alex.biblioteca.business.exceptions.*;
 import org.junit.jupiter.api.*;
@@ -17,19 +19,20 @@ public class BibliotecaTest {
     private String isbnLibroClasico, isbnLibroCiencia;
     private int dniEstudiante1;
 
+
     @BeforeEach
     public void setUp() {
         this.biblioteca = new Biblioteca();
         this.isbnLibroClasico = "9788467037531";
         this.libroClasico = new Libro(this.isbnLibroClasico, "La Íliada",
-                new CategoriaClasico(),1);
+                CategoriaFactory.createCategoria(CategoriaType.clasico.toString()),1);
         this.libroHistoria = new Libro("9789500718585",
                 "El último confin de la tierra",
-                new CategoriaHistoria(), 1);
+                CategoriaFactory.createCategoria(CategoriaType.historia.toString()), 1);
 
         this.isbnLibroCiencia = "9789874682734";
         this.libroCiencia = new Libro(this.isbnLibroCiencia, "El último teorema de Fermat",
-                new CategoriaCiencia(),1);
+                CategoriaFactory.createCategoria(CategoriaType.ciencia),1);
 
         this.dniEstudiante1 = 31999999;
         this.estudiante1 = (new Estudiante(31999999,"Pablo", "Aimar",

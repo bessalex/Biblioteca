@@ -1,12 +1,18 @@
-package ar.alex.biblioteca.business;
+package ar.alex.biblioteca.api.controller;
+import ar.alex.biblioteca.api.dto.LibroDto;
+import ar.alex.biblioteca.business.*;
 import ar.alex.biblioteca.business.exceptions.*;
 import ar.alex.biblioteca.business.service.*;
 import ar.alex.biblioteca.data_access.*;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@SpringBootApplication
 public class Biblioteca {
 
     public static final int MAXIMO_DIAS_PRESTAMO = 15;
@@ -14,6 +20,17 @@ public class Biblioteca {
     private final LibroService libroService;
     private final PrestamoService prestamoService;
     private final EstudianteService estudianteService;
+
+    private static Biblioteca instance;
+
+    @Bean
+    public static Biblioteca getInstance(){
+        if (instance == null){
+            instance = new Biblioteca();
+        }
+        return instance;
+    }
+
 
     public Biblioteca(){
         this.libroService = new LibroService(new MapLibroRepository());
@@ -33,7 +50,7 @@ public class Biblioteca {
      * Obtener lista de libros presentes en la biblioteca
      * @return Lista de libro
      */
-    public List<Libro> getLibros() {
+    public List<LibroDto> getLibros() {
         return this.libroService.findAll();
     }
 
@@ -71,7 +88,7 @@ public class Biblioteca {
         }
 
         if (!libroFound.isDisponible()){
-            throw new LibroSinEjemplaresException("Libro sin Ejemplares disponibles");
+            throw new LibroSinEjemplaresException(100, "Libro sin Ejemplares disponibles");
         }
 
         Prestamo prestamo = new Prestamo(libroFound, estudianteFound);
@@ -93,7 +110,7 @@ public class Biblioteca {
         Optional<Estudiante> estudianteFound = this.estudianteService.findByDni(estudiante.getDni());
 
         return estudianteFound.orElseThrow(() ->
-                new EstudianteNoPresenteException("Estudiante No existe en biblioteca"));
+                new EstudianteNoPresenteException(200,"Estudiante No existe en biblioteca"));
     }
 
     /**
@@ -105,7 +122,7 @@ public class Biblioteca {
     private Libro ifLibroExistOrElseThrow(Libro libro) throws LibroNoPresenteException {
         Optional<Libro> libroFound = this.libroService.findByIsbn(libro.getIsbn());
         return libroFound.orElseThrow((() ->
-                new LibroNoPresenteException("Libro No existe en biblioteca")));
+                new LibroNoPresenteException(101, "Libro No existe en biblioteca")));
     }
 
     /**
@@ -167,12 +184,9 @@ public class Biblioteca {
      * @throws LibroNoPresenteException Si el libro no existe
      */
     public Libro getLibroPorISBN(String isbn) throws LibroNoPresenteException {
+        System.out.println("isbn = " + isbn);
         Libro libro = new Libro(isbn,"",new CategoriaClasico(),0);
         return ifLibroExistOrElseThrow(libro);
-        /*        Optional<Libro> libroFound =this.libroService.findByIsbn(isbn);
-
-        return libroFound.orElseThrow( () ->
-                new LibroNoPresenteException("Libro inexistente en Biblioteca"));*/
     }
 
     /**
@@ -190,5 +204,9 @@ public class Biblioteca {
      */
     public List<Estudiante> getEstudiantes() {
         return this.estudianteService.findAll();
+    }
+
+    public static void main(String[] args) {
+        SpringApplication.run(Biblioteca.class, args);
     }
 }

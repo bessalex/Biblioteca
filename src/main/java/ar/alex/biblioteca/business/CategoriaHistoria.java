@@ -1,9 +1,11 @@
 package ar.alex.biblioteca.business;
 
+import ar.alex.biblioteca.business.enums.CategoriaType;
+
 public class CategoriaHistoria extends Categoria {
 
     public CategoriaHistoria() {
-        super("HISTORIA");
+        super(CategoriaType.historia);
     }
 
     @Override
