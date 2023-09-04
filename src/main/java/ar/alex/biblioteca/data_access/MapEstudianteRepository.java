@@ -1,8 +1,11 @@
 package ar.alex.biblioteca.data_access;
 
+import ar.alex.biblioteca.api.dto.EstudianteDto;
 import ar.alex.biblioteca.business.Estudiante;
+import ar.alex.biblioteca.business.Libro;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class MapEstudianteRepository implements EstudianteRepository {
 

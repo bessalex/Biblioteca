@@ -21,7 +21,7 @@ public class LibroService {
         this.libroRepository.save(libro);
     }
 
-    public List<LibroDto> findAll() {
+    public List<Libro> findAll() {
         return this.libroRepository.findAll();
     }
 

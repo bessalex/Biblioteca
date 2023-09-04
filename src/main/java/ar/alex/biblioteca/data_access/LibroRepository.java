@@ -12,7 +12,7 @@ public interface LibroRepository {
 
     void save(Libro libro);
 
-    List<LibroDto> findAll();
+    List<Libro> findAll();
 
     List<Libro> findByCategoria(Categoria categoria);
 

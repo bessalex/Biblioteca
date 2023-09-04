@@ -1,10 +1,7 @@
-package ar.alex.biblioteca.api.controller;
-import ar.alex.biblioteca.api.dto.LibroDto;
-import ar.alex.biblioteca.business.*;
+package ar.alex.biblioteca.business;
 import ar.alex.biblioteca.business.exceptions.*;
 import ar.alex.biblioteca.business.service.*;
 import ar.alex.biblioteca.data_access.*;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
@@ -15,7 +12,8 @@ import java.util.Optional;
 @SpringBootApplication
 public class Biblioteca {
 
-    public static final int MAXIMO_DIAS_PRESTAMO = 15;
+
+       public static final int MAXIMO_DIAS_PRESTAMO = 15;
     public static final int MAXIMO_RENOVACIONES = 2;
     private final LibroService libroService;
     private final PrestamoService prestamoService;
@@ -43,14 +41,15 @@ public class Biblioteca {
      * @param libro omitiendo duplicados por ISBN
      */
     public void addLibro(Libro libro){
-            this.libroService.save(libro);
+        System.out.println("addLibro--> addLibro");
+        this.libroService.save(libro);
     }
 
     /**
      * Obtener lista de libros presentes en la biblioteca
      * @return Lista de libro
      */
-    public List<LibroDto> getLibros() {
+    public List<Libro> getLibros() {
         return this.libroService.findAll();
     }
 
@@ -81,7 +80,7 @@ public class Biblioteca {
             throw new IllegalArgumentException("Libro o estudiante deben informarse");
         }
         Libro libroFound = ifLibroExistOrElseThrow(libro);
-        Estudiante estudianteFound = ifEstudianteExistOrElseThrow(estudiante);
+        Estudiante estudianteFound = ifEstudianteExistOrElseThrow(estudiante.getDni());
 
         if (this.prestamoService.findByLibroAndEstudiante(libro, estudiante).isPresent()){
             throw new PrestamoDuplicadoException("Ya existe un prestamo de este libro y estudiante");
@@ -102,12 +101,12 @@ public class Biblioteca {
 
     /**
      * Obtener estudiante si está registrado,  en otro caso lanzar excepción
-     * @param estudiante  estudiante a verificar que está incorporado a la biblioteca, por DNI
+     * @param dni  estudiante a verificar que está incorporado a la biblioteca, por DNI
      * @return Estudiante obtenido de registrados
      * @throws EstudianteNoPresenteException En caso de no obtener el estudiante buscado.
      */
-    private Estudiante ifEstudianteExistOrElseThrow(Estudiante estudiante) throws EstudianteNoPresenteException {
-        Optional<Estudiante> estudianteFound = this.estudianteService.findByDni(estudiante.getDni());
+    private Estudiante ifEstudianteExistOrElseThrow(Integer dni) throws EstudianteNoPresenteException {
+        Optional<Estudiante> estudianteFound = this.estudianteService.findByDni(dni);
 
         return estudianteFound.orElseThrow(() ->
                 new EstudianteNoPresenteException(200,"Estudiante No existe en biblioteca"));
@@ -150,7 +149,7 @@ public class Biblioteca {
      */
     public Prestamo renovarPrestamo(Libro libro, Estudiante estudiante) throws PrestamoSuperaRenovacionesException, EstudianteNoPresenteException, LibroNoPresenteException, PrestamoVencidoException {
 
-        Estudiante estudianteFound = ifEstudianteExistOrElseThrow(estudiante);
+        Estudiante estudianteFound = ifEstudianteExistOrElseThrow(estudiante.getDni());
         Libro libroFound = ifLibroExistOrElseThrow(libro);
         Prestamo prestamoFound = ifPrestamoExistOrElseThrow(libroFound, estudianteFound);
 
@@ -184,7 +183,6 @@ public class Biblioteca {
      * @throws LibroNoPresenteException Si el libro no existe
      */
     public Libro getLibroPorISBN(String isbn) throws LibroNoPresenteException {
-        System.out.println("isbn = " + isbn);
         Libro libro = new Libro(isbn,"",new CategoriaClasico(),0);
         return ifLibroExistOrElseThrow(libro);
     }
@@ -206,7 +204,13 @@ public class Biblioteca {
         return this.estudianteService.findAll();
     }
 
-    public static void main(String[] args) {
-        SpringApplication.run(Biblioteca.class, args);
+    /**
+     * Obtener Estudiante por Dni
+     * @param dni identificador del Estudiante
+     * @see Estudiante
+     * @return Estudiante puntual
+     */
+    public Estudiante getEstudianteByDni(Integer dni ) {
+        return  this.ifEstudianteExistOrElseThrow(dni);
     }
 }

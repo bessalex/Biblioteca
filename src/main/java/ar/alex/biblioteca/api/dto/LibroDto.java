@@ -2,6 +2,7 @@ package ar.alex.biblioteca.api.dto;
 
 import ar.alex.biblioteca.business.Categoria;
 import ar.alex.biblioteca.business.CategoriaFactory;
+import ar.alex.biblioteca.business.Libro;
 
 public class LibroDto {
     private String titulo;
@@ -9,6 +10,19 @@ public class LibroDto {
     private String isbn;
     private String categoria;
 
+    public LibroDto(String titulo, String autor, String isbn, String categoria) {
+        this.titulo = titulo;
+        this.autor = autor;
+        this.isbn = isbn;
+        this.categoria = categoria;
+    }
+
+    public LibroDto(Libro libro){
+        this.isbn = libro.getIsbn();
+        this.autor = libro.getAutor();
+        this.titulo = libro.getTitulo();
+        this.categoria = libro.getCategoria().getName();
+    }
 
     public String getTitulo() {
         return titulo;

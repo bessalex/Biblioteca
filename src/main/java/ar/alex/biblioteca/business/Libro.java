@@ -1,8 +1,6 @@
 package ar.alex.biblioteca.business;
 
 
-import ar.alex.biblioteca.api.dto.LibroDto;
-
 import java.util.Objects;
 
 public class Libro {
@@ -20,7 +18,14 @@ public class Libro {
         this.categoria = categoria;
         this.ejemplares_disponibles = num_ejemplares;
     }
-
+    public Libro(String isbn, String titulo, Categoria categoria, String autor){
+        System.out.println("addLibro--> new Libro");
+        this.isbn = isbn;
+        this.titulo = titulo;
+        this.categoria = categoria;
+        this.autor = autor;
+        this.ejemplares_disponibles = 1;
+    }
     public Libro( Libro libro) {
         this.titulo = libro.getTitulo();
         this.categoria = libro.getCategoria();
@@ -29,13 +34,7 @@ public class Libro {
         this.autor =  libro.getAutor();
     }
 
-    public Libro( LibroDto libroDto) {
-        this.titulo = libroDto.getTitulo();
-        this.categoria = CategoriaFactory.createCategoria(libroDto.getCategoria());
-        this.ejemplares_disponibles = 1;
-        this.isbn = libroDto.getIsbn();
-        this.autor =  libroDto.getAutor();
-    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -78,13 +77,6 @@ public class Libro {
         this.ejemplares_disponibles--;
     }
 
-    public LibroDto mapToDTO(){
-        LibroDto libroDTO = new LibroDto();
-        libroDTO.setTitulo(this.getTitulo());
-        libroDTO.setAutor(this.getAutor());
-        libroDTO.setCategoria(this.getCategoria().getName());
-        libroDTO.setIsbn(this.getIsbn());
-        return libroDTO;
-    }
+
 
 }

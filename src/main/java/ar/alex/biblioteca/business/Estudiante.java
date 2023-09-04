@@ -1,5 +1,8 @@
 package ar.alex.biblioteca.business;
 
+import ar.alex.biblioteca.api.dto.EstudianteDto;
+import ar.alex.biblioteca.api.dto.LibroDto;
+
 import java.util.Objects;
 
 public class Estudiante {
@@ -15,6 +18,7 @@ public class Estudiante {
         this.nombres = nombres;
         this.direccion = direccion;
     }
+
 
     @Override
     public boolean equals(Object o) {
@@ -51,5 +55,9 @@ public class Estudiante {
 
     public String getDireccion() {
         return direccion;
+    }
+
+    public EstudianteDto mapToDTO(){
+        return new EstudianteDto(this);
     }
 }

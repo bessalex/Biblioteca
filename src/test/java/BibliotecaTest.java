@@ -1,9 +1,10 @@
-import ar.alex.biblioteca.api.controller.Biblioteca;
+import ar.alex.biblioteca.business.Biblioteca;
 import ar.alex.biblioteca.business.enums.CategoriaType;
 import ar.alex.biblioteca.business.*;
 import ar.alex.biblioteca.business.exceptions.*;
 import org.junit.jupiter.api.*;
 
+import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ public class BibliotecaTest {
 
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         this.biblioteca = new Biblioteca();
         this.isbnLibroClasico = "9788467037531";
         this.libroClasico = new Libro(this.isbnLibroClasico, "La Íliada",

@@ -1,5 +1,6 @@
 package ar.alex.biblioteca.data_access;
 
+import ar.alex.biblioteca.api.dto.EstudianteDto;
 import ar.alex.biblioteca.business.Estudiante;
 
 import java.util.List;

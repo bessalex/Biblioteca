@@ -18,12 +18,8 @@ public class MapLibroRepository implements LibroRepository {
     }
 
     @Override
-    public List<LibroDto> findAll() {
-        return new ArrayList<>(this.libroMap.values()
-                .stream()
-                .map(Libro::mapToDTO)
-                .collect(Collectors.toList())
-        );
+    public List<Libro> findAll() {
+        return new ArrayList<>(this.libroMap.values());
     }
 
     @Override
@@ -34,7 +30,6 @@ public class MapLibroRepository implements LibroRepository {
 
     @Override
     public Optional<Libro> findByIsbn(String isbn) {
-        System.out.println("isbn findByIsbn = " + isbn);
         if (this.libroMap.get(isbn) == null)
             return Optional.empty();
         return Optional.of(new Libro(this.libroMap.get(isbn)));
