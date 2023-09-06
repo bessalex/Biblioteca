@@ -13,7 +13,7 @@ import java.util.Optional;
 public class Biblioteca {
 
 
-       public static final int MAXIMO_DIAS_PRESTAMO = 15;
+    public static final int MAXIMO_DIAS_PRESTAMO = 15;
     public static final int MAXIMO_RENOVACIONES = 2;
     private final LibroService libroService;
     private final PrestamoService prestamoService;
@@ -79,7 +79,7 @@ public class Biblioteca {
         if (libro == null || estudiante == null) {
             throw new IllegalArgumentException("Libro o estudiante deben informarse");
         }
-        Libro libroFound = ifLibroExistOrElseThrow(libro);
+        Libro libroFound = ifLibroExistOrElseThrow(libro.getIsbn());
         Estudiante estudianteFound = ifEstudianteExistOrElseThrow(estudiante.getDni());
 
         if (this.prestamoService.findByLibroAndEstudiante(libro, estudiante).isPresent()){
@@ -87,7 +87,7 @@ public class Biblioteca {
         }
 
         if (!libroFound.isDisponible()){
-            throw new LibroSinEjemplaresException(100, "Libro sin Ejemplares disponibles");
+            throw new LibroSinEjemplaresException(String.format("Libro isbn: %s sin ejemplares disponibles", libro.getIsbn()));
         }
 
         Prestamo prestamo = new Prestamo(libroFound, estudianteFound);
@@ -109,19 +109,19 @@ public class Biblioteca {
         Optional<Estudiante> estudianteFound = this.estudianteService.findByDni(dni);
 
         return estudianteFound.orElseThrow(() ->
-                new EstudianteNoPresenteException(200,"Estudiante No existe en biblioteca"));
+                new EstudianteNoPresenteException(String.format("Estudiante con DNI: %d No existe en Biblioteca", dni)));
     }
 
     /**
      *  Obtener libro si está presente, en otro caso lanzar excepción
-     * @param libro libro a verificar que está presente en la biblioteca, por ISBN
+     * @param isbn id de libro a verificar que está presente en la biblioteca, por ISBN
      * @return Libro obtenido de los registrados
      * @throws LibroNoPresenteException En caso de no obtener el libro buscado
      */
-    private Libro ifLibroExistOrElseThrow(Libro libro) throws LibroNoPresenteException {
-        Optional<Libro> libroFound = this.libroService.findByIsbn(libro.getIsbn());
-        return libroFound.orElseThrow((() ->
-                new LibroNoPresenteException(101, "Libro No existe en biblioteca")));
+    private Libro ifLibroExistOrElseThrow(String isbn) throws LibroNoPresenteException {
+        Optional<Libro> libroFound = this.libroService.findByIsbn(isbn);
+        return libroFound.orElseThrow(() ->
+                new LibroNoPresenteException(String.format("Libro isbn: %s sin ejemplares disponibles", isbn)));
     }
 
     /**
@@ -150,7 +150,7 @@ public class Biblioteca {
     public Prestamo renovarPrestamo(Libro libro, Estudiante estudiante) throws PrestamoSuperaRenovacionesException, EstudianteNoPresenteException, LibroNoPresenteException, PrestamoVencidoException {
 
         Estudiante estudianteFound = ifEstudianteExistOrElseThrow(estudiante.getDni());
-        Libro libroFound = ifLibroExistOrElseThrow(libro);
+        Libro libroFound = ifLibroExistOrElseThrow(libro.getIsbn());
         Prestamo prestamoFound = ifPrestamoExistOrElseThrow(libroFound, estudianteFound);
 
 
@@ -183,8 +183,7 @@ public class Biblioteca {
      * @throws LibroNoPresenteException Si el libro no existe
      */
     public Libro getLibroPorISBN(String isbn) throws LibroNoPresenteException {
-        Libro libro = new Libro(isbn,"",new CategoriaClasico(),0);
-        return ifLibroExistOrElseThrow(libro);
+        return ifLibroExistOrElseThrow(isbn);
     }
 
     /**

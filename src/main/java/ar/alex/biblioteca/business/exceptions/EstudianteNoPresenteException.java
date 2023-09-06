@@ -1,8 +1,8 @@
 package ar.alex.biblioteca.business.exceptions;
 
-public class EstudianteNoPresenteException extends BusinessException{
+public class EstudianteNoPresenteException extends RuntimeException{
 
-    public EstudianteNoPresenteException(int code, String message) {
-        super(code, message);
+    public EstudianteNoPresenteException(String message) {
+        super(message);
     }
 }

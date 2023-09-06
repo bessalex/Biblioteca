@@ -4,7 +4,6 @@ import ar.alex.biblioteca.business.*;
 import ar.alex.biblioteca.business.exceptions.*;
 import org.junit.jupiter.api.*;
 
-import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,18 +21,18 @@ public class BibliotecaTest {
 
 
     @BeforeEach
-    public void setUp() throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    public void setUp() throws ReflectiveOperationException {
         this.biblioteca = new Biblioteca();
         this.isbnLibroClasico = "9788467037531";
         this.libroClasico = new Libro(this.isbnLibroClasico, "La Íliada",
-                CategoriaFactory.createCategoria(CategoriaType.clasico.toString()),1);
+                Categoria.create(CategoriaType.clasico.toString()),1);
         this.libroHistoria = new Libro("9789500718585",
                 "El último confin de la tierra",
-                CategoriaFactory.createCategoria(CategoriaType.historia.toString()), 1);
+                Categoria.create(CategoriaType.historia.toString()), 1);
 
         this.isbnLibroCiencia = "9789874682734";
         this.libroCiencia = new Libro(this.isbnLibroCiencia, "El último teorema de Fermat",
-                CategoriaFactory.createCategoria(CategoriaType.ciencia),1);
+                Categoria.create(CategoriaType.ciencia),1);
 
         this.dniEstudiante1 = 31999999;
         this.estudiante1 = (new Estudiante(31999999,"Pablo", "Aimar",
@@ -59,10 +58,10 @@ public class BibliotecaTest {
 
     @Test
     @DisplayName("Intentar incorporar Libros Duplicados ")
-    public void incorporarLibrosDuplicadosFailTest(){
+    public void incorporarLibrosDuplicadosFailTest() throws ReflectiveOperationException {
 
         Libro libro = new Libro(this.isbnLibroClasico, "La Íliada",
-                new CategoriaClasico(),1);
+                Categoria.create(CategoriaType.clasico),1);
 
         this.biblioteca.addLibro(this.libroClasico);
         this.biblioteca.addLibro(libro);
@@ -74,12 +73,12 @@ public class BibliotecaTest {
 
     @Test
     @DisplayName("Obtener Libros por Categoria OK")
-    public void getLibrosPorCategoriaTest(){
+    public void getLibrosPorCategoriaTest() throws ReflectiveOperationException {
 
         this.biblioteca.addLibro(this.libroClasico);
         this.biblioteca.addLibro(this.libroHistoria);
 
-        List<Libro> librosClasicos = biblioteca.getLibrosPorCategoria(new CategoriaClasico());
+        List<Libro> librosClasicos = biblioteca.getLibrosPorCategoria(Categoria.create(CategoriaType.clasico));
 
         Assertions.assertEquals(1, librosClasicos.size());
     }
@@ -87,12 +86,12 @@ public class BibliotecaTest {
 
     @Test
     @DisplayName("Obtener Libros por Categoría Vacío")
-    public void getLibrosPorCategoriaVacioTest(){
+    public void getLibrosPorCategoriaVacioTest() throws ReflectiveOperationException {
 
         this.biblioteca.addLibro(this.libroClasico);
         this.biblioteca.addLibro(this.libroHistoria);
 
-        List<Libro> librosDeportes = biblioteca.getLibrosPorCategoria(new CategoriaDeportes());
+        List<Libro> librosDeportes = biblioteca.getLibrosPorCategoria(Categoria.create(CategoriaType.deportes));
 
         Assertions.assertEquals(0, librosDeportes.size());
     }

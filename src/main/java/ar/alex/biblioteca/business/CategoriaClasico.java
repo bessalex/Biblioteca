@@ -8,6 +8,8 @@ public class CategoriaClasico extends Categoria {
         super(CategoriaType.clasico);
     }
 
+
+
     @Override
     public int getMaximoDiasPrestamo(CondicionPrestamoVisitor visitor) {
         return visitor.getMaximoDiasPrestamo(this);

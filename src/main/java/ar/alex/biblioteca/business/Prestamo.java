@@ -86,4 +86,11 @@ public class Prestamo {
 
     }
 
+    public LocalDate getFechaInicio() {
+        return this.fechaVencimiento;
+    }
+
+    public int getNroRenovacion() {
+        return this.nroRenovacion;
+    }
 }

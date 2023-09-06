@@ -1,7 +1,5 @@
 package ar.alex.biblioteca.api.dto;
 
-import ar.alex.biblioteca.business.Categoria;
-import ar.alex.biblioteca.business.CategoriaFactory;
 import ar.alex.biblioteca.business.Libro;
 
 public class LibroDto {

@@ -3,15 +3,12 @@ package ar.alex.biblioteca.api.controller;
 import ar.alex.biblioteca.api.dto.LibroDto;
 import ar.alex.biblioteca.business.Biblioteca;
 import ar.alex.biblioteca.business.Categoria;
-import ar.alex.biblioteca.business.CategoriaFactory;
 import ar.alex.biblioteca.business.Libro;
-import ar.alex.biblioteca.business.enums.CategoriaType;
 import ar.alex.biblioteca.business.exceptions.LibroNoPresenteException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,11 +23,11 @@ public class LibroController {
     }
 
     @PostMapping("/library/books")
-    public ResponseEntity<String> addLibro(@RequestBody LibroDto libroDTO) throws InstantiationException, IllegalAccessException {
+    public ResponseEntity<String> addLibro(@RequestBody LibroDto libroDTO) throws ReflectiveOperationException {
         System.out.println("addLibro");
         biblioteca.addLibro(new Libro(libroDTO.getIsbn(),
                 libroDTO.getTitulo(),
-                CategoriaFactory.createCategoria(libroDTO.getCategoria()),
+                Categoria.create(libroDTO.getCategoria()),
                 libroDTO.getAutor()));
         return ResponseEntity.ok().build();
     }

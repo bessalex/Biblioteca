@@ -2,23 +2,11 @@ package ar.alex.biblioteca.api.dto;
 
 public class ErrorDto {
 
-    private int code;
-    private String mensaje;
+    private String message;
 
-    public ErrorDto(int code, String mensaje) {
-        this.mensaje = mensaje;
-        this.code = code;
+    public ErrorDto(String message) {
+        this.message = message;
     }
 
-    public int getCode() {
-        return code;
-    }
 
-    public String getMensaje() {
-        return mensaje;
-    }
-
-    public void setMensaje(String mensaje) {
-        this.mensaje = mensaje;
-    }
 }

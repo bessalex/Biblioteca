@@ -1,8 +1,8 @@
 package ar.alex.biblioteca.business.exceptions;
 
-public class LibroSinEjemplaresException extends BusinessException{
+public class LibroSinEjemplaresException extends RuntimeException{
 
-    public LibroSinEjemplaresException(int code, String message) {
-        super(code, message);
+    public LibroSinEjemplaresException(String message) {
+        super(message);
     }
 }

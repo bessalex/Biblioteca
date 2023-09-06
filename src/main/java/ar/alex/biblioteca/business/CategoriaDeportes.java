@@ -4,10 +4,9 @@ import ar.alex.biblioteca.business.enums.CategoriaType;
 
 public class CategoriaDeportes extends Categoria {
 
-    public CategoriaDeportes() {
+    private CategoriaDeportes() {
         super(CategoriaType.deportes);
     }
-
     @Override
     public int getMaximoDiasPrestamo(CondicionPrestamoVisitor visitor) {
 
