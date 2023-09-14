@@ -5,4 +5,5 @@ public class EstudianteNoPresenteException extends RuntimeException{
     public EstudianteNoPresenteException(String message) {
         super(message);
     }
+
 }

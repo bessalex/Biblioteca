@@ -3,6 +3,7 @@ package ar.alex.biblioteca.api.controller;
 import ar.alex.biblioteca.api.dto.EstudianteDto;
 import ar.alex.biblioteca.business.Biblioteca;
 import ar.alex.biblioteca.business.Estudiante;
+import ar.alex.biblioteca.business.exceptions.EstudianteNoPresenteException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

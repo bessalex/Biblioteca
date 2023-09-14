@@ -1,16 +1,14 @@
 package ar.alex.biblioteca.business;
 
-import ar.alex.biblioteca.api.dto.EstudianteDto;
-import ar.alex.biblioteca.api.dto.LibroDto;
 
 import java.util.Objects;
 
 public class Estudiante {
 
     private final Integer dni;
-    private String apellido;
-    private String nombres;
-    private String direccion;
+    private final String apellido;
+    private final String nombres;
+    private final String direccion;
 
     public Estudiante(Integer dni, String apellido, String nombres, String direccion) {
         this.dni = dni;
@@ -57,7 +55,4 @@ public class Estudiante {
         return direccion;
     }
 
-    public EstudianteDto mapToDTO(){
-        return new EstudianteDto(this);
-    }
 }

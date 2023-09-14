@@ -9,6 +9,8 @@ import java.util.Objects;
 
 public class Prestamo {
 
+    private static int prestamoIdCounter = 0;
+    private String id;
     private final Libro libro;
     private final Estudiante estudiante;
     private final LocalDate fechaInicio;
@@ -25,6 +27,7 @@ public class Prestamo {
         this.fechaInicio = LocalDate.now();
         this.fechaVencimiento = this.fechaInicio.plusDays(
                 this.libro.getCategoria().getMaximoDiasPrestamo(this.condiciones));
+        this.id= String.valueOf(prestamoIdCounter++);
     }
 
     public LocalDate getFechaVencimiento() {
@@ -70,10 +73,11 @@ public class Prestamo {
 
     public void renovar() throws PrestamoSuperaRenovacionesException, PrestamoVencidoException {
         if (!this.isDisponible()){
-            throw new PrestamoVencidoException("Prestamo Vencido");
+            throw new PrestamoVencidoException( String.format("Prestamo %s Vencido",this.id));
         }
         if (!this.isRenovable()){
-            throw new PrestamoSuperaRenovacionesException("Prestamo Supera nro de Renovaciones posibles");
+            throw new PrestamoSuperaRenovacionesException(
+                    String.format("Prestamo %s Supera nro de Renovaciones posibles",this.id));
         }
         this.fechaVencimiento = LocalDate.now().plusDays(
                 this.libro.getCategoria().getMaximoDiasPrestamo(this.condiciones));
@@ -93,4 +97,10 @@ public class Prestamo {
     public int getNroRenovacion() {
         return this.nroRenovacion;
     }
+
+    public String getId() {
+        return id;
+    }
+
+
 }

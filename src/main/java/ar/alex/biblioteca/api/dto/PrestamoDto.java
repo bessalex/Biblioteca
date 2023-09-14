@@ -7,15 +7,17 @@ import java.time.LocalDate;
 
 public class PrestamoDto {
 
+    private final String id;
     private final String isbn;
     private final Integer dni;
     private LocalDate fechaInicio;
     private LocalDate fechaVencimiento ;
     private int nroRenovacion;
 
-    public PrestamoDto(String isbn, Integer dni) {
+    public PrestamoDto(String id, String isbn, Integer dni) {
         this.isbn = isbn;
         this.dni = dni;
+        this.id = id;
     }
 
     public void setFechaInicio(LocalDate fechaInicio) {
@@ -36,6 +38,7 @@ public class PrestamoDto {
         this.fechaInicio = prestamo.getFechaInicio();
         this.fechaVencimiento = prestamo.getFechaVencimiento();
         this.nroRenovacion = prestamo.getNroRenovacion();
+        this.id = prestamo.getId();
     }
 
     public String getIsbn() {
@@ -56,5 +59,9 @@ public class PrestamoDto {
 
     public int getNroRenovacion() {
         return nroRenovacion;
+    }
+
+    public String getId() {
+        return id;
     }
 }

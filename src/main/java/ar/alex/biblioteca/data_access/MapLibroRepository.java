@@ -32,7 +32,7 @@ public class MapLibroRepository implements LibroRepository {
     public Optional<Libro> findByIsbn(String isbn) {
         if (this.libroMap.get(isbn) == null)
             return Optional.empty();
-        return Optional.of(new Libro(this.libroMap.get(isbn)));
+        return Optional.of(this.libroMap.get(isbn));
     }
 
     @Override
