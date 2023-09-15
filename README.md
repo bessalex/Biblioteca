@@ -26,3 +26,22 @@ Nos llamaron de la biblioteca Nacional y nos solicitaron construir un sistema pa
 5. Un estudiante solicita prestado un libro y su plazo límite de devolución es dentro de 15 días corridos, teniendo presente que exista un libro disponible. 
 6. Consultar una lista de libros que se encuentran prestados y su fecha de vencimiento del préstamo. 
 7. Renovación del préstamo de su libro extendiendo su fecha de devolución siempre y cuando no haya excedido el límite de renovaciones establecido por la biblioteca. 
+
+
+
+
+## Notas Ejecución 
+
+### Docker en Ubuntu
+systemctl --user start docker-desktop
+Desde la terminal: 
+1. docker compose -f docker_compose.yaml up -d
+2. docker exec -it tools-postgres-1 bash
+
+### Docker en Windows
+Desde powershell: 
+1. docker-compose-v1.exe -f .\docker_compose.yaml up -d
+2. docker exec -it tools_postgres_1 bash
+
+Luego ya conectado en docker. Para crear y poblar tablas . 
+3. sh /docker-entrypoint-initdb.d/after_create.sh 

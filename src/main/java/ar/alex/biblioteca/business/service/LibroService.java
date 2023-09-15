@@ -1,6 +1,5 @@
 package ar.alex.biblioteca.business.service;
 
-import ar.alex.biblioteca.api.dto.LibroDto;
 import ar.alex.biblioteca.business.Categoria;
 import ar.alex.biblioteca.business.Libro;
 import ar.alex.biblioteca.business.exceptions.LibroNoPresenteException;

@@ -31,7 +31,7 @@ public class Biblioteca {
 
 
     public Biblioteca(){
-        this.libroService = new LibroService(new MapLibroRepository());
+        this.libroService = new LibroService(new DatabaseLibroRepository());
         this.prestamoService = new PrestamoService(new MapPrestamoRepository());
         this.estudianteService = new EstudianteService(new MapEstudianteRepository());
     }

@@ -1,6 +1,5 @@
 package ar.alex.biblioteca.business;
 
-
 import java.util.Objects;
 
 public class Libro {
@@ -71,6 +70,9 @@ public class Libro {
         return autor;
     }
 
+    public int getEjemplares_disponibles() {
+        return ejemplares_disponibles;
+    }
 
     public void marcarEjemplarPrestado() {
         this.ejemplares_disponibles--;
