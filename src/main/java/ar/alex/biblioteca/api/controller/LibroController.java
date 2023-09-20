@@ -30,7 +30,7 @@ public class LibroController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/library/books")
+    @GetMapping("/library/books/")
     public ResponseEntity<List<LibroDto>> getLibros(){
         return ResponseEntity.ok(biblioteca.getLibros()
                 .stream()
@@ -38,9 +38,9 @@ public class LibroController {
     }
 
 
-    @GetMapping("/library/books/category/{categoria}")
-    public ResponseEntity<List<LibroDto>> getLibrosByCategoria(@PathVariable String categoria) throws ReflectiveOperationException {
-        return ResponseEntity.ok(biblioteca.getLibrosPorCategoria(Categoria.create(categoria))
+    @GetMapping("/library/books")
+    public ResponseEntity<List<LibroDto>> getLibrosByCategoria(@RequestParam(value = "category", required=false) String category) {
+        return ResponseEntity.ok(biblioteca.getLibrosPorCategoria(category)
                 .stream().map(LibroDto::new).toList());
     }
 }

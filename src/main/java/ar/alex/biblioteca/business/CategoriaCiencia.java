@@ -5,7 +5,7 @@ import ar.alex.biblioteca.business.enums.CategoriaType;
 public class CategoriaCiencia extends Categoria {
 
 
-    private CategoriaCiencia() {
+    public CategoriaCiencia() {
         super(CategoriaType.ciencia);
     }
 

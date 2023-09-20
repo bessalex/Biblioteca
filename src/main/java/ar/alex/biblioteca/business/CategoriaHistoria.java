@@ -4,7 +4,7 @@ import ar.alex.biblioteca.business.enums.CategoriaType;
 
 public class CategoriaHistoria extends Categoria {
 
-    private CategoriaHistoria() {
+    public CategoriaHistoria() {
         super(CategoriaType.historia);
     }
 

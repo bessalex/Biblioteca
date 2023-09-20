@@ -59,7 +59,7 @@ public class Biblioteca {
      * @see Categoria
      * @return Lista de libro de la categoría indicada
      */
-    public List<Libro> getLibrosPorCategoria(Categoria categoria) {
+    public List<Libro> getLibrosPorCategoria(String categoria)  {
         return this.libroService.findByCategoria(categoria);
     }
 

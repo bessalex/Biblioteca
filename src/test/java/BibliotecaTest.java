@@ -73,12 +73,12 @@ public class BibliotecaTest {
 
     @Test
     @DisplayName("Obtener Libros por Categoria OK")
-    public void getLibrosPorCategoriaTest() throws ReflectiveOperationException {
+    public void getLibrosPorCategoriaTest()  {
 
         this.biblioteca.addLibro(this.libroClasico);
         this.biblioteca.addLibro(this.libroHistoria);
 
-        List<Libro> librosClasicos = biblioteca.getLibrosPorCategoria(Categoria.create(CategoriaType.clasico));
+        List<Libro> librosClasicos = biblioteca.getLibrosPorCategoria(CategoriaType.clasico.getName());
 
         Assertions.assertEquals(1, librosClasicos.size());
     }
@@ -91,7 +91,7 @@ public class BibliotecaTest {
         this.biblioteca.addLibro(this.libroClasico);
         this.biblioteca.addLibro(this.libroHistoria);
 
-        List<Libro> librosDeportes = biblioteca.getLibrosPorCategoria(Categoria.create(CategoriaType.deportes));
+        List<Libro> librosDeportes = biblioteca.getLibrosPorCategoria(CategoriaType.deportes.getName());
 
         Assertions.assertEquals(0, librosDeportes.size());
     }

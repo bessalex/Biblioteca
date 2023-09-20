@@ -24,8 +24,14 @@ public class LibroService {
         return this.libroRepository.findAll();
     }
 
-    public List<Libro> findByCategoria(Categoria categoria) {
-        return this.libroRepository.findByCategoria(categoria);
+    public List<Libro> findByCategoria(String categoria)  {
+        Categoria toFind = null;
+        try {
+            toFind = (categoria == null)?null:Categoria.create(categoria);
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException(e);
+        }
+        return this.libroRepository.findByCategoria(toFind);
     }
 
     public Optional<Libro> findByIsbn(String isbn) throws LibroNoPresenteException {

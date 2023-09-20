@@ -1,8 +1,8 @@
 -- Insertar datos en la tabla "libro"
 INSERT INTO libros (isbn, titulo, autor, categoria, ejemplares_disponibles)
 VALUES
-    ('9780061120084', 'El último teorema de Fermat', 'Simon Singh', 'Ciencia', 1),
-    ('9780307588364', 'El último confín de la tierra', 'Lucas Bridges', 'Historia', 2);
+    ('9780061120084', 'El último teorema de Fermat', 'Simon Singh', 'ciencia', 1),
+    ('9780307588364', 'El último confín de la tierra', 'Lucas Bridges', 'historia', 2);
 
 -- Insertar datos en la tabla "estudiante"
 INSERT INTO estudiantes (dni, apellido, nombres, direccion)
