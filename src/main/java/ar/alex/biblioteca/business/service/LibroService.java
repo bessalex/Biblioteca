@@ -14,12 +14,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Service
+
 public class LibroService {
 
-    @Autowired
+
     private DatabaseLibroRepository libroRepository;
 
+    public LibroService(DatabaseLibroRepository libroRepository) {
+        this.libroRepository = libroRepository;
+    }
 
     public LibroEntity save(Libro libro) {
         return libroRepository.save(libro.mapToEntity());

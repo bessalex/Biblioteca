@@ -5,13 +5,18 @@ import ar.alex.biblioteca.data_access.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.support.Repositories;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Service
+@Component
 public class Biblioteca {
 
 
@@ -25,6 +30,9 @@ public class Biblioteca {
 
     private static Biblioteca instance;
 
+    @Autowired
+    private WebApplicationContext appContext;
+
     @Bean
     public static Biblioteca getInstance(){
         if (instance == null){
@@ -32,11 +40,20 @@ public class Biblioteca {
         }
         return instance;
     }
+    Repositories repositories = null;
 
 
     public Biblioteca(){
         this.prestamoService = new PrestamoService(new MapPrestamoRepository());
         this.estudianteService = new EstudianteService(new MapEstudianteRepository());
+    }
+
+    private LibroService getLibroService() {
+        if (this.libroService == null) {
+            repositories = new Repositories(appContext);
+            this.libroService = new LibroService((DatabaseLibroRepository) repositories.getRepositoryFor(DatabaseLibroRepository.class).get());
+        }
+        return this.libroService;
     }
 
     /**
