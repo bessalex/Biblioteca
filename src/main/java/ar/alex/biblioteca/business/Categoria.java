@@ -18,9 +18,13 @@ public abstract class Categoria {
       return categoriaType.create();
    }
 
-   public static Categoria create(String name) throws ReflectiveOperationException {
+   public static Categoria create(String name)  {
       CategoriaType categoriaType = Enum.valueOf(CategoriaType.class, name.toLowerCase());
-      return categoriaType.create();
+      try {
+         return categoriaType.create();
+      } catch (ReflectiveOperationException e) {
+         throw new RuntimeException(e);
+      }
    }
    public String getName(){
       return categoriaEnum.getName();

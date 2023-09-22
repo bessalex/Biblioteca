@@ -1,6 +1,8 @@
 package ar.alex.biblioteca.business;
 
 
+import ar.alex.biblioteca.data_access.entity.LibroEntity;
+
 import java.util.Objects;
 
 
@@ -34,6 +36,13 @@ public class Libro {
         this.autor =  libro.getAutor();
     }
 
+    public Libro(LibroEntity libroEntity) {
+        this.titulo = libroEntity.getTitulo();
+        this.categoria = Categoria.create(libroEntity.getCategoria());
+        this.ejemplares_disponibles = libroEntity.getEjemplares_disponibles();
+        this.isbn = libroEntity.getIsbn();
+        this.autor = libroEntity.getAutor();
+    }
 
 
     @Override
@@ -80,6 +89,14 @@ public class Libro {
         this.ejemplares_disponibles--;
     }
 
-
+    public LibroEntity mapToEntity(){
+        return new LibroEntity(
+                this.isbn,
+                this.titulo,
+                this.autor,
+                this.categoria.getName(),
+                this.ejemplares_disponibles
+        );
+    }
 
 }

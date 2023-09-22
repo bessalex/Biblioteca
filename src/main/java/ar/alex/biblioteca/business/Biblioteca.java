@@ -2,20 +2,24 @@ package ar.alex.biblioteca.business;
 import ar.alex.biblioteca.business.exceptions.*;
 import ar.alex.biblioteca.business.service.*;
 import ar.alex.biblioteca.data_access.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@SpringBootApplication
+@Service
 public class Biblioteca {
 
 
     public static final int MAXIMO_DIAS_PRESTAMO = 15;
     public static final int MAXIMO_RENOVACIONES = 2;
-    private final LibroService libroService;
+
+    @Autowired
+    private LibroService libroService;
     private final PrestamoService prestamoService;
     private final EstudianteService estudianteService;
 
@@ -31,7 +35,6 @@ public class Biblioteca {
 
 
     public Biblioteca(){
-        this.libroService = new LibroService(new DatabaseLibroRepository());
         this.prestamoService = new PrestamoService(new MapPrestamoRepository());
         this.estudianteService = new EstudianteService(new MapEstudianteRepository());
     }

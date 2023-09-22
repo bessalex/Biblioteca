@@ -21,8 +21,7 @@ public class LibroController {
     }
 
     @PostMapping("/library/books")
-    public ResponseEntity<String> addLibro(@RequestBody LibroDto libroDTO) throws ReflectiveOperationException {
-        System.out.println("addLibro");
+    public ResponseEntity<String> addLibro(@RequestBody LibroDto libroDTO) {
         biblioteca.addLibro(new Libro(libroDTO.getIsbn(),
                 libroDTO.getTitulo(),
                 Categoria.create(libroDTO.getCategoria()),
