@@ -11,16 +11,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-public interface LibroRepository  {
+@Repository
+public interface LibroRepository  extends JpaRepository<LibroEntity, String>  {
 
-
-    LibroEntity save(LibroEntity libro);
-
-    List<LibroEntity> findAll();
-
+    @Query(value = "SELECT * FROM libros where categoria = :#{#categoria.name}", nativeQuery = true)
     List<LibroEntity> findByCategoria(Categoria categoria);
 
-    Optional<LibroEntity> findByIsbn(String isbn);
-
-    void update(LibroEntity libroPrestar);
 }

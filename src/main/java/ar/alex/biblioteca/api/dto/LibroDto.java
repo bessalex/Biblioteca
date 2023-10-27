@@ -2,6 +2,9 @@ package ar.alex.biblioteca.api.dto;
 
 import ar.alex.biblioteca.business.Libro;
 
+import javax.swing.text.html.Option;
+import java.util.Optional;
+
 public class LibroDto {
     private String titulo;
     private String autor;
@@ -21,6 +24,7 @@ public class LibroDto {
         this.titulo = libro.getTitulo();
         this.categoria = libro.getCategoria().getName();
     }
+
 
     public String getTitulo() {
         return titulo;

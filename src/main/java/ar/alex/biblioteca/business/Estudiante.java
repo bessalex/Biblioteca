@@ -1,6 +1,10 @@
 package ar.alex.biblioteca.business;
 
 
+import ar.alex.biblioteca.data_access.entity.EstudianteEntity;
+import lombok.NonNull;
+import org.springframework.stereotype.Service;
+
 import java.util.Objects;
 
 public class Estudiante {
@@ -44,6 +48,14 @@ public class Estudiante {
         this.direccion = estudiante.getDireccion();
     }
 
+    public Estudiante(EstudianteEntity estudianteEntity){
+        this.dni = estudianteEntity.getDni();
+        this.apellido = estudianteEntity.getApellido();
+        this.nombres = estudianteEntity.getNombres();
+        this.direccion = estudianteEntity.getDireccion();
+    }
+
+
     public String getApellido() {
         return apellido;
     }
@@ -54,6 +66,15 @@ public class Estudiante {
 
     public String getDireccion() {
         return direccion;
+    }
+
+    public EstudianteEntity mapToEntity(){
+        return new EstudianteEntity(
+                this.dni,
+                this.apellido,
+                this.nombres,
+                this.direccion
+        );
     }
 
 }

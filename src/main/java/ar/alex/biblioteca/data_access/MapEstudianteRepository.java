@@ -7,23 +7,23 @@ import ar.alex.biblioteca.business.Libro;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class MapEstudianteRepository implements EstudianteRepository {
+public class MapEstudianteRepository  {
 
 
     private final Map<Integer, Estudiante> estudianteMap = new HashMap<>();
-    @Override
+
     public void save(Estudiante estudiante) {
 
         this.estudianteMap.put(estudiante.getDni(),estudiante);
     }
 
-    @Override
+
     public List<Estudiante> findAll() {
         return new ArrayList<>(this.estudianteMap.values());
     }
 
 
-    @Override
+
     public Optional<Estudiante> findByDni(Integer dni) {
 
         if (this.estudianteMap.get(dni) == null)

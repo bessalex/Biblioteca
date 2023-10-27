@@ -15,36 +15,35 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class MapLibroRepository implements LibroRepository {
+public class MapLibroRepository {
 
     private final Map<String, LibroEntity> libroMap = new HashMap<>();
-    @Override
-    public LibroEntity save(LibroEntity libro) {
+
+    public void save(LibroEntity libro) {
         this.libroMap.put(libro.getIsbn(),libro);
-        return libro;
     }
 
-    @Override
+
     public List<LibroEntity> findAll() {
         return null;
     }
 
 
-    @Override
+
     public List<LibroEntity> findByCategoria(Categoria categoria) {
         return this.libroMap.values().stream()
                 .filter(libro -> libro.getCategoria().equals(categoria)).
                 collect(Collectors.toList());
     }
 
-    @Override
+
     public Optional<LibroEntity> findByIsbn(String isbn) {
         if (this.libroMap.get(isbn) == null)
             return Optional.empty();
         return Optional.of(this.libroMap.get(isbn));
     }
 
-    @Override
+
     public void update(LibroEntity libro) {
         this.libroMap.put(libro.getIsbn(), libro);
     }

@@ -1,30 +1,24 @@
 package ar.alex.biblioteca.data_access.entity;
 
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-
 
 @Getter
 @Entity
-@Table(name="libros")
+@Table(name="estudiantes")
 @RequiredArgsConstructor
-public class LibroEntity {
+public class EstudianteEntity {
     @Id
     @NonNull
-    private  final String isbn;
+    private final Integer dni;
     @NonNull
-    private  String titulo;
+    private final String apellido;
     @NonNull
-    private  String autor;
+    private final String nombres;
     @NonNull
-    private  String categoria;
-    @NonNull
-    @Setter
-    private  int ejemplares_disponibles;
+    private final String direccion;
 }

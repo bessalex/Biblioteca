@@ -26,9 +26,6 @@ public interface DatabaseLibroRepository  extends JpaRepository<LibroEntity, Str
     @Query(value = "SELECT * FROM libros where categoria = :#{#categoria.name}", nativeQuery = true)
     List<LibroEntity> findByCategoria(Categoria categoria);
 
-    @Query(value = "SELECT * FROM libros where isbn = :#{#isbn}", nativeQuery = true)
-    Optional<LibroEntity> findByIsbn(String isbn);
-
 
     @Query(value = "update libros " +
             "set autor = :#{#libro.autor}," +

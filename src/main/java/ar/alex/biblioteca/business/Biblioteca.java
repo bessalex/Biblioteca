@@ -19,7 +19,7 @@ import java.util.Optional;
 @Component
 public class Biblioteca {
 
-
+/*
     public static final int MAXIMO_DIAS_PRESTAMO = 15;
     public static final int MAXIMO_RENOVACIONES = 2;
 
@@ -59,7 +59,7 @@ public class Biblioteca {
     /**
      * Agregar Libro a la biblioteca
      * @param libro omitiendo duplicados por ISBN
-     */
+     *
     public void addLibro(Libro libro){
         System.out.println("addLibro--> addLibro");
         this.libroService.save(libro);
@@ -68,7 +68,7 @@ public class Biblioteca {
     /**
      * Obtener lista de libros presentes en la biblioteca
      * @return Lista de libro
-     */
+     *
     public List<Libro> getLibros() {
         return this.libroService.findAll();
     }
@@ -78,7 +78,7 @@ public class Biblioteca {
      * @param categoria Categoría de libro de acuerdo al enumerador
      * @see Categoria
      * @return Lista de libro de la categoría indicada
-     */
+     *
     public List<Libro> getLibrosPorCategoria(String categoria)  {
         return this.libroService.findByCategoria(categoria);
     }
@@ -93,7 +93,7 @@ public class Biblioteca {
      * @throws LibroSinEjemplaresException En caso de que no existan más ejemplares del libro solicitado
      * @throws EstudianteNoPresenteException Si el estudiante no registrado en biblioteca
      * @throws LibroNoPresenteException  Si el libro no existe en la biblioteca
-     */
+     *
     public Prestamo solicitarPrestamo(String isbnLibro, Integer dniEstudiante) throws EstudianteNoPresenteException {
 
         if (isbnLibro == null || dniEstudiante == null) {
@@ -124,7 +124,7 @@ public class Biblioteca {
      * @param dni  estudiante a verificar que está incorporado a la biblioteca, por DNI
      * @return Estudiante obtenido de registrados
      * @throws EstudianteNoPresenteException En caso de no obtener el estudiante buscado.
-     */
+     *
     private Estudiante ifEstudianteExistOrElseThrow(Integer dni) {
         Optional<Estudiante> estudianteFound = this.estudianteService.findByDni(dni);
 
@@ -137,7 +137,7 @@ public class Biblioteca {
      * @param isbn id de libro a verificar que está presente en la biblioteca, por ISBN
      * @return Libro obtenido de los registrados
      * @throws LibroNoPresenteException En caso de no obtener el libro buscado
-     */
+     *
     private Libro ifLibroExistOrElseThrow(String isbn) throws LibroNoPresenteException {
         Optional<Libro> libroFound = this.libroService.findByIsbn(isbn);
         return libroFound.orElseThrow(() ->
@@ -147,7 +147,7 @@ public class Biblioteca {
     /**
      * Obtener vista de Prestamos
      * @return Lista
-     */
+     *
     public List<String> getVistaPrestamos() {
         List<String> vista = new ArrayList<>();
 
@@ -165,16 +165,14 @@ public class Biblioteca {
      * @throws EstudianteNoPresenteException Si el estudiante no está registrado en biblioteca
      * @throws LibroNoPresenteException Si el libro no está presente en la biblioteca
      * @throws PrestamoSuperaRenovacionesException Si se supera el número de renovaciones permitidas
-     */
+     *
     public Prestamo renovarPrestamo(String idPrestamo, String isbn, Integer dni) {
 
         Estudiante estudianteFound = ifEstudianteExistOrElseThrow(dni);
         Libro libroFound = ifLibroExistOrElseThrow(isbn);
         Prestamo prestamoFound = ifPrestamoExistOrElseThrow(idPrestamo, libroFound, estudianteFound);
 
-
         prestamoFound.renovar();
-
 
         this.prestamoService.update(prestamoFound);
 
@@ -187,7 +185,7 @@ public class Biblioteca {
      * @param estudiante estudiante asociado al prestamo a verificar
      * @return Prestamo encontrado
      * @throws RuntimeException Si no está presente
-     */
+     *
     private Prestamo ifPrestamoExistOrElseThrow(String idPrestamo, Libro libro, Estudiante estudiante) {
         Optional<Prestamo> optionalPrestamo = this.prestamoService.findByLibroAndEstudiante(libro, estudiante);
 
@@ -207,7 +205,7 @@ public class Biblioteca {
      * @param isbn número de identificación unívoca del libro
      * @return Libro obtenido
      * @throws LibroNoPresenteException Si el libro no existe
-     */
+     *
     public Libro getLibroPorISBN(String isbn) throws LibroNoPresenteException {
         return ifLibroExistOrElseThrow(isbn);
     }
@@ -215,7 +213,7 @@ public class Biblioteca {
     /**
      * Registrar estudiante a la biblioteca
      * @param estudiante estudiante a registrar en la biblioteca
-     */
+     *
     public void addEstudiante(Estudiante estudiante) {
         this.estudianteService.save(estudiante);
     }
@@ -224,7 +222,7 @@ public class Biblioteca {
      * Obtener la lista de estudiantes registrado en la biblioteca
      * @see Estudiante
      * @return Listado completo de estudiantes
-     */
+     *
     public List<Estudiante> getEstudiantes() {
         return this.estudianteService.findAll();
     }
@@ -234,8 +232,9 @@ public class Biblioteca {
      * @param dni identificador del Estudiante
      * @see Estudiante
      * @return Estudiante puntual
-     */
+     *
     public Estudiante getEstudianteByDni(Integer dni ) {
         return  this.ifEstudianteExistOrElseThrow(dni);
     }
+*/
 }

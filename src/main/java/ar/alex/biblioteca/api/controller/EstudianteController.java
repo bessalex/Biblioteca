@@ -4,6 +4,10 @@ import ar.alex.biblioteca.api.dto.EstudianteDto;
 import ar.alex.biblioteca.business.Biblioteca;
 import ar.alex.biblioteca.business.Estudiante;
 import ar.alex.biblioteca.business.exceptions.EstudianteNoPresenteException;
+import ar.alex.biblioteca.business.service.EstudianteService;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,18 +19,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
+@RequiredArgsConstructor
 public class EstudianteController {
 
-    private final Biblioteca biblioteca = Biblioteca.getInstance();
+    @NonNull private final  EstudianteService estudianteService;
 
     @GetMapping("/library/student/{dni}")
     public ResponseEntity<EstudianteDto> getEstudianteByDni(@PathVariable Integer dni) {
-        return ResponseEntity.ok(new EstudianteDto( biblioteca.getEstudianteByDni(dni)));
+        return ResponseEntity.ok(new EstudianteDto(this.estudianteService.findByDni(dni)));
     }
 
     @PostMapping("/library/student")
     public ResponseEntity<String> addEstudiante(@RequestBody EstudianteDto estudianteDto){
-        biblioteca.addEstudiante(new Estudiante(estudianteDto.getDni(),
+        this.estudianteService.save(new Estudiante(estudianteDto.getDni(),
                 estudianteDto.getApellido(),
                 estudianteDto.getNombres(),
                 estudianteDto.getDireccion()));
@@ -35,7 +40,7 @@ public class EstudianteController {
 
     @GetMapping("/library/students")
     public ResponseEntity<List<EstudianteDto>> getEstudiantes(){
-        return ResponseEntity.ok(biblioteca.getEstudiantes()
+        return ResponseEntity.ok(estudianteService.findAll()
                 .stream().map(EstudianteDto::new).collect(Collectors.toList()));
     }
 }

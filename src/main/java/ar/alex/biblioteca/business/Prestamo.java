@@ -3,6 +3,11 @@ package ar.alex.biblioteca.business;
 
 import ar.alex.biblioteca.business.exceptions.PrestamoSuperaRenovacionesException;
 import ar.alex.biblioteca.business.exceptions.PrestamoVencidoException;
+import ar.alex.biblioteca.data_access.entity.LibroEntity;
+import ar.alex.biblioteca.data_access.entity.PrestamoEntity;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -13,7 +18,7 @@ public class Prestamo {
     private String id;
     private final Libro libro;
     private final Estudiante estudiante;
-    private final LocalDate fechaInicio;
+    private LocalDate fechaInicio;
     private final CondicionPrestamo condiciones;
     private LocalDate fechaVencimiento ;
 
@@ -28,6 +33,18 @@ public class Prestamo {
         this.fechaVencimiento = this.fechaInicio.plusDays(
                 this.libro.getCategoria().getMaximoDiasPrestamo(this.condiciones));
         this.id= String.valueOf(prestamoIdCounter++);
+    }
+
+    public void setFechaInicio(LocalDate fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public void setFechaVencimiento(LocalDate fechaVencimiento) {
+        this.fechaVencimiento = fechaVencimiento;
+    }
+
+    public void setNroRenovacion(int nroRenovacion) {
+        this.nroRenovacion = nroRenovacion;
     }
 
     public LocalDate getFechaVencimiento() {
@@ -100,6 +117,19 @@ public class Prestamo {
 
     public String getId() {
         return id;
+    }
+
+
+    public PrestamoEntity mapToEntity(){
+        PrestamoEntity prestamoEntity = new PrestamoEntity(
+                this.id,
+                this.libro.getIsbn(),
+                this.estudiante.getDni(),
+                this.fechaInicio
+        );
+        prestamoEntity.setFechaVencimiento(this.fechaVencimiento);
+        prestamoEntity.setNroRenovacion(this.nroRenovacion);
+        return prestamoEntity;
     }
 
 
