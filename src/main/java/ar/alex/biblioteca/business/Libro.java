@@ -81,6 +81,7 @@ public class Libro {
         return autor;
     }
 
+
     public int getEjemplares_disponibles() {
         return ejemplares_disponibles;
     }
@@ -89,7 +90,7 @@ public class Libro {
         this.ejemplares_disponibles--;
     }
 
-    public LibroEntity mapToEntity(){
+/*    public LibroEntity mapToEntity(){
         return new LibroEntity(
                 this.isbn,
                 this.titulo,
@@ -97,6 +98,6 @@ public class Libro {
                 this.categoria.getName(),
                 this.ejemplares_disponibles
         );
-    }
+    }*/
 
 }

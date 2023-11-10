@@ -10,6 +10,7 @@ import java.time.LocalDate;
 
 @Getter
 @Entity
+@Builder
 @Table(name="prestamos")
 @RequiredArgsConstructor
 public class PrestamoEntity {

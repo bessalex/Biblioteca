@@ -24,7 +24,12 @@ public class LibroService {
     private DatabaseLibroRepository libroRepository;
 
     public void save(Libro libro) {
-        libroRepository.save(libro.mapToEntity());
+        libroRepository.save(LibroEntity.builder()
+                .autor(libro.getAutor())
+                .titulo(libro.getTitulo())
+                .isbn(libro.getIsbn()).categoria(libro.getCategoria().toString())
+                .ejemplares_disponibles(libro.getEjemplares_disponibles())
+                .build());
     }
 
     public List<Libro> findAll() {
@@ -46,13 +51,14 @@ public class LibroService {
 
     public Libro findByIsbn(String isbn) {
         return new Libro(this.libroRepository.findById(isbn)
-                .orElseGet(() -> {
-                    throw new LibroNoPresenteException(isbn);
-                }));
+                .orElseThrow(() -> new LibroNoPresenteException(isbn)));
     }
 
     public void update(Libro libro) {
-        this.libroRepository.update(libro.mapToEntity());
+        LibroEntity libroEntity = this.libroRepository.findById(libro.getIsbn())
+                .orElseThrow(() -> new LibroNoPresenteException(libro.getIsbn()));
+
+        this.libroRepository.save(libro.mapToEntity());
     }
 
 }

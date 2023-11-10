@@ -19,13 +19,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LibroController {
 
-
     @NonNull
     private final LibroService libroService;
 
     @GetMapping("/library/books/{isbn}")
     public ResponseEntity<LibroDto> getLibroByIsbn(@PathVariable String isbn) {
-        return ResponseEntity.ok(new LibroDto(this.libroService.findByIsbn(isbn)));
+        Libro libro = this.libroService.findByIsbn(isbn);
+        return ResponseEntity.ok(LibroDto.builder()
+                .isbn(libro.getIsbn())
+                .titulo(libro.getTitulo())
+                .categoria(libro.getCategoria().toString())
+                .build());
     }
 
     @PostMapping("/library/books")
@@ -41,13 +45,23 @@ public class LibroController {
     public ResponseEntity<List<LibroDto>> getLibros(){
         return ResponseEntity.ok(this.libroService.findAll()
                 .stream()
-                .map(LibroDto::new).toList());
+                .map(libro  -> LibroDto.builder()
+                        .isbn(libro.getIsbn())
+                        .titulo(libro.getTitulo())
+                        .autor(libro.getAutor())
+                        .categoria(libro.getCategoria().toString())
+                        .build()).toList());
     }
 
 
     @GetMapping("/library/books")
     public ResponseEntity<List<LibroDto>> getLibrosByCategoria(@RequestParam(value = "category", required=false) String category) {
         return ResponseEntity.ok(this.libroService.findByCategoria(category)
-                .stream().map(LibroDto::new).toList());
+                .stream().map(libro  -> LibroDto.builder()
+                        .isbn(libro.getIsbn())
+                        .titulo(libro.getTitulo())
+                        .autor(libro.getAutor())
+                        .categoria(libro.getCategoria().toString())
+                        .build()).toList());
     }
 }
