@@ -1,13 +1,11 @@
-package ar.alex.biblioteca.business;
+package ar.alex.biblioteca.business.model;
 
 
+import ar.alex.biblioteca.business.CondicionPrestamo;
 import ar.alex.biblioteca.business.exceptions.PrestamoSuperaRenovacionesException;
 import ar.alex.biblioteca.business.exceptions.PrestamoVencidoException;
-import ar.alex.biblioteca.data_access.entity.LibroEntity;
+import ar.alex.biblioteca.business.model.Libro;
 import ar.alex.biblioteca.data_access.entity.PrestamoEntity;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.Objects;

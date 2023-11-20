@@ -3,16 +3,19 @@ package ar.alex.biblioteca.data_access.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
 import jakarta.persistence.Table;
 import lombok.*;
 
 import java.time.LocalDate;
 
+// https://www.baeldung.com/jpa-hibernate-associations
+
 @Getter
 @Entity
 @Builder
 @Table(name="prestamos")
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class PrestamoEntity {
     @Id
     @NonNull

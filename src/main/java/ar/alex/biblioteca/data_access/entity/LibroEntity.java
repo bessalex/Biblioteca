@@ -9,8 +9,7 @@ import lombok.*;
 
 
 @Entity
-@Getter @Setter
-@Builder
+@Getter
 @Table(name="libros")
 @AllArgsConstructor
 public class LibroEntity {

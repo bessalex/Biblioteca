@@ -1,14 +1,11 @@
 package ar.alex.biblioteca.api.controller;
 
 import ar.alex.biblioteca.api.dto.LibroDto;
-import ar.alex.biblioteca.business.Biblioteca;
 import ar.alex.biblioteca.business.Categoria;
-import ar.alex.biblioteca.business.Libro;
-import ar.alex.biblioteca.business.exceptions.LibroNoPresenteException;
+import ar.alex.biblioteca.business.model.Libro;
 import ar.alex.biblioteca.business.service.LibroService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -53,7 +50,7 @@ public class LibroController {
                         .build()).toList());
     }
 
-
+// mapstruct <-- mapper  https://www.baeldung.com/mapstruct
     @GetMapping("/library/books")
     public ResponseEntity<List<LibroDto>> getLibrosByCategoria(@RequestParam(value = "category", required=false) String category) {
         return ResponseEntity.ok(this.libroService.findByCategoria(category)

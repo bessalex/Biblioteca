@@ -2,6 +2,8 @@ import ar.alex.biblioteca.business.Biblioteca;
 import ar.alex.biblioteca.business.enums.CategoriaType;
 import ar.alex.biblioteca.business.*;
 import ar.alex.biblioteca.business.exceptions.*;
+import ar.alex.biblioteca.business.model.Libro;
+import ar.alex.biblioteca.business.model.Prestamo;
 import org.junit.jupiter.api.*;
 
 import java.time.LocalDate;
