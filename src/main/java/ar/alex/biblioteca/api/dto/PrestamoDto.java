@@ -1,7 +1,6 @@
 package ar.alex.biblioteca.api.dto;
 
 
-import ar.alex.biblioteca.business.Prestamo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

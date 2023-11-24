@@ -1,8 +1,8 @@
 package ar.alex.biblioteca.business.service;
 
 import ar.alex.biblioteca.business.Estudiante;
-import ar.alex.biblioteca.business.Libro;
-import ar.alex.biblioteca.business.Prestamo;
+import ar.alex.biblioteca.business.model.Libro;
+import ar.alex.biblioteca.business.model.Prestamo;
 import ar.alex.biblioteca.business.exceptions.*;
 import ar.alex.biblioteca.data_access.PrestamoRepository;
 import ar.alex.biblioteca.data_access.entity.PrestamoEntity;

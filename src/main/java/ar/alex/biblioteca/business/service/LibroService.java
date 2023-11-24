@@ -1,27 +1,24 @@
 package ar.alex.biblioteca.business.service;
 
 import ar.alex.biblioteca.business.Categoria;
-import ar.alex.biblioteca.business.Libro;
+import ar.alex.biblioteca.business.model.Libro;
 import ar.alex.biblioteca.business.exceptions.LibroNoPresenteException;
 import ar.alex.biblioteca.data_access.DatabaseLibroRepository;
-import ar.alex.biblioteca.data_access.LibroRepository;
 
 import ar.alex.biblioteca.data_access.entity.LibroEntity;
+import lombok.AllArgsConstructor;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class LibroService {
 
     @NonNull
-    private DatabaseLibroRepository libroRepository;
+    private final DatabaseLibroRepository libroRepository;
 
     public void save(Libro libro) {
         libroRepository.save(LibroEntity.builder()

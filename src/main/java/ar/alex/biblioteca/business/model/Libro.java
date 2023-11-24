@@ -1,18 +1,23 @@
-package ar.alex.biblioteca.business;
+package ar.alex.biblioteca.business.model;
 
 
+import ar.alex.biblioteca.business.Categoria;
 import ar.alex.biblioteca.data_access.entity.LibroEntity;
+import lombok.Builder;
+import lombok.Getter;
 
 import java.util.Objects;
 
-
+@Getter
+@Builder
 public class Libro {
     private final String titulo;
     private final Categoria categoria;
     private final String isbn;
     private String autor = null;
 
-    private int ejemplares_disponibles;
+    @Builder.Default
+    private int ejemplares_disponibles = 1 ;
 
 
     public Libro(String isbn, String titulo, Categoria categoria, int num_ejemplares){
@@ -28,6 +33,8 @@ public class Libro {
         this.autor = autor;
         this.ejemplares_disponibles = 1;
     }
+
+
     public Libro( Libro libro) {
         this.titulo = libro.getTitulo();
         this.categoria = libro.getCategoria();
@@ -43,6 +50,7 @@ public class Libro {
         this.isbn = libroEntity.getIsbn();
         this.autor = libroEntity.getAutor();
     }
+
 
 
     @Override

@@ -1,31 +1,25 @@
 package ar.alex.biblioteca.data_access;
 
 import ar.alex.biblioteca.business.Estudiante;
-import ar.alex.biblioteca.business.Libro;
-import ar.alex.biblioteca.business.Prestamo;
-import ar.alex.biblioteca.data_access.entity.LibroEntity;
 import ar.alex.biblioteca.data_access.entity.PrestamoEntity;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface PrestamoRepository extends JpaRepository<PrestamoEntity, String> {
 
 
+   //buscar directamente por nombre del campo en la entity
+
     @Query(value = "select * " +
             " from  prestamos" +
-            " Where isbn_libro = :#{#isbnLibro} " +
-            "   and dni_estudiante = :#{#dniEstudiante},", nativeQuery = true)
-    @NotNull
+            " Where isbn_libro = ?1 " +
+            "   and dni_estudiante = ?2")
     Optional<PrestamoEntity> findByLibroAndEstudiante(String isbnLibro, Integer dniEstudiante);
 
     @Query(value = "update prestamos " +
@@ -34,7 +28,8 @@ public interface PrestamoRepository extends JpaRepository<PrestamoEntity, String
             "   fecha_inicio = :#{#prestamoEntity.fechaInicio}," +
             "   fecha_vencimiento = :#{#prestamoEntity.fechaVencimiento}," +
             "   nro_renovacion = :#{#prestamoEntity.nroRenovacion}" +
-            " Where id = :#{#prestamoEntity.id}", nativeQuery = true)
+            " Where id = :#{#prestamoEntity.id}")
+    @Modifying
     void update(PrestamoEntity prestamoEntity);
 }
 

@@ -1,4 +1,4 @@
-package ar.alex.biblioteca.business;
+package ar.alex.biblioteca.business.model;
 
 
 import ar.alex.biblioteca.data_access.entity.EstudianteEntity;
