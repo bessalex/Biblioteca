@@ -1,30 +1,40 @@
 package ar.alex.biblioteca.data_access.entity;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
 
-@Getter
 @Entity
-@Builder
-@Table(name="prestamos")
-@RequiredArgsConstructor
+@Table(name = "prestamos")
+@Data
 public class PrestamoEntity {
     @Id
-    @NonNull
-    private String id;
-    @NonNull
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(name = "isbn_libro")
     private final String isbnLibro;
-    @NonNull
+    @Column(name = "dni_estudiante")
     private final Integer dniEstudiante;
-    @NonNull
+    @Column(name = "id_condicion_prestamo")
+    private Long idCondicionPrestamo;
+    @Column(name = "fecha_inicio")
     private final LocalDate fechaInicio;
-    @Setter
+    @Column(name = "fecha_vencimiento")
     private LocalDate fechaVencimiento ;
-    @Setter
+    @Column(name = "nro_renovacion")
     private int nroRenovacion;
+
+    @ManyToOne
+    @JoinColumn(name = "isbn_libro", referencedColumnName = "isbn")
+    private LibroEntity libro;
+
+    @ManyToOne
+    @JoinColumn(name = "dni_estudiante", referencedColumnName = "dni")
+    private EstudianteEntity estudiante;
+
+    @ManyToOne
+    @JoinColumn(name = "id_condicion_prestamo", referencedColumnName = "id")
+    private CondicionPrestamoEntity condicionPrestamo;
 }

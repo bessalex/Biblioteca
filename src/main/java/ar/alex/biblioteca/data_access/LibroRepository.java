@@ -14,7 +14,7 @@ import java.util.Optional;
 @Repository
 public interface LibroRepository  extends JpaRepository<LibroEntity, String>  {
 
-    @Query(value = "SELECT * FROM libros where categoria = :#{#categoria.name}", nativeQuery = true)
+    @Query(value = "SELECT * FROM libros where categoria = :#{#categoria.name}")
     List<LibroEntity> findByCategoria(Categoria categoria);
 
 }
