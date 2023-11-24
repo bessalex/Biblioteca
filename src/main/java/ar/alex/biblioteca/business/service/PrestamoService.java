@@ -1,8 +1,9 @@
 package ar.alex.biblioteca.business.service;
 
 import ar.alex.biblioteca.business.Estudiante;
-import ar.alex.biblioteca.business.model.Libro;
-import ar.alex.biblioteca.business.model.Prestamo;
+import ar.alex.biblioteca.business.model.EstudianteBO;
+import ar.alex.biblioteca.business.model.LibroBO;
+import ar.alex.biblioteca.business.model.PrestamoBO;
 import ar.alex.biblioteca.business.exceptions.*;
 import ar.alex.biblioteca.data_access.PrestamoRepository;
 import ar.alex.biblioteca.data_access.entity.PrestamoEntity;
@@ -26,18 +27,25 @@ public class PrestamoService {
     @NonNull
     private final EstudianteService estudianteService;
 
-    private void save(Prestamo prestamo) {
-        this.prestamoRepository.save(prestamo.mapToEntity());
+    private void save(PrestamoBO prestamo) {
+        this.prestamoRepository.save(PrestamoEntity.builder()
+                .isbnLibro(prestamo.getLibro().getIsbn())
+                .dniEstudiante(prestamo.getEstudiante().getDni())
+                .idCondicionPrestamo(prestamo.getCondiciones().getId())
+                .fechaInicio(prestamo.getFechaInicio())
+                .fechaVencimiento(prestamo.getFechaVencimiento())
+                .nroRenovacion(prestamo.getNroRenovacion())
+                .build());
     }
 
 
-    public List<Prestamo> findAll() {
-        List<Prestamo> prestamoList = new ArrayList<>();
+    public List<PrestamoBO> findAll() {
+        List<PrestamoBO> prestamoList = new ArrayList<>();
         List<PrestamoEntity> prestamoEntityList = this.prestamoRepository.findAll();
         for (PrestamoEntity prestamoEntity: prestamoEntityList) {
-            Libro libro = this.libroService.findByIsbn(prestamoEntity.getIsbnLibro());
-            Estudiante estudiante = this.estudianteService.findByDni(prestamoEntity.getDniEstudiante());
-            Prestamo prestamo = new Prestamo(libro, estudiante );
+            LibroBO libro = this.libroService.findByIsbn(prestamoEntity.getIsbnLibro());
+            EstudianteBO estudiante = this.estudianteService.findByDni(prestamoEntity.getDniEstudiante());
+            PrestamoBO prestamo = new PrestamoBO(libro, estudiante );
             prestamo.setFechaInicio(prestamoEntity.getFechaInicio());
             prestamo.setNroRenovacion(prestamoEntity.getNroRenovacion());
             prestamo.setFechaVencimiento(prestamoEntity.getFechaVencimiento());
@@ -46,7 +54,7 @@ public class PrestamoService {
         return prestamoList;
     }
 
-    public Optional<Prestamo> findByIsbnAndDni(String isbn, Integer dni) {
+    public Optional<PrestamoBO> findByIsbnAndDni(String isbn, Integer dni) {
 
         Optional<PrestamoEntity> prestamoEntityOptional =
                 this.prestamoRepository.findByLibroAndEstudiante(isbn, dni);
@@ -54,24 +62,24 @@ public class PrestamoService {
         if (prestamoEntityOptional.isEmpty())
             return Optional.empty();
 
-        Libro libro = this.libroService.findByIsbn(isbn);
-        Estudiante estudiante = this.estudianteService.findByDni(dni);
+        LibroBO libro = this.libroService.findByIsbn(isbn);
+        EstudianteBO estudiante = this.estudianteService.findByDni(dni);
 
-        Prestamo prestamo = new Prestamo(libro, estudiante);
+        PrestamoBO prestamo = new PrestamoBO(libro, estudiante);
         prestamo.setFechaInicio(prestamoEntityOptional.get().getFechaInicio());
         prestamo.setNroRenovacion(prestamoEntityOptional.get().getNroRenovacion());
         prestamo.setFechaVencimiento(prestamoEntityOptional.get().getFechaVencimiento());
         return Optional.of(prestamo);
     }
 
-    public Prestamo alta(String isbnLibro, Integer dniEstudiante) {
+    public PrestamoBO alta(String isbnLibro, Integer dniEstudiante) {
 
         if (isbnLibro == null || dniEstudiante == null) {
             throw new IllegalArgumentException("ISBN y DNI deben informarse");
         }
 
-        Libro libroFound = this.libroService.findByIsbn(isbnLibro);
-        Estudiante estudianteFound = this.estudianteService.findByDni(dniEstudiante);
+        LibroBO libroFound = this.libroService.findByIsbn(isbnLibro);
+        EstudianteBO estudianteFound = this.estudianteService.findByDni(dniEstudiante);
 
         if (this.findByIsbnAndDni(isbnLibro, dniEstudiante).isPresent()){
             throw new PrestamoDuplicadoException("Ya existe un prestamo de este libro y estudiante");
@@ -81,7 +89,7 @@ public class PrestamoService {
             throw new LibroSinEjemplaresException(String.format("Libro isbn: %s sin ejemplares disponibles", libroFound.getIsbn()));
         }
 
-        Prestamo prestamo = new Prestamo(libroFound, estudianteFound);
+        PrestamoBO prestamo = new PrestamoBO(libroFound, estudianteFound);
 
         this.save(prestamo);
         libroFound.marcarEjemplarPrestado();
@@ -90,17 +98,17 @@ public class PrestamoService {
         return prestamo;
     }
 
-    public Prestamo renovar(String idPrestamo) {
+    public PrestamoBO renovar(String idPrestamo) {
 
         Optional<PrestamoEntity> prestamoEntityOptional = this.prestamoRepository.findById(idPrestamo);
 
         if (prestamoEntityOptional.isEmpty())
             throw new PrestamoNoPresenteException(idPrestamo);
 
-        Libro libro = this.libroService.findByIsbn(prestamoEntityOptional.get().getIsbnLibro());
-        Estudiante estudiante = this.estudianteService.findByDni(prestamoEntityOptional.get().getDniEstudiante());
+        LibroBO libro = this.libroService.findByIsbn(prestamoEntityOptional.get().getIsbnLibro());
+        EstudianteBO estudiante = this.estudianteService.findByDni(prestamoEntityOptional.get().getDniEstudiante());
 
-        Prestamo prestamo = new Prestamo(libro, estudiante);
+        PrestamoBO prestamo = new PrestamoBO(libro, estudiante);
         prestamo.setFechaInicio(prestamoEntityOptional.get().getFechaInicio());
         prestamo.setNroRenovacion(prestamoEntityOptional.get().getNroRenovacion());
         prestamo.setFechaVencimiento(prestamoEntityOptional.get().getFechaVencimiento());
@@ -113,7 +121,8 @@ public class PrestamoService {
 
 
 
-    public void update(Prestamo prestamo) {
-        this.prestamoRepository.update(prestamo.mapToEntity());
+    public void update(PrestamoBO prestamo) {
+
+        this.prestamoRepository.save()
     }
 }

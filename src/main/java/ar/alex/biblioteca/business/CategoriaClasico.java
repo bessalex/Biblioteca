@@ -2,7 +2,7 @@ package ar.alex.biblioteca.business;
 
 import ar.alex.biblioteca.business.enums.CategoriaType;
 
-public class CategoriaClasico extends Categoria {
+public class CategoriaClasico extends Categoria_abstract {
 
     public CategoriaClasico() {
         super(CategoriaType.clasico);

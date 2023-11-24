@@ -21,8 +21,4 @@ public class LibroEntity {
     @Column(name = "ejemplares_disponibles")
     private  int ejemplaresDisponibles;
 
-    // Cada libro tiene sólo una categoria, en este esquema
-    @ManyToOne
-    @JoinColumn(name = "id_categoria", referencedColumnName = "id")
-    private CategoriaEntity categoria;
 }

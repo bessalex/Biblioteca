@@ -11,9 +11,9 @@ public enum CategoriaType {
     clasico("clasico", CategoriaClasico.class);
 
     private final String name;
-    private final Class<? extends Categoria> categoria;
+    private final Class<? extends Categoria_abstract> categoria;
 
-    CategoriaType( String name, Class<? extends Categoria> categoria) {
+    CategoriaType( String name, Class<? extends Categoria_abstract> categoria) {
         this.categoria = categoria;
         this.name = name;
     }
@@ -23,7 +23,7 @@ public enum CategoriaType {
     }
 
 
-    public Categoria create() throws ReflectiveOperationException {
+    public Categoria_abstract create() throws ReflectiveOperationException {
         return this.categoria.getDeclaredConstructor().newInstance();
     }
 

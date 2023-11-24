@@ -3,22 +3,22 @@ package ar.alex.biblioteca.business;
 import ar.alex.biblioteca.business.enums.CategoriaType;
 
 import java.util.Objects;
-
-public abstract class Categoria {
+/*
+public abstract class Categoria_abstract {
 
    private final CategoriaType categoriaEnum;
 
-   protected Categoria(CategoriaType categoriaEnum){
+   protected Categoria_abstract(CategoriaType categoriaEnum){
       this.categoriaEnum = categoriaEnum;
    }
 
    public abstract int getMaximoDiasPrestamo(CondicionPrestamoVisitor visitor);
 
-   public static Categoria create(CategoriaType categoriaType) throws ReflectiveOperationException {
+   public static Categoria_abstract create(CategoriaType categoriaType) throws ReflectiveOperationException {
       return categoriaType.create();
    }
 
-   public static Categoria create(String name)  {
+   public static Categoria_abstract create(String name)  {
       CategoriaType categoriaType = Enum.valueOf(CategoriaType.class, name.toLowerCase());
       try {
          return categoriaType.create();
@@ -33,7 +33,7 @@ public abstract class Categoria {
    @Override
    public boolean equals(Object o) {
       if (this == o) return true;
-      if (!(o instanceof Categoria categoria)) return false;
+      if (!(o instanceof Categoria_abstract categoria)) return false;
       return Objects.equals(getName(), categoria.getName());
    }
 
@@ -42,3 +42,4 @@ public abstract class Categoria {
       return Objects.hash(getName());
    }
 }
+*/

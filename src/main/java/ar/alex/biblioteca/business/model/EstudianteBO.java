@@ -2,12 +2,15 @@ package ar.alex.biblioteca.business.model;
 
 
 import ar.alex.biblioteca.data_access.entity.EstudianteEntity;
-import lombok.NonNull;
-import org.springframework.stereotype.Service;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
 import java.util.Objects;
 
-public class Estudiante {
+@Getter
+@Builder
+public class EstudianteBO {
 
 
     private final Integer dni;
@@ -15,19 +18,12 @@ public class Estudiante {
     private final String nombres;
     private final String direccion;
 
-    public Estudiante(Integer dni, String apellido, String nombres, String direccion) {
-        this.dni = dni;
-        this.apellido = apellido;
-        this.nombres = nombres;
-        this.direccion = direccion;
-    }
-
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Estudiante that = (Estudiante) o;
+        EstudianteBO that = (EstudianteBO) o;
         return Objects.equals(getDni(), that.getDni());
     }
 
@@ -38,21 +34,6 @@ public class Estudiante {
 
     public Integer getDni() {
         return this.dni;
-    }
-
-
-    public Estudiante(Estudiante estudiante){
-        this.dni = estudiante.getDni();
-        this.apellido = estudiante.getApellido();
-        this.nombres = estudiante.getNombres();
-        this.direccion = estudiante.getDireccion();
-    }
-
-    public Estudiante(EstudianteEntity estudianteEntity){
-        this.dni = estudianteEntity.getDni();
-        this.apellido = estudianteEntity.getApellido();
-        this.nombres = estudianteEntity.getNombres();
-        this.direccion = estudianteEntity.getDireccion();
     }
 
 

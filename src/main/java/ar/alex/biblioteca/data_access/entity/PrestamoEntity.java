@@ -9,6 +9,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "prestamos")
 @Data
+@Builder
 public class PrestamoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,15 +27,4 @@ public class PrestamoEntity {
     @Column(name = "nro_renovacion")
     private int nroRenovacion;
 
-    @ManyToOne
-    @JoinColumn(name = "isbn_libro", referencedColumnName = "isbn")
-    private LibroEntity libro;
-
-    @ManyToOne
-    @JoinColumn(name = "dni_estudiante", referencedColumnName = "dni")
-    private EstudianteEntity estudiante;
-
-    @ManyToOne
-    @JoinColumn(name = "id_condicion_prestamo", referencedColumnName = "id")
-    private CondicionPrestamoEntity condicionPrestamo;
 }

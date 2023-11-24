@@ -1,33 +1,33 @@
 package ar.alex.biblioteca.data_access;
 
 import ar.alex.biblioteca.business.Estudiante;
-import ar.alex.biblioteca.business.model.Libro;
-import ar.alex.biblioteca.business.model.Prestamo;
+import ar.alex.biblioteca.business.model.LibroBO;
+import ar.alex.biblioteca.business.model.PrestamoBO;
 
 import java.util.*;
 
 public class MapPrestamoRepository {
 
 
-    private final Map<Integer, Prestamo> prestamoMap = new HashMap<>();
+    private final Map<Integer, PrestamoBO> prestamoMap = new HashMap<>();
 
-    public void save(Prestamo prestamo) {
+    public void save(PrestamoBO prestamo) {
 
         this.prestamoMap.put(prestamo.hashCode(),prestamo);
     }
 
-    public List<Prestamo> findAll() {
+    public List<PrestamoBO> findAll() {
         return new ArrayList<>(this.prestamoMap.values());
     }
 
 
-    public Optional<Prestamo> findByLibroAndEstudiante(Libro libro, Estudiante estudiante) {
+    public Optional<PrestamoBO> findByLibroAndEstudiante(LibroBO libro, Estudiante estudiante) {
 
-        return Optional.ofNullable(this.prestamoMap.get(new Prestamo(libro, estudiante).hashCode()));
+        return Optional.ofNullable(this.prestamoMap.get(new PrestamoBO(libro, estudiante).hashCode()));
 
     }
 
-    public void update(Prestamo prestamo) {  // verifiar que libro exista es útil
+    public void update(PrestamoBO prestamo) {  // verifiar que libro exista es útil
 
         this.prestamoMap.put(prestamo.hashCode(), prestamo);
     }

@@ -2,12 +2,14 @@ package ar.alex.biblioteca.data_access.entity;
 
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 
 
 @Entity
 @Table(name = "condiciones_prestamo")
 @Data
+@Builder
 public class CondicionPrestamoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,8 +24,4 @@ public class CondicionPrestamoEntity {
     @Column(name = "maximo_renovaciones")
     private int numMaximoRenovaciones;
 
-    // Cada condición pertenece a una categoria
-    @OneToOne
-    @JoinColumn(name = "id_categoria", referencedColumnName = "id")
-    private CategoriaEntity categoria;
 }

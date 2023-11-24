@@ -8,11 +8,8 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor
-public class EstudianteDto {
-
-    private final Integer dni;
-    private String apellido;
-    private String nombres;
-    private String direccion;
-
+public class CondicionesPrestamoDto {
+    private Long idCategoria;
+    private int numMaximoDiasPrestamo;
+    private int numMaximoRenovaciones;
 }

@@ -1,35 +1,37 @@
 package ar.alex.biblioteca.business.model;
 
 
-import ar.alex.biblioteca.business.CondicionPrestamo;
 import ar.alex.biblioteca.business.exceptions.PrestamoSuperaRenovacionesException;
 import ar.alex.biblioteca.business.exceptions.PrestamoVencidoException;
-import ar.alex.biblioteca.business.model.Libro;
+import ar.alex.biblioteca.data_access.entity.CondicionPrestamoEntity;
 import ar.alex.biblioteca.data_access.entity.PrestamoEntity;
+import lombok.Builder;
+import lombok.Getter;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class Prestamo {
+@Getter
+public class PrestamoBO {
 
     private static int prestamoIdCounter = 0;
     private String id;
-    private final Libro libro;
-    private final Estudiante estudiante;
+    private final LibroBO libro;
+    private final EstudianteBO estudiante;
+    private final CondicionPrestamoBO condiciones;
     private LocalDate fechaInicio;
-    private final CondicionPrestamo condiciones;
     private LocalDate fechaVencimiento ;
 
-    private int nroRenovacion;
+    @Builder.Default
+    private int nroRenovacion = 0;
 
-    public Prestamo(Libro libro, Estudiante estudiante) {
+    public PrestamoBO(LibroBO libro, EstudianteBO estudiante, CondicionPrestamoBO condiciones) {
         this.libro = libro;
         this.estudiante = estudiante;
         this.nroRenovacion = 0;
-        this.condiciones = new CondicionPrestamo();
+        this.condiciones = condiciones;
         this.fechaInicio = LocalDate.now();
-        this.fechaVencimiento = this.fechaInicio.plusDays(
-                this.libro.getCategoria().getMaximoDiasPrestamo(this.condiciones));
+        this.fechaVencimiento = this.condiciones.getFechaMaximoDiasVencimiento(this.fechaInicio);
         this.id= String.valueOf(prestamoIdCounter++);
     }
 
@@ -49,11 +51,11 @@ public class Prestamo {
         return this.fechaVencimiento;
     }
 
-    public Libro getLibro() {
+    public LibroBO getLibro() {
         return libro;
     }
 
-    public Estudiante getEstudiante() {
+    public EstudianteBO getEstudiante() {
         return estudiante;
     }
 
@@ -75,13 +77,6 @@ public class Prestamo {
         return Objects.hash(getLibro(), getEstudiante());
     }
 
-    private boolean isRenovable(){
-        if (this.isDisponible())
-            return (this.nroRenovacion < this.condiciones.getMaximoCantRenovacion());
-
-        return false;
-    }
-
     private boolean isDisponible(){
         return this.fechaVencimiento.isAfter(LocalDate.now());
     }
@@ -90,12 +85,11 @@ public class Prestamo {
         if (!this.isDisponible()){
             throw new PrestamoVencidoException( String.format("Prestamo %s Vencido",this.id));
         }
-        if (!this.isRenovable()){
+        if (!this.condiciones.isRenovable(this.nroRenovacion)){
             throw new PrestamoSuperaRenovacionesException(
                     String.format("Prestamo %s Supera nro de Renovaciones posibles",this.id));
         }
-        this.fechaVencimiento = LocalDate.now().plusDays(
-                this.libro.getCategoria().getMaximoDiasPrestamo(this.condiciones));
+        this.fechaVencimiento = this.condiciones.getFechaMaximoDiasVencimiento(LocalDate.now());
         this.nroRenovacion++;
     }
 
@@ -115,19 +109,6 @@ public class Prestamo {
 
     public String getId() {
         return id;
-    }
-
-
-    public PrestamoEntity mapToEntity(){
-        PrestamoEntity prestamoEntity = new PrestamoEntity(
-                this.id,
-                this.libro.getIsbn(),
-                this.estudiante.getDni(),
-                this.fechaInicio
-        );
-        prestamoEntity.setFechaVencimiento(this.fechaVencimiento);
-        prestamoEntity.setNroRenovacion(this.nroRenovacion);
-        return prestamoEntity;
     }
 
 

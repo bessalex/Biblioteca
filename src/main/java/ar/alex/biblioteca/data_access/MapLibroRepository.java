@@ -1,6 +1,6 @@
 package ar.alex.biblioteca.data_access;
 
-import ar.alex.biblioteca.business.Categoria;
+import ar.alex.biblioteca.business.Categoria_abstract;
 import ar.alex.biblioteca.data_access.entity.LibroEntity;
 
 import java.util.*;
@@ -21,7 +21,7 @@ public class MapLibroRepository {
 
 
 
-    public List<LibroEntity> findByCategoria(Categoria categoria) {
+    public List<LibroEntity> findByCategoria(Categoria_abstract categoria) {
         return this.libroMap.values().stream()
                 .filter(libro -> libro.getCategoria().equals(categoria)).
                 collect(Collectors.toList());

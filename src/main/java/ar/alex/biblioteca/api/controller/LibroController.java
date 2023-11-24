@@ -1,8 +1,8 @@
 package ar.alex.biblioteca.api.controller;
 
 import ar.alex.biblioteca.api.dto.LibroDto;
-import ar.alex.biblioteca.business.Categoria;
-import ar.alex.biblioteca.business.model.Libro;
+import ar.alex.biblioteca.api.mapper.LibroMapper;
+import ar.alex.biblioteca.business.model.LibroBO;
 import ar.alex.biblioteca.business.service.LibroService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -18,47 +18,30 @@ public class LibroController {
 
     @NonNull
     private final LibroService libroService;
+    @NonNull
+    private final LibroMapper libroMapper;
 
     @GetMapping("/library/books/{isbn}")
     public ResponseEntity<LibroDto> getLibroByIsbn(@PathVariable String isbn) {
-        Libro libro = this.libroService.findByIsbn(isbn);
-        return ResponseEntity.ok(LibroDto.builder()
-                .isbn(libro.getIsbn())
-                .titulo(libro.getTitulo())
-                .categoria(libro.getCategoria().toString())
-                .build());
+        LibroBO libro = this.libroService.findByIsbn(isbn);
+        return ResponseEntity.ok(this.libroMapper.mapToLibroDto(libro));
     }
 
     @PostMapping("/library/books")
     public ResponseEntity<String> addLibro(@RequestBody LibroDto libroDTO) {
-        libroService.save(new Libro(libroDTO.getIsbn(),
-                libroDTO.getTitulo(),
-                Categoria.create(libroDTO.getCategoria()),
-                libroDTO.getAutor()));
+        libroService.save(this.libroMapper.mapToLibroBO(libroDTO));
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/library/books/")
     public ResponseEntity<List<LibroDto>> getLibros(){
-        return ResponseEntity.ok(this.libroService.findAll()
-                .stream()
-                .map(libro  -> LibroDto.builder()
-                        .isbn(libro.getIsbn())
-                        .titulo(libro.getTitulo())
-                        .autor(libro.getAutor())
-                        .categoria(libro.getCategoria().toString())
-                        .build()).toList());
+        return ResponseEntity.ok(this.libroMapper.mapToLibroDtoList(this.libroService.findAll()));
     }
 
-// mapstruct <-- mapper  https://www.baeldung.com/mapstruct
     @GetMapping("/library/books")
-    public ResponseEntity<List<LibroDto>> getLibrosByCategoria(@RequestParam(value = "category", required=false) String category) {
-        return ResponseEntity.ok(this.libroService.findByCategoria(category)
-                .stream().map(libro  -> LibroDto.builder()
-                        .isbn(libro.getIsbn())
-                        .titulo(libro.getTitulo())
-                        .autor(libro.getAutor())
-                        .categoria(libro.getCategoria().toString())
-                        .build()).toList());
+    public ResponseEntity<List<LibroDto>> getLibrosByCategoria(@RequestParam(value = "category",
+            required=false) String category) {
+        return ResponseEntity.ok(
+                this.libroMapper.mapToLibroDtoList(this.libroService.findByCategoria(category)));
     }
 }
