@@ -17,7 +17,7 @@ public class LibroEntity {
     private  String titulo;
     private  String autor;
     @Column(name = "id_categoria")
-    private  Long idCategoria;
+    private  Integer idCategoria;
     @Column(name = "ejemplares_disponibles")
     private  int ejemplaresDisponibles;
 

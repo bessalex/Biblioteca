@@ -1,6 +1,7 @@
-package ar.alex.biblioteca.business;
+package ar.alex.biblioteca.old;
 
-import ar.alex.biblioteca.business.enums.CategoriaType;
+/*/
+import ar.alex.biblioteca.old.enums.CategoriaType;
 
 public class CategoriaClasico extends Categoria_abstract {
 
@@ -15,3 +16,4 @@ public class CategoriaClasico extends Categoria_abstract {
         return visitor.getMaximoDiasPrestamo(this);
     }
 }
+*/

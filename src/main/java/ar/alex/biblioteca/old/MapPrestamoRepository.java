@@ -1,5 +1,5 @@
-package ar.alex.biblioteca.data_access;
-
+package ar.alex.biblioteca.old;
+/*/
 import ar.alex.biblioteca.business.Estudiante;
 import ar.alex.biblioteca.business.model.LibroBO;
 import ar.alex.biblioteca.business.model.PrestamoBO;
@@ -32,3 +32,4 @@ public class MapPrestamoRepository {
         this.prestamoMap.put(prestamo.hashCode(), prestamo);
     }
 }
+/*/

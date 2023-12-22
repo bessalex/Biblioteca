@@ -13,8 +13,8 @@ public class CondicionPrestamoBO {
     public static  int MAXIMO_DIAS_PRESTAMO_CATEGORIA_CIENCIA = 10;
     public static  int MAXIMO_RENOVACIONES_DEFAULT = 2;
 
-    private final Long id;
-    private final Long idCategoria;
+    private final int id;
+    private final int idCategoria;
     private final int numMaximoDiasPrestamo;
     private final int numMaximoRenovaciones;
 

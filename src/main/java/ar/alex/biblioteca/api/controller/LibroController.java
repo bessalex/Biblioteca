@@ -18,7 +18,7 @@ public class LibroController {
 
     @NonNull
     private final LibroService libroService;
-    @NonNull
+
     private final LibroMapper libroMapper;
 
     @GetMapping("/library/books/{isbn}")

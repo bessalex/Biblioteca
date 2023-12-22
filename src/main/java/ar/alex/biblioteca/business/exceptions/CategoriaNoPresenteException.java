@@ -5,6 +5,9 @@ public class CategoriaNoPresenteException extends RuntimeException{
     public CategoriaNoPresenteException(String nombre) {
         super(String.format("Cagegoria %s No existente en Base de Datos", nombre));
     }
+    public CategoriaNoPresenteException(Integer id) {
+        super(String.format("Cagegoria Id: %s No existente en Base de Datos", id.toString()));
+    }
     public CategoriaNoPresenteException(Long id) {
         super(String.format("Cagegoria Id: %s No existente en Base de Datos", id.toString()));
     }

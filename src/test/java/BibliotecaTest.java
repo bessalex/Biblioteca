@@ -1,5 +1,4 @@
-import ar.alex.biblioteca.business.Biblioteca;
-import ar.alex.biblioteca.business.enums.CategoriaType;
+import ar.alex.biblioteca.old.Biblioteca;
 import ar.alex.biblioteca.business.exceptions.*;
 import ar.alex.biblioteca.business.model.CondicionPrestamoBO;
 import ar.alex.biblioteca.business.model.LibroBO;
@@ -17,7 +16,7 @@ public class BibliotecaTest {
     private Biblioteca biblioteca;
 
     private LibroBO libroClasico, libroHistoria, libroCiencia;
-    private Estudiante estudiante1;
+    private EstudianteBO estudiante1;
     private String isbnLibroClasico, isbnLibroCiencia;
     private int dniEstudiante1;
 

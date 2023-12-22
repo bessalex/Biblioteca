@@ -1,7 +1,9 @@
-package ar.alex.biblioteca.business.enums;
-
-import ar.alex.biblioteca.business.*;
-
+package ar.alex.biblioteca.old.enums;
+/*/
+import ar.alex.biblioteca.old.CategoriaCiencia;
+import ar.alex.biblioteca.old.CategoriaClasico;
+import ar.alex.biblioteca.old.CategoriaDeportes;
+import ar.alex.biblioteca.old.CategoriaHistoria;
 
 
 public enum CategoriaType {
@@ -28,3 +30,4 @@ public enum CategoriaType {
     }
 
 }
+/*/

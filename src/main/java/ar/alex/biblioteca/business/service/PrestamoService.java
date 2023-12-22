@@ -1,6 +1,6 @@
 package ar.alex.biblioteca.business.service;
 
-import ar.alex.biblioteca.business.Estudiante;
+import ar.alex.biblioteca.business.model.CondicionPrestamoBO;
 import ar.alex.biblioteca.business.model.EstudianteBO;
 import ar.alex.biblioteca.business.model.LibroBO;
 import ar.alex.biblioteca.business.model.PrestamoBO;
@@ -26,6 +26,8 @@ public class PrestamoService {
     private final LibroService libroService;
     @NonNull
     private final EstudianteService estudianteService;
+    @NonNull
+    private final CondicionesPrestamoService condicionesPrestamoService;
 
     private void save(PrestamoBO prestamo) {
         this.prestamoRepository.save(PrestamoEntity.builder()
@@ -44,8 +46,9 @@ public class PrestamoService {
         List<PrestamoEntity> prestamoEntityList = this.prestamoRepository.findAll();
         for (PrestamoEntity prestamoEntity: prestamoEntityList) {
             LibroBO libro = this.libroService.findByIsbn(prestamoEntity.getIsbnLibro());
+            CondicionPrestamoBO condicionPrestamoBO = this.condicionesPrestamoService.findByIdCategoria(libro.getCategoria().getId());
             EstudianteBO estudiante = this.estudianteService.findByDni(prestamoEntity.getDniEstudiante());
-            PrestamoBO prestamo = new PrestamoBO(libro, estudiante );
+            PrestamoBO prestamo = new PrestamoBO(libro, estudiante, condicionPrestamoBO );
             prestamo.setFechaInicio(prestamoEntity.getFechaInicio());
             prestamo.setNroRenovacion(prestamoEntity.getNroRenovacion());
             prestamo.setFechaVencimiento(prestamoEntity.getFechaVencimiento());
@@ -63,9 +66,10 @@ public class PrestamoService {
             return Optional.empty();
 
         LibroBO libro = this.libroService.findByIsbn(isbn);
+        CondicionPrestamoBO condicionPrestamoBO = this.condicionesPrestamoService.findByIdCategoria(libro.getCategoria().getId());
         EstudianteBO estudiante = this.estudianteService.findByDni(dni);
 
-        PrestamoBO prestamo = new PrestamoBO(libro, estudiante);
+        PrestamoBO prestamo = new PrestamoBO(libro, estudiante, condicionPrestamoBO);
         prestamo.setFechaInicio(prestamoEntityOptional.get().getFechaInicio());
         prestamo.setNroRenovacion(prestamoEntityOptional.get().getNroRenovacion());
         prestamo.setFechaVencimiento(prestamoEntityOptional.get().getFechaVencimiento());
@@ -79,6 +83,7 @@ public class PrestamoService {
         }
 
         LibroBO libroFound = this.libroService.findByIsbn(isbnLibro);
+        CondicionPrestamoBO condicionPrestamoBO = this.condicionesPrestamoService.findByIdCategoria(libroFound.getCategoria().getId());
         EstudianteBO estudianteFound = this.estudianteService.findByDni(dniEstudiante);
 
         if (this.findByIsbnAndDni(isbnLibro, dniEstudiante).isPresent()){
@@ -89,7 +94,7 @@ public class PrestamoService {
             throw new LibroSinEjemplaresException(String.format("Libro isbn: %s sin ejemplares disponibles", libroFound.getIsbn()));
         }
 
-        PrestamoBO prestamo = new PrestamoBO(libroFound, estudianteFound);
+        PrestamoBO prestamo = new PrestamoBO(libroFound, estudianteFound, condicionPrestamoBO);
 
         this.save(prestamo);
         libroFound.marcarEjemplarPrestado();
@@ -106,9 +111,10 @@ public class PrestamoService {
             throw new PrestamoNoPresenteException(idPrestamo);
 
         LibroBO libro = this.libroService.findByIsbn(prestamoEntityOptional.get().getIsbnLibro());
+        CondicionPrestamoBO condicionPrestamoBO = this.condicionesPrestamoService.findByIdCategoria(libro.getCategoria().getId());
         EstudianteBO estudiante = this.estudianteService.findByDni(prestamoEntityOptional.get().getDniEstudiante());
 
-        PrestamoBO prestamo = new PrestamoBO(libro, estudiante);
+        PrestamoBO prestamo = new PrestamoBO(libro, estudiante, condicionPrestamoBO);
         prestamo.setFechaInicio(prestamoEntityOptional.get().getFechaInicio());
         prestamo.setNroRenovacion(prestamoEntityOptional.get().getNroRenovacion());
         prestamo.setFechaVencimiento(prestamoEntityOptional.get().getFechaVencimiento());
@@ -122,7 +128,6 @@ public class PrestamoService {
 
 
     public void update(PrestamoBO prestamo) {
-
-        this.prestamoRepository.save()
+        this.save(prestamo);
     }
 }

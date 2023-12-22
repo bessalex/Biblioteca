@@ -1,8 +1,7 @@
 package ar.alex.biblioteca.business.service;
 
-import ar.alex.biblioteca.business.exceptions.CategoriaNoPresenteException;
 import ar.alex.biblioteca.business.mapper.LibroBOMapper;
-import ar.alex.biblioteca.business.model.Categoria;
+import ar.alex.biblioteca.data_access.entity.Categoria;
 import ar.alex.biblioteca.business.model.LibroBO;
 import ar.alex.biblioteca.business.exceptions.LibroNoPresenteException;
 
@@ -24,11 +23,17 @@ public class LibroService {
     @NonNull
     private final CategoriaRepository categoriaRepository;
     @NonNull
+    private final CategoriaService categoriaService;
+
     private final LibroBOMapper libroMapper;
 
 
     public void save(LibroBO libro) {
+        String categoriaNombre = libro.getCategoria().getNombre();
 
+        Categoria categoria = this.categoriaService.findIdByNombre(categoriaNombre);
+
+        libro.setCategoria(categoria);
 
         libroRepository.save(libroMapper.mapToLibroEntity(libro));
     }
@@ -37,15 +42,14 @@ public class LibroService {
         return this.libroMapper.mapToLibroBOList(this.libroRepository.findAll());
     }
 
-    public List<LibroBO> findByCategoria(String categoria)  {
-        if (categoria == null)
+    public List<LibroBO> findByCategoria(String nombreCategoria)  {
+        if (nombreCategoria == null)
             return this.findAll();
 
-        Categoria categoriaEntity = this.categoriaRepository.findByNombre(categoria)
-                .orElseThrow(() -> new CategoriaNoPresenteException(categoria));
+        Categoria categoria = this.categoriaService.findIdByNombre (nombreCategoria);
 
         return this.libroMapper.mapToLibroBOList(
-                this.libroRepository.findByCategoria(categoriaEntity.getId()));
+                this.libroRepository.findByCategoria(categoria.getId()));
     }
 
     public LibroBO findByIsbn(String isbn) {

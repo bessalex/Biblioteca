@@ -1,11 +1,13 @@
 package ar.alex.biblioteca.business.service;
 
 import ar.alex.biblioteca.business.exceptions.CategoriaNoPresenteException;
-import ar.alex.biblioteca.business.model.Categoria;
+import ar.alex.biblioteca.data_access.entity.Categoria;
 import ar.alex.biblioteca.data_access.CategoriaRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -14,19 +16,25 @@ public class CategoriaService {
     @NonNull
     private final CategoriaRepository categoriaRepository;
 
-    public void save(String categoriaNombre) {
-        if (this.categoriaRepository.findByNombre(categoriaNombre).isEmpty())
-            this.categoriaRepository.save(Categoria.builder()
-                    .nombre(categoriaNombre)
-                    .build());
+    public void save(Categoria categoria) {
+        if (this.categoriaRepository.findByNombre(categoria.getNombre()).isEmpty())
+            this.categoriaRepository.save(categoria);
     }
 
-    public Long findIdByNombre(String nombre)  {
+    public Categoria findIdByNombre(String nombre)  {
 
-        Categoria categoriaEntity = this.categoriaRepository.findByNombre(nombre)
-                .orElseThrow(() -> new CategoriaNoPresenteException(nombre));
+        List<Categoria> resultado = this.categoriaRepository.findByNombre(nombre);
 
-        return categoriaEntity.getId();
+        if (resultado.isEmpty())
+           throw new CategoriaNoPresenteException(nombre);
+
+        return resultado.get(0);
+    }
+
+    public Categoria findById(Integer id)  {
+
+        return this.categoriaRepository.findById(id)
+                .orElseThrow(() -> new CategoriaNoPresenteException(id));
     }
 
 }

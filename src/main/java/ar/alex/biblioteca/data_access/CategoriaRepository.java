@@ -1,15 +1,14 @@
 package ar.alex.biblioteca.data_access;
 
-import ar.alex.biblioteca.business.model.Categoria;
+import ar.alex.biblioteca.data_access.entity.Categoria;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.List;
 
 @Repository
-public interface CategoriaRepository extends JpaRepository<Categoria, Long>  {
+public interface CategoriaRepository extends JpaRepository<Categoria, Integer>  {
 
-    @Query(value = "SELECT * FROM libros where nombre = :#{1}")
-    Optional<Categoria> findByNombre(String nombre);
+
+    List<Categoria> findByNombre(String nombre);
 }

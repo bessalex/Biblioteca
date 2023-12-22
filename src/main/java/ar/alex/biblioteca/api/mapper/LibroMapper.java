@@ -1,14 +1,16 @@
 package ar.alex.biblioteca.api.mapper;
 
 import ar.alex.biblioteca.api.dto.LibroDto;
-import ar.alex.biblioteca.business.model.Categoria;
+import ar.alex.biblioteca.data_access.entity.Categoria;
 import ar.alex.biblioteca.business.model.LibroBO;
 import org.mapstruct.*;
+import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface LibroMapper {
+    LibroMapper INSTANCE = Mappers.getMapper(LibroMapper.class);
     @Mapping(source = "categoria", target = "categoria", qualifiedByName = "categoriaMapping")
     LibroBO mapToLibroBO(LibroDto libroDto);
 

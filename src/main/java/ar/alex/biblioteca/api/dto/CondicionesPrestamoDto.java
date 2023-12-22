@@ -9,7 +9,7 @@ import lombok.Getter;
 @Builder
 @AllArgsConstructor
 public class CondicionesPrestamoDto {
-    private Long idCategoria;
+    private int idCategoria;
     private int numMaximoDiasPrestamo;
     private int numMaximoRenovaciones;
 }

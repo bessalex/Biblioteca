@@ -1,9 +1,9 @@
-package ar.alex.biblioteca.business;
+package ar.alex.biblioteca.old;
 
-import ar.alex.biblioteca.business.enums.CategoriaType;
-
-import java.util.Objects;
 /*
+import ar.alex.biblioteca.old.*;
+import ar.alex.biblioteca.old.enums.*;
+
 public abstract class Categoria_abstract {
 
    private final CategoriaType categoriaEnum;

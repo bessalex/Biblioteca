@@ -22,7 +22,6 @@ public class PrestamoBO {
     private LocalDate fechaInicio;
     private LocalDate fechaVencimiento ;
 
-    @Builder.Default
     private int nroRenovacion = 0;
 
     public PrestamoBO(LibroBO libro, EstudianteBO estudiante, CondicionPrestamoBO condiciones) {

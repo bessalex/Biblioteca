@@ -1,18 +1,21 @@
 package ar.alex.biblioteca.business.model;
 
 
+import ar.alex.biblioteca.data_access.entity.Categoria;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Objects;
 
 @Getter
+@Setter
 @Builder
 public class LibroBO {
     private final String titulo;
-    private final Categoria categoria;
+    private Categoria categoria;
     private final String isbn;
-    private String autor = null;
+    private String autor;
 
     @Builder.Default
     private int ejemplaresDisponibles = 1 ;
@@ -31,9 +34,6 @@ public class LibroBO {
         return Objects.hash(getIsbn());
     }
 
-    public String getTitulo() {
-        return this.titulo;
-    }
 
     public Categoria getIdCategoria() {
         return categoria;
@@ -44,19 +44,6 @@ public class LibroBO {
         if (this.ejemplaresDisponibles > 0 )
                 return Boolean.TRUE;
         return Boolean.FALSE;
-    }
-
-    public String getIsbn() {
-        return isbn;
-    }
-
-    public String getAutor() {
-        return autor;
-    }
-
-
-    public int getEjemplaresDisponibles() {
-        return ejemplaresDisponibles;
     }
 
     public void marcarEjemplarPrestado() {

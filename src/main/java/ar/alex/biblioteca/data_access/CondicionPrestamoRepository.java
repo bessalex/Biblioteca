@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface CondicionPrestamoRepository extends JpaRepository<CondicionPrestamoEntity, Long>  {
+public interface CondicionPrestamoRepository extends JpaRepository<CondicionPrestamoEntity, Integer>  {
 
-    @Query(value = "SELECT * FROM condiciones_prestamo where id_categoria = ?1")
-    Optional<CondicionPrestamoEntity> findByIdCategoria(Long idCategoria);
+    @Query(value = "SELECT cp FROM CondicionPrestamoEntity cp where cp.idCategoria = ?1")
+    Optional<CondicionPrestamoEntity> findByIdCategoria(Integer idCategoria);
 }

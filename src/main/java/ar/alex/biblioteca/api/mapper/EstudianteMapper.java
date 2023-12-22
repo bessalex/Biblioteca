@@ -1,15 +1,15 @@
 package ar.alex.biblioteca.api.mapper;
 
 import ar.alex.biblioteca.api.dto.EstudianteDto;
-import ar.alex.biblioteca.api.dto.LibroDto;
 import ar.alex.biblioteca.business.model.EstudianteBO;
-import ar.alex.biblioteca.business.model.LibroBO;
 import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface EstudianteMapper {
+    EstudianteMapper INSTANCE = Mappers.getMapper(EstudianteMapper.class);
 
     EstudianteBO mapToEstudianteBO(EstudianteDto estudianteDto);
 

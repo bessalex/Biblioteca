@@ -1,6 +1,7 @@
-package ar.alex.biblioteca.business;
+package ar.alex.biblioteca.old;
 
-import ar.alex.biblioteca.business.enums.CategoriaType;
+/*
+import ar.alex.biblioteca.old.*;
 
 public class CategoriaCiencia extends Categoria_abstract {
 
@@ -16,3 +17,4 @@ public class CategoriaCiencia extends Categoria_abstract {
     }
 
 }
+*/

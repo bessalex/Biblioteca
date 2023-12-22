@@ -12,7 +12,6 @@ import java.util.Objects;
 @Builder
 public class EstudianteBO {
 
-
     private final Integer dni;
     private final String apellido;
     private final String nombres;

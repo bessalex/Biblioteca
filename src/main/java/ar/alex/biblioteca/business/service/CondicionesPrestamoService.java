@@ -1,9 +1,11 @@
 package ar.alex.biblioteca.business.service;
 
 import ar.alex.biblioteca.api.dto.CondicionesPrestamoDto;
+import ar.alex.biblioteca.business.mapper.CondicionesPrestamoBOMapper;
 import ar.alex.biblioteca.business.model.CondicionPrestamoBO;
 import ar.alex.biblioteca.business.exceptions.CategoriaNoPresenteException;
 import ar.alex.biblioteca.data_access.CondicionPrestamoRepository;
+import ar.alex.biblioteca.data_access.entity.Categoria;
 import ar.alex.biblioteca.data_access.entity.CondicionPrestamoEntity;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -15,28 +17,29 @@ public class CondicionesPrestamoService {
 
     @NonNull
     private final CondicionPrestamoRepository condicionPrestamoRepository;
+    @NonNull
+    private final CondicionesPrestamoBOMapper condicionesPrestamoBOMapper;
+    @NonNull
+    private final CategoriaService categoriaService;
 
-    public void save(CondicionesPrestamoDto condicionesPrestamoDto) {
-        this.condicionPrestamoRepository.save(CondicionPrestamoEntity
-                .builder()
-                .idCategoria(condicionesPrestamoDto.getIdCategoria())
-                .numMaximoDiasPrestamo(condicionesPrestamoDto.getNumMaximoDiasPrestamo())
-                .numMaximoRenovaciones(condicionesPrestamoDto.getNumMaximoRenovaciones())
-                .build());
+    public void save(CondicionPrestamoBO condicionPrestamoBO) {
+        this.condicionPrestamoRepository.save(this.condicionesPrestamoBOMapper.toEntity(condicionPrestamoBO));
     }
 
-    public CondicionPrestamoBO findByIdCategoria(Long idCategoria)  {
+    public CondicionPrestamoBO findById(Integer id){
 
-        CondicionPrestamoEntity condicionPrestamoEntity = this.condicionPrestamoRepository
-                .findByIdCategoria(idCategoria)
-                .orElseThrow(() -> new CategoriaNoPresenteException(idCategoria));
+        CondicionPrestamoEntity condicionPrestamoEntity;
+        condicionPrestamoEntity = this.condicionPrestamoRepository.findById(id)
+                .orElseThrow(() -> new CategoriaNoPresenteException(id));
 
-        return CondicionPrestamoBO.builder()
-                .id(condicionPrestamoEntity.getId())
-                .idCategoria(condicionPrestamoEntity.getIdCategoria())
-                .numMaximoRenovaciones(condicionPrestamoEntity.getNumMaximoRenovaciones())
-                .numMaximoDiasPrestamo(condicionPrestamoEntity.getNumMaximoDiasPrestamo())
-                .build();
+        return this.condicionesPrestamoBOMapper.toBO(condicionPrestamoEntity);
+    }
+
+    public CondicionPrestamoBO findByIdCategoria(Integer idCategoria)  {
+
+        Categoria categoria = this.categoriaService.findById(idCategoria);
+
+        return this.condicionesPrestamoBOMapper.toBO(this.condicionPrestamoRepository.findByIdCategoria(categoria.getId()).get());
     }
 
 }

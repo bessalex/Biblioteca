@@ -13,13 +13,13 @@ import java.time.LocalDate;
 public class PrestamoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
     @Column(name = "isbn_libro")
     private final String isbnLibro;
     @Column(name = "dni_estudiante")
     private final Integer dniEstudiante;
     @Column(name = "id_condicion_prestamo")
-    private Long idCondicionPrestamo;
+    private int idCondicionPrestamo;
     @Column(name = "fecha_inicio")
     private final LocalDate fechaInicio;
     @Column(name = "fecha_vencimiento")

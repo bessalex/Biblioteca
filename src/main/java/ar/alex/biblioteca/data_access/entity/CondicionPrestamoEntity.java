@@ -13,10 +13,10 @@ import lombok.Data;
 public class CondicionPrestamoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @Column(name = "id_categoria")
-    private Long idCategoria;
+    private int idCategoria;
 
     @Column(name = "maximo_dias_prestamo")
     private int numMaximoDiasPrestamo;

@@ -18,7 +18,6 @@ public class EstudianteService {
 
     @NonNull
     private final EstudianteRepository estudianteRepository;
-    @NonNull
     private final EstudianteBOMapper estudianteBOMapper;
 
     public void save(EstudianteBO estudianteBO) {
