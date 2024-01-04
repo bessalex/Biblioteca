@@ -16,9 +16,16 @@ public class LibroEntity {
     private  final String isbn;
     private  String titulo;
     private  String autor;
-    @Column(name = "id_categoria")
-    private  Integer idCategoria;
+
+      @Column(name = "id_categoria")
+      private  Integer idCategoria;
+
+  //  @OneToOne <----
+  //  @JoinColumn(name = "id_categoria", referencedColumnName = "id")
+  //  private Categoria categoria;
+
     @Column(name = "ejemplares_disponibles")
     private  int ejemplaresDisponibles;
+
 
 }

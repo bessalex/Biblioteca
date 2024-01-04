@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@Builder
+@Builder  // no va
 @AllArgsConstructor
 public class CondicionesPrestamoDto {
     private int idCategoria;
