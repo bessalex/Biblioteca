@@ -8,16 +8,19 @@ import java.io.Serializable;
 
 
 // @Builder  // NO VA
-@AllArgsConstructor
-@NoArgsConstructor
+@RequiredArgsConstructor
 @Table(name = "categorias")
 @Entity
+@NoArgsConstructor
 @Getter
-public class Categoria implements Serializable {
+@Setter
+public class Categoria {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID) <----
+    @SequenceGenerator(name = "categorias_seq_gen", sequenceName = "categorias_id_seq",allocationSize=1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "categorias_seq_gen")
     private Integer id;
     @Column(name = "nombre")
-    private String nombre;
+    @NonNull private String nombre;
+
 }

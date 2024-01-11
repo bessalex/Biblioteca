@@ -3,12 +3,15 @@ package ar.alex.biblioteca.business.model;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Getter
 @Builder
-public class CondicionPrestamoBO {
+@Setter
+public class CondicionPrestamoBO implements Serializable {
     public static  int MAXIMO_DIAS_PRESTAMO_DEFAULT = 15;
     public static  int MAXIMO_DIAS_PRESTAMO_CATEGORIA_CIENCIA = 10;
     public static  int MAXIMO_RENOVACIONES_DEFAULT = 2;

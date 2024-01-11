@@ -4,14 +4,14 @@ package ar.alex.biblioteca.data_access.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 
 
 @Entity
 @Getter
-@Builder
 @Table(name="libros")
 @AllArgsConstructor
-public class LibroEntity {
+public class LibroEntity implements Serializable {
     @Id
     private  final String isbn;
     private  String titulo;

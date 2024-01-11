@@ -6,13 +6,15 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
 
 @Getter
 @Entity
-@Builder
 @Table(name="estudiantes")
 @AllArgsConstructor
-public class EstudianteEntity {
+public class EstudianteEntity implements Serializable {
     @Id
     private final Integer dni;
     private final String apellido;

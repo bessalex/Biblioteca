@@ -30,14 +30,14 @@ public class PrestamoService {
     private final CondicionesPrestamoService condicionesPrestamoService;
 
     private void save(PrestamoBO prestamo) {
-        this.prestamoRepository.save(PrestamoEntity.builder()
-                .isbnLibro(prestamo.getLibro().getIsbn())
-                .dniEstudiante(prestamo.getEstudiante().getDni())
-                .idCondicionPrestamo(prestamo.getCondiciones().getId())
-                .fechaInicio(prestamo.getFechaInicio())
-                .fechaVencimiento(prestamo.getFechaVencimiento())
-                .nroRenovacion(prestamo.getNroRenovacion())
-                .build());
+        PrestamoEntity prestamoEntity = new PrestamoEntity(
+                prestamo.getLibro().getIsbn(),prestamo.getEstudiante().getDni(),prestamo.getFechaInicio());
+
+        prestamoEntity.setIdCondicionPrestamo(prestamo.getCondiciones().getId());
+        prestamoEntity.setFechaVencimiento(prestamo.getFechaVencimiento());
+        prestamoEntity.setNroRenovacion(prestamo.getNroRenovacion());
+
+        this.prestamoRepository.save(prestamoEntity);
     }
 
 

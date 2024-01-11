@@ -4,15 +4,18 @@ package ar.alex.biblioteca.data_access.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "prestamos")
-@Data
-@Builder
-public class PrestamoEntity {
+@AllArgsConstructor
+@RequiredArgsConstructor
+public class PrestamoEntity implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
     @Column(name = "isbn_libro")
     private final String isbnLibro;

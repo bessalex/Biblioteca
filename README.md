@@ -45,3 +45,8 @@ Desde powershell:
 
 Luego ya conectado en docker. Para crear y poblar tablas . 
 3. sh /docker-entrypoint-initdb.d/after_create.sh 
+
+
+## Links Interesantes asociados al desarrollo
+1. Generación de claves autogeneradas en postgres, usando SERIAL: https://stackoverflow.com/questions/11825643/configure-jpa-to-let-postgresql-generate-the-primary-key-value
+2. 

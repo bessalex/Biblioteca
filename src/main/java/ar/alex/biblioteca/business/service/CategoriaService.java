@@ -33,8 +33,10 @@ public class CategoriaService {
 
     public Categoria findById(Integer id)  {
 
-        return this.categoriaRepository.findById(id)
+        Categoria categoria = this.categoriaRepository.findById(id)
                 .orElseThrow(() -> new CategoriaNoPresenteException(id));
+        System.out.println("categoria.getNombre() = " + categoria.getNombre());
+        return categoria;
     }
 
 }

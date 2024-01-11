@@ -21,7 +21,7 @@ CREATE TABLE categorias
 DROP TABLE IF EXISTS condiciones_prestamo CASCADE;
 CREATE TABLE condiciones_prestamo
 (
-    id                      INT NOT NULL,
+    id                      SERIAL NOT NULL,
     id_categoria            INT,
     maximo_dias_prestamo    INT,
     maximo_renovaciones     INT,

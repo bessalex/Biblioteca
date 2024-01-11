@@ -39,7 +39,9 @@ public class CondicionesPrestamoService {
 
         Categoria categoria = this.categoriaService.findById(idCategoria);
 
-        return this.condicionesPrestamoBOMapper.toBO(this.condicionPrestamoRepository.findByIdCategoria(categoria.getId()).get());
+        //return this.condicionesPrestamoBOMapper.toBO(this.condicionPrestamoRepository.findByIdCategoria(categoria.getId()).get());
+
+        return this.condicionesPrestamoBOMapper.toBO(this.condicionPrestamoRepository.findByCategoria(categoria));
     }
 
 }

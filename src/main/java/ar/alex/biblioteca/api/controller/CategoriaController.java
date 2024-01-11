@@ -19,12 +19,12 @@ public class CategoriaController {
 
     @PostMapping("/library/category")
     public ResponseEntity<String> addCategoria  (@RequestBody CategoriaDto categoriaDto){
-        this.categoriaService.save(new Categoria(null, categoriaDto.nombre()));
+        this.categoriaService.save(new Categoria( categoriaDto.nombre()));
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/library/category/{id}")
-    public ResponseEntity<CategoriaDto> addCategoria  (@PathVariable Integer id){
+    public ResponseEntity<CategoriaDto> getCategoria  (@PathVariable Integer id){
         Categoria categoria = this.categoriaService.findById(id);
         return ResponseEntity.ok(new CategoriaDto(categoria.getNombre()));
     }

@@ -1,3 +1,5 @@
+import ar.alex.biblioteca.data_access.CategoriaRepository;
+import ar.alex.biblioteca.data_access.entity.Categoria;
 import ar.alex.biblioteca.old.Biblioteca;
 import ar.alex.biblioteca.business.exceptions.*;
 import ar.alex.biblioteca.business.model.CondicionPrestamoBO;
@@ -5,15 +7,26 @@ import ar.alex.biblioteca.business.model.LibroBO;
 import ar.alex.biblioteca.business.model.PrestamoBO;
 import org.junit.jupiter.api.*;
 
+import ar.alex.biblioteca.data_access.*;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.fail;
-
+@SpringBootTest
+@TestPropertySource(locations="classpath:test.properties")
 public class BibliotecaTest {
 
-    private Biblioteca biblioteca;
+   /* private Biblioteca biblioteca;
 
     private LibroBO libroClasico, libroHistoria, libroCiencia;
     private EstudianteBO estudiante1;
@@ -446,7 +459,20 @@ public class BibliotecaTest {
         Assertions.assertEquals(LocalDate.now().plusDays(CondicionPrestamoBO.MAXIMO_DIAS_PRESTAMO_CATEGORIA_CIENCIA),
                 prestamoRenovado.getFechaVencimiento());
     }
+*/
 
+    @Autowired
+    private CategoriaRepository categoriaRepository;
+
+    @Test
+    void findByNombreTest(){
+        List<Categoria> categorias = categoriaRepository.findByNombre("deportes");
+
+        categorias.forEach((categoria) -> {
+            System.out.println(categoria.getNombre());
+            System.out.println(categoria.getId());
+        });
+    }
 
 
 }

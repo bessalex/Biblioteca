@@ -25,7 +25,7 @@ public interface LibroMapper {
 
     @Named("categoriaMapping")
     default Categoria mapCategoria(String nombreCategoria) {
-        return new Categoria(null, nombreCategoria);
+        return new Categoria(nombreCategoria);
     }
 
     @Named("nombreCategoriaMapping")
